@@ -32,6 +32,7 @@ jspm_packages
 */node_modules
 */.env
 .env
+controllers/security
 
 # Optional npm cache directory
 .npm

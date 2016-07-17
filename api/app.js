@@ -5,20 +5,18 @@ var mongoose = require('mongoose');
 var cors = require('cors');  
 var auth = require('./controllers/auth');  
 var middleware = require('./controllers/middleware');
-var http = require('http').Server(app);
 
 // Configuramos Express
 var app = express();  
 app.use(bodyParser.json());  
 app.use(bodyParser.urlencoded({extended: true}));  
 app.use(cors());  
-app.set('port', 3000);
-app.io = require('socket.io')(http);
 
-// Importamos nuestros modelos, 
-// en este ejemplo nuestro modelo de usuario
-require('./models/user');
-
+/***********servidor***************/
+var server = require('http').Server(app);
+app.io = require('socket.io')(server);
+var server_port = process.env.OPENSHIFT_NODEJS_PORT || process.env.PORT || 8000;
+var server_ip_address = process.env.OPENSHIFT_NODEJS_IP || process.env.IP || '127.0.0.1';
 
 
 // Rutas de autenticación y login
@@ -33,8 +31,9 @@ app.get('/private',middleware.ensureAuthenticated, function(req, res) {
 
 
 
-mongoose.connect('mongodb://localhost', function(err) {  
-    app.listen(app.get('port'), function(){
-        console.log('Express corriendo en http://localhost:3000');
-    });
+mongoose.connect('mongodb://localhost/belardi', function(err) {  
+    server.listen(server_port,server_ip_address, function() { 
+	  console.log("Listening on " + server_ip_address + ", server_port " + server_port);
+	  console.log("Listening on port " + server_port);
+	});
 });
