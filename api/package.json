@@ -1,0 +1,23 @@
+{
+  "name": "apibelardi",
+  "version": "1.0.0",
+  "description": "control de stock, consumo y ventas",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "nati",
+  "license": "ISC",
+  "dependencies": {
+    "socket.io": "^1.4.8",
+    "body-parser": "^1.9.3",
+    "cookie-parser": "^1.3.3",
+    "cors": "^2.7.1",
+    "express": "^4.10.4",
+    "jsonwebtoken": "^5.7.0",
+    "jwt-simple": "^0.5.0",
+    "moment": "^2.13.0",
+    "mongoose": "^4.4.17",
+    "morgan": "^1.5.0"
+  }
+}
