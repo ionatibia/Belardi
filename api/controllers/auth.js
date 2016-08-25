@@ -6,12 +6,15 @@ var service = require('./services');
 //encriptar password
 var crypto = require('./crypto');
 //log
-var Log = require('simple-node-logger'),
-    opts = {
-        logFilePath:'./logs/auth.log',
-        timestampFormat:'YYYY-MM-DD HH:mm'
-    },
-    log = Log.createSimpleLogger( opts );
+var log4js = require('log4js');
+    
+    log4js.configure({
+      appenders: [
+        { type: 'console' },
+        { type: 'file', filename: 'logs/auth.log', category: 'auth' }
+      ]
+    });
+var log = log4js.getLogger('auth');
 
 /**
  *
@@ -31,6 +34,7 @@ exports.emailSignup = function(req, res) {
 
     user.save(function(err){
         if (err) {
+            log.error("Fallo al guardar usuario: "+err)
             return res
                 .status(400)//bad request
                 .send("fallo al guardar usuario")
@@ -60,19 +64,20 @@ exports.emailLogin = function(req, res) {
     User.findOne({correo: req.body.correo.toLowerCase()}, function(err, user) {
         if (user) {
             if (user.password === pass) {
-                log.warn("Accediendo el usuario nº:"+user.numero+';')
-                log.warn("Accediendo el usuario nº:"+user.numero+';')
+                log.info("Accediendo el usuario nº:"+user.numero)
                 //si se loguea correctamente enviamos el token al cliente
                 return res
                     .status(200)//ok
                     //enviamos el token al cliente para que lo guarde y lo utilice en cada peticion
                     .send({token: service.createToken(user)});
             } else {
+                log.warn("Contraseña incorrecta usuario: "+user.numero)
                 return res
                     .status(404)
                     .send("Contraseña incorrecta")
             }
         }else{
+            log.info("Peticion de login no existe usuario: "+req.body.correo)
             return res
                 .status(204)//no content
                 .send("usuario no existe");
@@ -101,11 +106,12 @@ exports.emailUpdate = function (req,res) {
     //guardamos el usuario modificado
     User.update({_id: user._id},userUpdated,function (err) {
         if (err) {
+            log.error("Error actualizando usuario: "+userUpdated.numero)
             return res
                 .status(500)
                 .send("Error actualizando el usuario: "+err)
         } else {
-            log.info("Modificado el usuario nº:"+user.numero+';')
+            log.info("Modificado el usuario nº:"+user.numero)
             //devolvemos el usuario modificado
             res.json(userUpdated)
         }
@@ -122,6 +128,7 @@ exports.emailDelete = function (req,res) {
     var user = req.usuario;
     //si el username es admin NO lo borramos
     if (req.usuario.username == 'admin') {
+        log.warn("No se puede borar el usuario administrador")
         return res
             .status(401)
             .send("No se puede borrar el usuario admin")
@@ -129,11 +136,12 @@ exports.emailDelete = function (req,res) {
     //borramos el usuario
     user.remove(function (err) {
         if (err) {
+            log.error("Error al borrar usuario: "+req.usuario.numero)
             return res
                 .status(500)
                 .send("Error al borrar usuario: "+err)
         } else {
-            log.warn("Borrado el usuario nº:"+user.numero+';')
+            log.warn("Borrado el usuario nº:"+user.numero)
             //devolvemos el usuario borrado
             res.json(user)
         }
@@ -161,6 +169,7 @@ exports.emailList = function (req,res) {
     //buscamos todos los usuarios ordenados alfabeticamente
     User.find().sort({username: 1}).exec(function (err, users) {
         if (err) {
+            log.error("Error buscando usuarios")
             return res
                 .status(400)
                 .send("Error buscando usuarios: "+err)
@@ -179,6 +188,7 @@ exports.emailList = function (req,res) {
 module.exports.userByID = function (req, res, next, id) {
     //si el _id no es de un objeto de mongo valido
     if (!mongoose.Types.ObjectId.isValid(id)) {
+        log.error("Id de usuario invalida: "+id)
         return res.status(400).send({
             message: 'User is invalid'
         });
@@ -186,6 +196,7 @@ module.exports.userByID = function (req, res, next, id) {
     //buscamos el usuario mediante ID
     User.findById(id).populate('user', 'displayName').exec(function (err, user) {
         if (err) {
+            log.error("Error buscando usuario por ID: "+id)
             return next(err);
         } else if (!user) {
             return res.status(404).send({
