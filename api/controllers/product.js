@@ -10,13 +10,13 @@ var path = require('path'),
 	lodash = require('lodash');
 //log
 var log4js = require('log4js');
-    
 log4js.configure({
-  appenders: [
-    { type: 'console' },
-    { type: 'file', filename: 'logs/product.log', category: 'product' }
-  ]
-});
+	  appenders: [
+	    { type: 'console' },
+	    { type: 'file', filename: 'logs/product.log', category: 'product' }
+	  ]
+	});
+    
 var log = log4js.getLogger('product');
 
 /**
@@ -36,7 +36,9 @@ exports.create = function (req, res) {
 				.send("Error guardando producto: "+err)
 		} else {
 			//devolvemos el articulo
-			res.json(product);
+			return res
+				.status(200)
+				.json(product);
 		}
 	});
 };//exports create
@@ -69,7 +71,9 @@ module.exports.update = function (req, res) {
 				.send("Error actualizando producto: "+err);
 		} else {
 			//devolvemos el producto modificado
-			res.json(product);
+			return res
+				.status(200)
+				.json(product);
 		}
 	});
 };//exports update
@@ -80,9 +84,9 @@ module.exports.update = function (req, res) {
  *
  */
 module.exports.delete = function (req, res) {
-	//recogemos el articulo ByID
+	//recogemos el producto ByID
 	var product = req.product;
-	//borramos el articulo
+	//borramos el producto
 	product.remove(function (err) {
 		if (err) {
 			log.error("Error borrando producto: "+err)
@@ -90,7 +94,9 @@ module.exports.delete = function (req, res) {
 				.status(400)
 				.send("Error borrando producto: "+err);
 		} else {
-			res.json(product);
+			return res
+				.status(200)
+				.json(product);
 		}
 	});
 };//exports delete
@@ -110,7 +116,9 @@ module.exports.list = function (req, res) {
 				.send("Error buscando productos: "+err);
 		} else {
 			//devolvemos todos los articulos
-			res.json(products);
+			return res
+				.status(200)
+				.json(product);
 		}
 	});
 };//exports list

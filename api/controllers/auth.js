@@ -9,13 +9,12 @@ var crypto = require('./crypto');
 var lodash = require('lodash');
 //log
 var log4js = require('log4js');
-    
 log4js.configure({
-  appenders: [
-    { type: 'console' },
-    { type: 'file', filename: 'logs/auth.log', category: 'auth' }
-  ]
-});
+      appenders: [
+        { type: 'console' },
+        { type: 'file', filename: 'logs/contability.log', category: 'auth' }
+      ]
+    });
 var log = log4js.getLogger('auth');
 
 /**
