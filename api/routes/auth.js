@@ -14,4 +14,7 @@ module.exports = function (app) {
 	app.get('/auth/users/:userId', middleware.ensureAuthenticated, authController.emailFind);
 	app.put('/auth/users/:userId', middleware.ensureAuthenticated, authController.emailUpdate);
 	app.delete('/auth/users/:userId', middleware.ensureAuthenticated, authController.emailDelete);
+
+	//Finish by binding the article middleware
+	app.param('userId', authController.userByID);
 }

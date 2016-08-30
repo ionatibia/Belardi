@@ -5,15 +5,17 @@ var User = require('../models/user');
 var service = require('./services');
 //encriptar password
 var crypto = require('./crypto');
+//lodash
+var lodash = require('lodash');
 //log
 var log4js = require('log4js');
     
-    log4js.configure({
-      appenders: [
-        { type: 'console' },
-        { type: 'file', filename: 'logs/auth.log', category: 'auth' }
-      ]
-    });
+log4js.configure({
+  appenders: [
+    { type: 'console' },
+    { type: 'file', filename: 'logs/auth.log', category: 'auth' }
+  ]
+});
 var log = log4js.getLogger('auth');
 
 /**
