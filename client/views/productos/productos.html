@@ -1,0 +1,10 @@
+<div>
+	<h1>PRODUCTOS</h1>
+	<a href="#/productos/addProducto" class="glyphicon glyphicon-plus"></a>
+	<input type="text" name="buscador" ng-model="buscador" placeholder="Buscar" class="form-control">
+	<div id="listaProductos">
+		<ul class="list-group">
+			<li class="list-group-item" ng-repeat="producto in productos | filter: buscador">{{producto.nombre}} <br/>{{producto.descripcion}} <br/>Tipo: {{producto.tipo}}<br/>Subtipo: {{producto.subtipo}}<br/>Stock: {{producto.stock}}<a id="botonUpdate" class="btn btn-primary" ng-click="seleccionProductoUpdate(producto)"><span class="glyphicon glyphicon-pencil"></span></a><a id="botonDelete" class="btn btn-danger" ng-click="deleteProducto(producto)"><span class="glyphicon glyphicon-trash"></span></a></li>
+		</ul>
+	</div>
+</div>

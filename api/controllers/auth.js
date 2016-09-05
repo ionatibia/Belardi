@@ -12,7 +12,7 @@ var log4js = require('log4js');
 log4js.configure({
       appenders: [
         { type: 'console' },
-        { type: 'file', filename: 'logs/contability.log', category: 'auth' }
+        { type: 'file', filename: 'logs/users.log', category: 'auth' }
       ]
     });
 var log = log4js.getLogger('auth');
@@ -28,7 +28,9 @@ exports.emailSignup = function(req, res) {
             .status(400)
             .send("Faltan datos")
     }
-    var pass = crypto.encriptar(req.body.correo,req.body.password);
+    if (req.body.password) {
+        var pass = crypto.encriptar(req.body.correo,req.body.password);
+    }
 
     var user = new User(req.body);
     user.password = pass;
@@ -38,7 +40,7 @@ exports.emailSignup = function(req, res) {
             log.error("Fallo al guardar usuario: "+err)
             return res
                 .status(400)//bad request
-                .send("fallo al guardar usuario")
+                .send("fallo al guardar usuario"+err)
         }
         log.info("Creado el usuario nº:"+user.numero+';')
         delete user.password;

@@ -1,92 +1,40 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<!-- Latest compiled and minified CSS -->
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
-	<!-- Font Awesome -->
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
-	<!-- CSS personalizado -->
-	<link href="css/myStyle.css" rel="stylesheet">
-	<title>Belardi</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta charset="utf-8">
+	<link rel="apple-touch-icon" sizes="180x180" href="./img/favicon/apple-touch-icon.png">
+	<link rel="icon" type="image/png" href="./img/favicon/favicon-32x32.png" sizes="32x32">
+	<link rel="icon" type="image/png" href="./img/favicon/favicon-16x16.png" sizes="16x16">
+	<link rel="manifest" href="./img/favicon/manifest.json">
+	<link rel="mask-icon" href="./img/favicon/safari-pinned-tab.svg" color="#5bbad5">
+	<meta name="theme-color" content="#ffffff">
+	<title>Prueba AngularJS</title>
+	<link rel="stylesheet" type="text/css" href="./bower_components/bootstrap/dist/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="./bower_components/angular-flash-alert/dist/angular-flash.min.css">
+	<link rel="stylesheet" type="text/css" href="./css/style.css">
 </head>
-<body>
-
-	<div>
-	    <header class="jumbotron">
-	        <!-- Main component for a primary marketing message or call to action -->
-	        <div class="container">
-	            <div class="row row-header">
-	                <h1>Sign up</h1>
-	            </div>
-	        </div>
-	    
-
-			<div class="container">
-
-				<form id='signup'>
-					<label for="nombre">Nombre: </label>
-					<input class="form-control" type="text" id="nombre" name="nombre"/>
-					<br>
-					<label for="correo">Correo: </label>
-					<input class="form-control" type="text" id="correo" name="correo"/>
-					<br>
-					<label for="password">Password: </label>
-					<input class="form-control" type="text" id="password" name="password"/>
-					<br>
-					<button id="enviar" class="btn btn-primary">Enviar</button>
-
-				</form>					
-			</div>
-		</header>
-
-		<header class="jumbotron">
-	        <!-- Main component for a primary marketing message or call to action -->
-	        <div class="container">
-	            <div class="row row-header">
-	                <h1>Sign in</h1>
-	            </div>
-	        </div>
-	    
-
-			<div class="container">
-
-				<form id='login'>
-					<label for="correo">Correo: </label>
-					<input class="form-control" type="text" id="correo" name="correo"/>
-					<br>
-					<label for="password">Password: </label>
-					<input class="form-control" type="text" id="password" name="password"/>
-					<br>
-					<button id="enviar" class="btn btn-primary">Enviar</button>
-
-				</form>					
-			</div>
-		</header>
-
-		<header class="jumbotron">
-	        <!-- Main component for a primary marketing message or call to action -->
-	        <div class="container">
-	            <div class="row row-header">
-	                <h1>Ir a privado</h1>
-	            </div>
-	        </div>
-	    
-
-			<div class="container">
-					<button id="privado" class="btn btn-primary">ir</button>				
-			</div>
-		</header>
-		
-	<div>
-
-
-<!--Librerias-->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
-<!-- Latest compiled and minified JavaScript -->
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
-<!--JQuery cookie-->
-<script src="publicJs/jquery.cookie.js"></script>
-<!--funciones propias-->
-<script src="js/funciones.js"></script>
+<body ng-app="app" ng-controller="AppCtrl">
+<ng-include src="'views/header.html'"></ng-include>
+<flash-message duration="5000" show-close="true"></flash-message> 
+<ng-view></ng-view>
+	<!--SCRIPTS-->
+	<script src="./bower_components/jquery/dist/jquery.min.js"></script>
+	<script src="./bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+	<script src="./bower_components/angular/angular.min.js"></script>
+	<script src="./bower_components/angular-route/angular-route.min.js"></script>
+	<script src="./bower_components/angular-flash-alert/dist/angular-flash.min.js"></script>
+	<!--CONTROLLERS-->
+	<script src="./js/app.js"></script>
+	<script src="./js/mainCtrl.js"></script>
+	<script src="./js/dispensaCtrl.js"></script>
+	<script src="./js/sociosCtrl.js"></script>
+	<script src="./js/productosCtrl.js"></script>
+	<script src="./js/informesCtrl.js"></script>
+	<script src="./js/graficosCtrl.js"></script>
+	<!--SERVICES-->
+	<script src="./js/services/menuService.js"></script>
+	<script src="./js/services/productos.js"></script>
+	<script src="./js/services/socios.js"></script>
 </body>
 </html>

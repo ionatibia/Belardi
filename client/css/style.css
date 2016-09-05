@@ -1,0 +1,59 @@
+body{
+	background-color: #F4FA58;
+	font-family: fuente;
+	font-size: 16pt;
+}
+@font-face {
+    font-family: titulo;
+    src: url('../fonts/Jack Frost.otf');
+}
+@font-face {
+    font-family: menu;
+    src: url('../fonts/Original Woody.ttf');
+}
+@font-face {
+    font-family: fuente;
+    src: url('../fonts/Urban Elegance Bold.ttf');
+}
+
+/*NavBar*/
+.navbar-default .navbar-nav>.active>a, .navbar-default .navbar-nav>.active>a:focus, .navbar-default .navbar-nav>.active>a:hover{
+	color:black !important;
+	background-color: #cbcc0c;
+	font-weight: bold;
+	font-family: menu;
+}
+.navbar-custom{
+	background-color: green;
+}
+.navbar-default .navbar-nav>li>a {
+    color: white !important;
+    font-family: menu;
+}
+.navbar-brand{
+	padding: 5px;
+	width: 100px;
+}
+
+/*LOGIN*/
+#formularioLogin{
+	width: 60%;
+	margin: auto;
+	border: 1px solid black;
+	padding: 35px;
+	border-radius: 25px;
+	background-color: #D8D8D8;
+}
+h1{
+	margin: auto;
+	text-align: center;
+	font-family: titulo !important;
+}
+#submitButton{
+	width: 100%;
+	margin-top: 25px;
+}
+#numero, #password, #nombre, #apellido, #correo, #telefono{
+	margin-top: 5px;
+	margin-bottom: 20px;
+}

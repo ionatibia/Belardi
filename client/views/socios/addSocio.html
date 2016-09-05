@@ -1,0 +1,35 @@
+<h1>ADDSOCIO</h1>
+<form id="formularioAddSocio" name="formularioAddSocio" class="form-group" ng-submit="addSocio(socio)" novalidate>
+
+	<div class="form-group" ng-class="{'has-error':formularioAddSocio.nombre.$invalid && formularioAddSocio.nombre.$dirty}">
+		<label for="nombre" class="label label-default">Nombre: </label>
+		<input type="text" name="nombre" id="nombre" class="form-control" ng-model="socio.nombre" ng-required="true" minlength="3" placeholder="Nombre">
+	</div>
+
+	<div class="form-group" ng-class="{'has-error':formularioAddSocio.apellido.$invalid && formularioAddSocio.apellido.$dirty}">
+		<label for="apellido" class="label label-default">Apellido: </label>
+		<input type="text" name="apellido" id="apellido" class="form-control" value="{{socio.apellido}}" ng-model="socio.apellido" ng-required="true" minlength="3" placeholder="Apellido">
+	</div>
+
+	<div class="form-group" ng-class="{'has-error':formularioAddSocio.numero.$invalid && formularioAddSocio.numero.$dirty}">
+		<label for="numero" class="label label-default">Numero: </label>
+		<input type="number" name="numero" id="numero" class="form-control" value="{{socio.numero}}" ng-model="socio.numero" ng-required="true" maxlength="3" placeholder="Numero">
+	</div>
+
+	<div class="form-group" ng-class="{'has-error':formularioAddSocio.correo.$invalid && formularioAddSocio.correo.$dirty}">
+		<label for="correo" class="label label-default">Correo: </label>
+		<input type="email" name="correo" id="correo" class="form-control" value="{{socio.correo}}" ng-model="socio.correo" ng-required="true" placeholder="Correo">
+	</div>
+
+	<div class="form-group" ng-class="{'has-error':formularioAddSocio.telefono.$invalid && formularioAddSocio.telefono.$dirty}">
+		<label for="telefono" class="label label-default">Telefono: </label>
+		<input type="tel" name="telefono" id="telefono" class="form-control" value="{{socio.telefono}}" ng-model="socio.telefono" placeholder="Telefono">
+	</div>
+
+	<div class="form-group" ng-class="{'has-error':formularioAddSocio.password.$invalid && formularioAddSocio.password.$dirty}">
+		<label for="password" class="label label-default">Password: </label>
+		<input type="password" name="password" id="password" class="form-control" value="{{socio.password}}" ng-model="socio.password" placeholder="Password">
+	</div>
+
+	<input type="submit" name="submit" style="width:100%" class="btn btn-primary" value="Actualizar" ng-disabled="formularioAddSocio.$invalid">
+</form>

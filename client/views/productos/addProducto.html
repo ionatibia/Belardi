@@ -1,0 +1,42 @@
+<h1>ADDPRODUCTO</h1>
+<form id="formularioAddProducto" name="formularioAddProducto" class="form-group" ng-submit="addProducto(producto)" novalidate>
+
+	<div class="form-group" ng-class="{'has-error':formularioAddProducto.nombre.$invalid && formularioAddProducto.nombre.$dirty}">
+		<label for="nombre" class="label label-default">Nombre: </label>
+		<input type="text" name="nombre" id="nombre" class="form-control" ng-model="producto.nombre" ng-required="true" minlength="3" placeholder="Nombre">
+	</div>
+
+	<div class="form-group" ng-class="{'has-error':formularioAddProducto.descripcion.$invalid && formularioAddProducto.descripcion.$dirty}">
+		<label for="descripcion" class="label label-default">Descripcion: </label>
+		<input type="text" name="descripcion" id="descripcion" class="form-control" value="{{producto.descripcion}}" ng-model="producto.descripcion" ng-required="true" minlength="3" placeholder="Descripcion">
+	</div>
+
+	<div class="form-group">
+		<label for="tipo" class="label label-default">Tipo: </label>
+		<select id="tipo" name="tipo" class="form-control" ng-model="producto.tipo" ng-required="true" ng-change="seleccionTipo(producto.tipo)">
+			<option value="" selected disabled="">Selecciona</option>
+			<option ng-repeat="option in tipos" value="{{option.tipo}}">{{option.tipo}}</option>
+		</select>
+	</div>
+
+	<div class="form-group">
+		<label for="subtipo" class="label label-default">Subtipo: </label>
+		<select id="subtipo" name="subtipo" class="form-control" ng-model="producto.subtipo" ng-required="true" ng-switch on="tipo">
+			<option value="" selected disabled="">Selecciona</option>
+			<option ng-switch-when="dispensa" ng-repeat="option in subtiposDispensa" value="{{option.dispensa}}">{{option.dispensa}}</option>
+			<option ng-switch-when="barra" ng-repeat="option in subtiposBarra" value="{{option.barra}}">{{option.barra}}</option>
+		</select>
+	</div>
+
+	<div class="form-group" ng-class="{'has-error':formularioAddProducto.precio.$invalid && formularioAddProducto.precio.$dirty}">
+		<label for="precio" class="label label-default">Precio: </label>
+		<input type="number" name="precio" id="precio" class="form-control" value="{{producto.precio}}" ng-model="producto.precio" ng-required="true" placeholder="Precio sin IVA">
+	</div>
+
+	<div class="form-group" ng-class="{'has-error':formularioAddProducto.iva.$invalid && formularioAddProducto.iva.$dirty}">
+		<label for="iva" class="label label-default">iva: </label>
+		<input type="number" name="iva" id="iva" class="form-control" value="{{producto.iva}}" ng-model="producto.iva" ng-required="true" placeholder="% IVA">
+	</div>
+
+	<input type="submit" name="submit" style="width:100%" class="btn btn-primary" value="Enviar" ng-disabled="formularioAddProducto.$invalid">
+</form>

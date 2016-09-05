@@ -1,0 +1,25 @@
+<h1>UpdateSocio</h1>
+<form id="formularioUpdateSocio" name="formularioUpdateSocio" class="form-group" ng-submit="updateSocio(socioSeleccionado)" novalidate>
+
+	<div class="form-group" ng-class="{'has-error':formularioUpdateSocio.nombre.$invalid && formularioUpdateSocio.nombre.$dirty}">
+		<label for="nombre" class="label label-default">Nombre: </label>
+		<input type="text" name="nombre" id="nombre" class="form-control" value="{{socioSeleccionado.nombre}}" ng-model="socioSeleccionado.nombre" ng-required="true" minlength="3">
+	</div>
+
+	<div class="form-group" ng-class="{'has-error':formularioUpdateSocio.apellido.$invalid && formularioUpdateSocio.apellido.$dirty}">
+		<label for="apellido" class="label label-default">Apellido: </label>
+		<input type="text" name="apellido" id="apellido" class="form-control" value="{{socioSeleccionado.apellido}}" ng-model="socioSeleccionado.apellido" ng-required="true" minlength="3">
+	</div>
+
+	<div class="form-group" ng-class="{'has-error':formularioUpdateSocio.numero.$invalid && formularioUpdateSocio.numero.$dirty}">
+		<label for="numero" class="label label-default">Numero: </label>
+		<input type="number" name="numero" id="numero" class="form-control" value="{{socioSeleccionado.numero}}" ng-model="socioSeleccionado.numero" ng-required="true" maxlength="3">
+	</div>
+
+	<div class="form-group" ng-class="{'has-error':formularioUpdateSocio.correo.$invalid && formularioUpdateSocio.correo.$dirty}">
+		<label for="correo" class="label label-default">Correo: </label>
+		<input type="email" name="correo" id="correo" class="form-control" value="{{socioSeleccionado.correo}}" ng-model="socioSeleccionado.correo" ng-required="true">
+	</div>
+
+	<input type="submit" name="submit" style="width:100%" class="btn btn-primary" value="Actualizar" ng-disabled="formularioUpdateSocio.$invalid">
+</form>

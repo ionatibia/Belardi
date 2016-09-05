@@ -23,7 +23,7 @@ var userSchema = new Schema({
 	apellido:{type:String},
 	numero:{type:Number,required: 'Please fill in a numero',unique: 'Number already exists'},
 	identificacion:{type:String, default:null},
-	correo:{type:String,required: 'Please fill in a correo',validate: [validateLocalStrategyEmail, 'Please fill a valid email address']},
+	correo:{type:String,required: 'Please fill in a correo',validate: [validateLocalStrategyEmail, 'Please fill a valid email address'], unique:true, lowercase: true},
 	telefono:{type:Number},
 	password:{type:String},
 	fecha_alta:{type:Date, default:Date.now()},

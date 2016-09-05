@@ -1,0 +1,14 @@
+<div id="containerFormulario" class="container-fluid form-group">
+	<h1 class="h1">LOGIN</h1>
+	<form id="formularioLogin" name="formularioLogin" novalidate>
+		<div class="form-group" ng-class="{'has-error':formularioLogin.numero.$invalid && formularioLogin.numero.$dirty}">
+			<label for="numero" class="label label-default">Nº Usuario: </label>
+			<input type="number" name="numero" id="numero" class="form-control" ng-model="user.numero" ng-required="true" maxlength="3">
+		</div>
+		<div class="form-group">
+			<label for="password" class="label label-default">Password: </label>
+			<input type="password" name="password" id="password" class="form-control" ng-model="user.password" ng-required="true" minlength="6">
+		</div>
+		<button id="submitButton" class="btn btn-primary" ng-click="submit(user)" ng-disabled="formularioLogin.$invalid">Login</button>
+	</form>
+</div>

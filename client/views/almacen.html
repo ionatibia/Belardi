@@ -1,0 +1,15 @@
+<h1>stock</h1>
+<form id="formularioAnadirStock" name="formularioAnadirStock" class="form-group" ng-submit="updateStock(productoSeleccionado)" novalidate>
+
+	<div class="form-group">
+		<label for="nombre" class="label label-default">Nombre: </label>
+		<input type="text" name="nombre" id="nombre" class="form-control" value="{{productoSeleccionado.nombre}}" ng-model="productoSeleccionado.nombre" disabled>
+	</div>
+
+	<div class="form-group" ng-class="{'has-error':formularioAnadirStock.stock.$invalid && formularioAnadirStock.stock.$dirty}">
+		<label for="stock" class="label label-default">Stock: </label>
+		<input type="number" name="stock" id="stock" class="form-control" ng-model="productoSeleccionado.stock" ng-required="true">
+	</div>
+
+	<input type="submit" name="submit" style="width:100%" class="btn btn-primary" value="Actualizar" ng-disabled="formularioAnadirStock.$invalid">
+</form>

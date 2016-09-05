@@ -1,0 +1,11 @@
+<div>
+	<h1>SOCIOS</h1>
+	<a href="#/socios/addSocio" class="glyphicon glyphicon-plus"></a>
+	<input type="text" name="buscador" ng-model="buscador" placeholder="Buscar" class="form-control">
+	<div id="listaSocios">
+		<ul class="list-group">
+			<li class="list-group-item" ng-repeat="socio in socios | filter: buscador">{{socio.nombre}} {{socio.apellido}} <br/>Número: {{socio.numero}}<br/>Correo: {{socio.correo}} <a id="botonUpdate" class="btn btn-primary" ng-click="seleccionSocioUpdate(socio)"><span class="glyphicon glyphicon-pencil"></span></a><a id="botonDelete" class="btn btn-danger" ng-click="deleteSocio(socio)"><span class="glyphicon glyphicon-trash"></span></a></li>
+		</ul>
+	</div>
+</div>
+

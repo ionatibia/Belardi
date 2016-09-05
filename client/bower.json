@@ -1,0 +1,25 @@
+{
+  "name": "belardiapp",
+  "homepage": "https://github.com/ionatibia/Angular",
+  "description": "Gestión de productos y usuarios",
+  "main": "index.html",
+  "authors": [
+    "Natiexperiencia"
+  ],
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular": "^1.5.8",
+    "bootstrap": "^3.3.7",
+    "jquery": "^3.1.0",
+    "angular-route": "^1.5.8",
+    "angular-flash-alert": "^2.3.0"
+  }
+}
