@@ -1,14 +1,18 @@
 var app = angular.module('app');
 
 app.controller('SociosCtrl', ['$scope','$location', 'SociosServ','Flash',function ($scope,$location,SociosServ,Flash) {
-	//get all socios
-	SociosServ.getAll().then(function (response) {
-		$scope.socios = response.data;
-	}, function (err) {
-		var message = '<strong>ERROR!!!</strong> '+JSON.stringify(err.data.message);
-	    Flash.create('danger', message);
-		console.log(JSON.stringify(err))
-	});
+	if (!$scope.checkLogin()){
+		$location.path("/");
+	} else{
+		//get all socios
+		SociosServ.getAll().then(function (response) {
+			$scope.socios = response.data;
+		}, function (err) {
+			var message = '<strong>ERROR!!!</strong> '+JSON.stringify(err.data.message);
+		    Flash.create('danger', message);
+			console.log(JSON.stringify(err))
+		});
+	}
 
 	//update socio
 	$scope.updateSocio = function (socio) {

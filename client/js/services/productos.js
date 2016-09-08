@@ -5,36 +5,22 @@ var app = angular.module('app');
         var factory = {};
         var endpoint = 'http://localhost:8000/products';
 
-        var token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI1N2NkMzE0NTQ4NGNmMDFhODAwYzY2ZWYiLCJpYXQiOjE0NzMwNjUzODMsImV4cCI6MTQ3MzE1MTc4M30.S6r5sh6r-Fx25VTjPIB1Ebnv_XhOodIXoeyPCtJaxgA";
-
         var configGet = {
             url: endpoint,
             method: 'GET',
-            headers: {
-                'X-ACCESS-TOKEN': token
-            }
         }
 
         var configPut = {
             method: "PUT",
-            headers: {
-                'X-ACCESS-TOKEN': token
-            }
         }
 
         var configAdd = {
             url:endpoint,
             method:"POST",
-            headers: {
-                'X-ACCESS-TOKEN': token
-            }
         }
 
         var configDelete = {
             method:"DELETE",
-            headers: {
-                'X-ACCESS-TOKEN': token
-            }
         }
 
 
@@ -69,10 +55,10 @@ var app = angular.module('app');
             {"tipo":"barra"}
         ];
         factory.subtipos = [
-            {"dispensa":"hierba"},
-            {"dispensa":"extraccion"},
-            {"barra":"bebida"},
-            {"barra":"comida"}
+            {"nombre":"hierba", "tipo":"dispensa"},
+            {"nombre":"extraccion", "tipo":"dispensa"},
+            {"nombre":"bebida", "tipo":"barra"},
+            {"nombre":"comida", "tipo":"barra"}
         ];
 
         return factory;

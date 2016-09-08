@@ -6,36 +6,22 @@ var app = angular.module('app');
         var endpoint = 'http://localhost:8000/auth/users';
         var endpoint2 = 'http://localhost:8000/auth/signup';
 
-        var token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI1N2NkMzE0NTQ4NGNmMDFhODAwYzY2ZWYiLCJpYXQiOjE0NzMwNjUzODMsImV4cCI6MTQ3MzE1MTc4M30.S6r5sh6r-Fx25VTjPIB1Ebnv_XhOodIXoeyPCtJaxgA";
-
         var configGet = {
             url: endpoint,
             method: 'GET',
-            headers: {
-                'X-ACCESS-TOKEN': token
-            }
         }
 
         var configPut = {
             method: "PUT",
-            headers: {
-                'X-ACCESS-TOKEN': token
-            }
         }
 
         var configAdd = {
             url:endpoint2,
             method:"POST",
-            headers: {
-                'X-ACCESS-TOKEN': token
-            }
         }
 
         var configDelete = {
             method:"DELETE",
-            headers: {
-                'X-ACCESS-TOKEN': token
-            }
         }
 
 

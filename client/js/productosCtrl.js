@@ -1,31 +1,39 @@
 var app = angular.module('app');
 
 app.controller('ProductosCtrl', ['$scope','$location','ProductosServ','Flash', function ($scope,$location,ProductosServ,Flash) {
-	//tipos y subtipos
-	$scope.tipos = ProductosServ.tipos;
-	$scope.subtipos = ProductosServ.subtipos;
-	$scope.subtiposDispensa = [];
-	$scope.subtiposBarra = []
-	for (var i = 0; i < $scope.subtipos.length; i++) {
-		if($scope.subtipos[i].dispensa){
-			$scope.subtiposDispensa.push($scope.subtipos[i])
-		}else {
-			$scope.subtiposBarra.push($scope.subtipos[i])
+	if (!$scope.checkLogin()){
+		$location.path("/");
+	} else{
+		tipos();
+		//get all productos
+		ProductosServ.getAll().then(function (response) {
+			$scope.productos = response.data;
+		}, function (err) {
+			var message = '<strong>ERROR!!!</strong> '+JSON.stringify(err.data.message);
+		    Flash.create('danger', message);
+			console.log(JSON.stringify(err))
+		})
+
+	}
+
+	function tipos() {
+		//tipos y subtipos
+		$scope.tipos = ProductosServ.tipos;
+		$scope.subtipos = ProductosServ.subtipos;
+		$scope.subtiposDispensa = [];
+		$scope.subtiposBarra = []
+		for (var i = 0; i < $scope.subtipos.length; i++) {
+			if($scope.subtipos[i].dispensa){
+				$scope.subtiposDispensa.push($scope.subtipos[i])
+			}else {
+				$scope.subtiposBarra.push($scope.subtipos[i])
+			}
 		}
 	}
+	
 	$scope.seleccionTipo = function (tipo) {
 		$scope.tipo = tipo;
 	}
-	/////////////////////////
-
-	//get all productos
-	ProductosServ.getAll().then(function (response) {
-		$scope.productos = response.data;
-	}, function (err) {
-		var message = '<strong>ERROR!!!</strong> '+JSON.stringify(err.data.message);
-	    Flash.create('danger', message);
-		console.log(JSON.stringify(err))
-	})
 	//add producto
 	$scope.addProducto = function (producto) {
 		ProductosServ.addProducto(producto).then(function (response) {

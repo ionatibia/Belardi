@@ -1,6 +1,6 @@
 angular.module('app',["ngRoute","ngFlash"])
 	//Routes
-	.config(function($routeProvider) {
+	.config(function($routeProvider,$httpProvider) {
 	    $routeProvider
 	    .when("/", {
 	        templateUrl: "../views/main.html",
@@ -42,10 +42,12 @@ angular.module('app',["ngRoute","ngFlash"])
 	    	templateUrl: '../views/graficos.html',
 	    	controller: 'GraficosCtrl'
 	    })
-	    .otherwise({ redirectTo: '/' })
+	    .otherwise({ redirectTo: '/' });
+
+	    $httpProvider.interceptors.push('HeadersInterceptor');
 	})
 	//Controller
-	.controller('AppCtrl', ['$scope','$location', function ($scope,$location) {
+	.controller('AppCtrl', ['$scope','$location','$window', function ($scope,$location,$window) {
 		//Active links
 		$scope.isActive = function (viewLocation) { 
         	return viewLocation === $location.path();
@@ -53,11 +55,20 @@ angular.module('app',["ngRoute","ngFlash"])
 
     	//Login comprobation
 		$scope.checkLogin = function () {
-			/*if ($scope.token) {
+			if ($window.localStorage.getItem('token')) {
 				return true;
 			} else {
 				return false;
-			}*/
-			return true;
-		}//check login	
+			}
+		}//check login
 	}])//AppCtrl controller
+	.factory("HeadersInterceptor", function($window){
+	      var request = function request(config){
+	          config.headers["X-ACCESS-TOKEN"] = $window.localStorage.getItem('token');
+	          return config;
+	      };
+
+	      return {
+	          request: request
+	      };
+	});
