@@ -18,14 +18,14 @@
 			<div class="form-group">
 				<select class="form-control" ng-model="ticket.tipo">
 					<option value="" selected disabled>Selecciona</option>
-					<option ng-repeat="tipo in tipos" value="{{tipo.tipo}}">{{tipo.tipo}}</option>
+					<option ng-repeat="tipo in tipos" value="{{tipo.tipo}}">{{tipo.tipo.toUpperCase()}}</option>
 				</select>
 			</div>
 			<!---->
 			<div class="form-group">
 				<select class="form-control" ng-model="ticket.subtipo" ng-show="ticket.tipo">
 					<option value="" selected disabled>Selecciona</option>
-					<option ng-repeat="subtipo in subtipos | filter: ticket.tipo" value="{{subtipo.nombre}}">{{subtipo.nombre}}</option>
+					<option ng-repeat="subtipo in subtipos | filter: ticket.tipo" value="{{subtipo.nombre}}">{{subtipo.nombre.toUpperCase()}}</option>
 				</select>
 			</div>
 			<!---->
@@ -40,6 +40,6 @@
 			</div>
 		</div>
 		<button id="anadirButton" class="btn btn-primary" ng-click="anadir(ticket)" ng-show="ticket.cantidad">Añadir</button>
-		<button id="submitButton" class="btn btn-primary" ng-click="finalizar(socio)" ng-disabled="formularioDispensa.$invalid">Finalizar</button>
+		<button id="submitButton" class="btn btn-primary" ng-click="finalizar(socio)" ng-disabled="formularioDispensa.$invalid || listaProductos == ''">Finalizar</button>
 	</form>
 </div>

@@ -21,10 +21,5 @@
 		<input type="number" name="iva" id="iva" class="form-control" value="{{productoSeleccionado.iva}}" ng-model="productoSeleccionado.iva" ng-required="true">
 	</div>
 
-	<div class="form-group" ng-class="{'has-error':formularioUpdateProducto.stock.$invalid && formularioUpdateProducto.stock.$dirty}">
-		<label for="stock" class="label label-default">Stock: </label>
-		<input type="number" name="stock" id="stock" class="form-control" value="{{productoSeleccionado.stock}}" ng-model="productoSeleccionado.stock" ng-required="true">
-	</div>
-
 	<input type="submit" name="submit" style="width:100%" class="btn btn-primary" value="Actualizar" ng-disabled="formularioUpdateProducto.$invalid">
 </form>

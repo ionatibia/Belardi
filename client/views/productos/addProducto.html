@@ -6,37 +6,36 @@
 		<input type="text" name="nombre" id="nombre" class="form-control" ng-model="producto.nombre" ng-required="true" minlength="3" placeholder="Nombre">
 	</div>
 
-	<div class="form-group" ng-class="{'has-error':formularioAddProducto.descripcion.$invalid && formularioAddProducto.descripcion.$dirty}">
+	<div class="form-group" ng-class="{'has-error':formularioAddProducto.descripcion.$invalid && formularioAddProducto.descripcion.$dirty}" ng-if="producto.nombre">
 		<label for="descripcion" class="label label-default">Descripcion: </label>
-		<input type="text" name="descripcion" id="descripcion" class="form-control" value="{{producto.descripcion}}" ng-model="producto.descripcion" ng-required="true" minlength="3" placeholder="Descripcion">
+		<input type="text" name="descripcion" id="descripcion" class="form-control" value="{{producto.descripcion}}" ng-model="producto.descripcion" minlength="3" placeholder="Descripcion">
 	</div>
 
-	<div class="form-group">
+	<div class="form-group" ng-if="producto.nombre">
 		<label for="tipo" class="label label-default">Tipo: </label>
 		<select id="tipo" name="tipo" class="form-control" ng-model="producto.tipo" ng-required="true" ng-change="seleccionTipo(producto.tipo)">
 			<option value="" selected disabled="">Selecciona</option>
-			<option ng-repeat="option in tipos" value="{{option.tipo}}">{{option.tipo}}</option>
+			<option ng-repeat="option in tipos" value="{{option.tipo}}">{{option.tipo.toUpperCase()}}</option>
 		</select>
 	</div>
 
-	<div class="form-group">
+	<div class="form-group" ng-if="producto.tipo">
 		<label for="subtipo" class="label label-default">Subtipo: </label>
-		<select id="subtipo" name="subtipo" class="form-control" ng-model="producto.subtipo" ng-required="true" ng-switch on="tipo">
+		<select id="subtipo" name="subtipo" class="form-control" ng-model="producto.subtipo" ng-required="true">
 			<option value="" selected disabled="">Selecciona</option>
-			<option ng-switch-when="dispensa" ng-repeat="option in subtiposDispensa" value="{{option.dispensa}}">{{option.dispensa}}</option>
-			<option ng-switch-when="barra" ng-repeat="option in subtiposBarra" value="{{option.barra}}">{{option.barra}}</option>
+			<option ng-repeat="subtipo in subtipos | filter: producto.tipo" value="{{subtipo.nombre}}">{{subtipo.nombre.toUpperCase()}}</option>
 		</select>
 	</div>
 
-	<div class="form-group" ng-class="{'has-error':formularioAddProducto.precio.$invalid && formularioAddProducto.precio.$dirty}">
+	<div class="form-group" ng-class="{'has-error':formularioAddProducto.precio.$invalid && formularioAddProducto.precio.$dirty}" ng-if="producto.subtipo">
 		<label for="precio" class="label label-default">Precio: </label>
 		<input type="number" name="precio" id="precio" class="form-control" value="{{producto.precio}}" ng-model="producto.precio" ng-required="true" placeholder="Precio sin IVA">
 	</div>
 
-	<div class="form-group" ng-class="{'has-error':formularioAddProducto.iva.$invalid && formularioAddProducto.iva.$dirty}">
+	<div class="form-group" ng-class="{'has-error':formularioAddProducto.iva.$invalid && formularioAddProducto.iva.$dirty}" ng-if="producto.precio">
 		<label for="iva" class="label label-default">iva: </label>
 		<input type="number" name="iva" id="iva" class="form-control" value="{{producto.iva}}" ng-model="producto.iva" ng-required="true" placeholder="% IVA">
 	</div>
 
-	<input type="submit" name="submit" style="width:100%" class="btn btn-primary" value="Enviar" ng-disabled="formularioAddProducto.$invalid">
+	<input type="submit" name="submit" style="width:100%" class="btn btn-primary" value="Crear" ng-disabled="formularioAddProducto.$invalid">
 </form>

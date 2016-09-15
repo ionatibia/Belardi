@@ -39,6 +39,7 @@ app.controller('ProductosCtrl', ['$scope','$location','ProductosServ','Flash', f
 		ProductosServ.addProducto(producto).then(function (response) {
 			var message = '<strong>HECHO!!!</strong> El producto ha sido guardado correctamente';
 	        Flash.create('success', message);
+	        $location.path('/productos')
 		}, function (err) {
 			var message = '<strong>ERROR!!!</strong> '+JSON.stringify(err.data.message);
 	        Flash.create('danger', message);
@@ -49,6 +50,7 @@ app.controller('ProductosCtrl', ['$scope','$location','ProductosServ','Flash', f
 		ProductosServ.updateProducto(producto).then(function (response) {
 	        var message = '<strong>HECHO!!!</strong> El producto ha sido modificado correctamente';
 	        Flash.create('success', message);
+	        $location.path('/productos')
 		}, function (err) {
 			var message = '<strong>ERROR!!!</strong> '+JSON.stringify(err.data.message);
 	        Flash.create('danger', message);

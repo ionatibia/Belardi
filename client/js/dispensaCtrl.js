@@ -45,7 +45,6 @@ app.controller('DispensaCtrl', ['$scope','$location','ProductosServ','SociosServ
 	$scope.listaProductos = [];
 	$scope.anadir = function (ticket) {
 		$scope.ticketCompleto.push(ticket);
-		console.log($scope.ticketCompleto)
 		$scope.listaProductos.push(ticket)
 		$scope.ticket = angular.copy($scope.master);
 	}

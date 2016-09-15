@@ -6,30 +6,35 @@
 		<input type="text" name="nombre" id="nombre" class="form-control" ng-model="socio.nombre" ng-required="true" minlength="3" placeholder="Nombre">
 	</div>
 
-	<div class="form-group" ng-class="{'has-error':formularioAddSocio.apellido.$invalid && formularioAddSocio.apellido.$dirty}">
+	<div class="form-group" ng-class="{'has-error':formularioAddSocio.apellido.$invalid && formularioAddSocio.apellido.$dirty}" ng-if="socio.nombre">
 		<label for="apellido" class="label label-default">Apellido: </label>
-		<input type="text" name="apellido" id="apellido" class="form-control" value="{{socio.apellido}}" ng-model="socio.apellido" ng-required="true" minlength="3" placeholder="Apellido">
+		<input type="text" name="apellido" id="apellido" class="form-control" ng-model="socio.apellido" minlength="3" placeholder="Apellido">
 	</div>
 
-	<div class="form-group" ng-class="{'has-error':formularioAddSocio.numero.$invalid && formularioAddSocio.numero.$dirty}">
+	<div class="form-group" ng-class="{'has-error':formularioAddSocio.numero.$invalid && formularioAddSocio.numero.$dirty}" ng-if="socio.nombre">
 		<label for="numero" class="label label-default">Numero: </label>
-		<input type="number" name="numero" id="numero" class="form-control" value="{{socio.numero}}" ng-model="socio.numero" ng-required="true" maxlength="3" placeholder="Numero">
+		<input type="number" name="numero" id="numero" class="form-control" ng-model="socio.numero" ng-required="true" maxlength="3" placeholder="Numero">
 	</div>
 
-	<div class="form-group" ng-class="{'has-error':formularioAddSocio.correo.$invalid && formularioAddSocio.correo.$dirty}">
+	<div class="form-group" ng-class="{'has-error':formularioAddSocio.dni.$invalid && formularioAddSocio.dni.$dirty}" ng-if="socio.numero">
+		<label for="dni" class="label label-default">DNI: </label>
+		<input type="text" name="dni" id="dni" class="form-control" ng-model="socio.dni" ng-required="true" maxlength="9" placeholder="00000000A">
+	</div>
+
+	<div class="form-group" ng-class="{'has-error':formularioAddSocio.correo.$invalid && formularioAddSocio.correo.$dirty}" ng-if="socio.dni">
 		<label for="correo" class="label label-default">Correo: </label>
-		<input type="email" name="correo" id="correo" class="form-control" value="{{socio.correo}}" ng-model="socio.correo" ng-required="true" placeholder="Correo">
+		<input type="email" name="correo" id="correo" class="form-control" ng-model="socio.correo" ng-required="true" placeholder="Correo">
 	</div>
 
-	<div class="form-group" ng-class="{'has-error':formularioAddSocio.telefono.$invalid && formularioAddSocio.telefono.$dirty}">
+	<div class="form-group" ng-class="{'has-error':formularioAddSocio.telefono.$invalid && formularioAddSocio.telefono.$dirty}" ng-if="socio.correo">
 		<label for="telefono" class="label label-default">Telefono: </label>
 		<input type="tel" name="telefono" id="telefono" class="form-control" value="{{socio.telefono}}" ng-model="socio.telefono" placeholder="Telefono">
 	</div>
 
-	<div class="form-group" ng-class="{'has-error':formularioAddSocio.password.$invalid && formularioAddSocio.password.$dirty}">
+	<div class="form-group" ng-class="{'has-error':formularioAddSocio.password.$invalid && formularioAddSocio.password.$dirty}" ng-if="socio.correo">
 		<label for="password" class="label label-default">Password: </label>
 		<input type="password" name="password" id="password" class="form-control" value="{{socio.password}}" ng-model="socio.password" placeholder="Password">
 	</div>
 
-	<input type="submit" name="submit" style="width:100%" class="btn btn-primary" value="Actualizar" ng-disabled="formularioAddSocio.$invalid">
+	<input type="submit" name="submit" style="width:100%" class="btn btn-primary" value="Crear" ng-disabled="formularioAddSocio.$invalid">
 </form>
