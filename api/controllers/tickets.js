@@ -8,6 +8,8 @@
 var path = require('path'),
 	mongoose = require('mongoose'),
 	Ticket = mongoose.model('Ticket'),
+	User = mongoose.model('User'),
+	Product = mongoose.model('Product'),
 	lodash = require('lodash');
 var log4js = require('log4js');
 log4js.configure({
@@ -17,6 +19,7 @@ log4js.configure({
 	  ]
 	});
 var log = log4js.getLogger('ticket');
+var Q = require('q');
 
 /**
  *
@@ -24,22 +27,85 @@ var log = log4js.getLogger('ticket');
  *
  */
 exports.create = function (req, res) {
-	//Guardar objetos no string
-	var ticket = new Ticket(req.body)
+	var usuario;
+	var productos = []
+	var socio;
+	var promises = [];
+	for (var i = 0; i < req.body.ticket.length; i++) {
+		var promise = Product.findOne({tipo:req.body.ticket[i].tipo, subtipo: req.body.ticket[i].subtipo, nombre: req.body.ticket[i].producto}, function (err,product) {
+			if (err) {
+				console.log(err)
+				log.warn('Error buscando producto '+req.body.ticket[i].producto)
+				res.send('Error buscando producto '+req.body.ticket[i].producto)
+			}
+			if (product) {
+				productos.push(product)
+			}else{
+				console.log("No se encuentra el producto "+req.body.ticket[i].producto)
+				log.warn('Producto '+req.body.ticket[i].producto+' no encontrado')
+				res.send('Producto '+req.body.ticket[i].producto+' no encontrado')
+			}
+		})
+		promises.push(promise);
+	}
 
-	ticket.save(function (err) {
+	Q.all(promises).then(function (response) {
+		console.log(response)
+		console.log(JSON.stringify(productos))
+	}, function (err) {
+		console.log(err)
+	})
+	
+
+	/*for (var i = 0; i < req.body.ticket.length; i++) {
+		Product.findOne({tipo:req.body.ticket[i].tipo, subtipo: req.body.ticket[i].subtipo, nombre: req.body.ticket[i].producto}, function (err,product) {
+			console.log("guardado producto "+i)
+			if (err) {
+				console.log(err)
+				log.warn('Error buscando producto '+req.body.ticket[i].producto)
+				res.send('Error buscando producto '+req.body.ticket[i].producto)
+			}
+			if (product) {
+				productos.push(product)
+			}else{
+				console.log("No se encuentra el producto "+req.body.ticket[i].producto)
+				log.warn('Producto '+req.body.ticket[i].producto+' no encontrado')
+				res.send('Producto '+req.body.ticket[i].producto+' no encontrado')
+			}
+		})
+	}
+
+	User.findOne({numero:req.body.socio},function (err, user) {
 		if (err) {
-			log.error("Error guardando ticket: "+err)
-			return res
-				.status(400)
-				.send("Error guardando ticket: "+err)
-		} else {
-			//devolvemos el articulo
-			return res
-				.status(200)
-				.json(ticket);
+			console.log(err)
+			log.warn('Error buscando usuario '+req.body.socio)
+			res.send('Error buscando usuario '+req.body.socio)
+		}
+		if (user) {
+			console.log("guardado sovio")
+			socio = user;
+		}else{
+			console.log("No se encuentra el usuario "+req.body.socio)
+			log.warn('Usuario '+req.body.socio+' no encontrado')
+			res.send('Usuario '+req.body.socio+' no encontrado')
 		}
 	});
+	User.findOne({_id:req.user},function (err, user) {
+		if (err) {
+			console.log(err)
+			log.warn('Error buscando usuario '+req.user)
+			res.send('Error buscando usuario '+req.user)
+		}
+		if (user) {
+			console.log("usuario guardado")
+			usuario = user;
+		}else{
+			console.log("No se encuentra el usuario "+req.user)
+			log.warn('Usuario '+req.user+' no encontrado')
+			res.send('Usuario '+req.user+' no encontrado')
+		}
+	});*/
+	
 };//exports create
 
 /**

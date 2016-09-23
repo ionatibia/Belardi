@@ -1,5 +1,5 @@
 var app = angular.module("app");
-app.controller('DispensaCtrl', ['$scope','$location','ProductosServ','SociosServ','$window','Flash', function ($scope,$location,ProductosServ,SociosServ,$window,Flash) {
+app.controller('DispensaCtrl', ['$scope','$location','ProductosServ','SociosServ','$window','Flash','TicketServ', function ($scope,$location,ProductosServ,SociosServ,$window,Flash,TicketServ) {
 	if (!$scope.checkLogin()){
 		$location.path("/");
 	}else{
@@ -43,15 +43,24 @@ app.controller('DispensaCtrl', ['$scope','$location','ProductosServ','SociosServ
 	}
 	$scope.ticketCompleto = [];
 	$scope.listaProductos = [];
+	$scope.prodDispensados = false;
 	$scope.anadir = function (ticket) {
 		$scope.ticketCompleto.push(ticket);
 		$scope.listaProductos.push(ticket)
 		$scope.ticket = angular.copy($scope.master);
+		$scope.prodDispensados = true;
 	}
 	$scope.finalizar = function (socio) {
 		console.log($scope.ticketCompleto+" socio: "+socio)
+		$scope.prodDispensados = false;
+		TicketServ.addTicket($scope.ticketCompleto,socio).then(function (response) {
+			console.log(response.data)
+		}, function (err) {
+			var message = '<strong>ERROR!!!</strong> '+JSON.stringify(err.data.message);
+		    Flash.create('danger', message);
+			console.log(JSON.stringify(err))
+		})
 		$scope.ticketCompleto = [];
-
 	}
 
 }])//controller

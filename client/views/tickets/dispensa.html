@@ -2,7 +2,7 @@
 	<h1 class="h1">DISPENSA</h1>
 	<form id="formularioDispensa" name="formularioDispensa" novalidate>
 		<!--Numero socio-->
-		<div class="form-group">
+		<div class="form-group" ng-show="listaProductos == ''">
 			<label for="numeroSocio" class="label label-default">Nº Socio: </label>
 			<select class="form-control" ng-model="socio" name="numeroSocio">
 				<option value="" selected disabled>Selecciona</option>
@@ -35,8 +35,8 @@
 					<option ng-repeat="option in productos | filter: ticket.tipo | filter: ticket.subtipo" value="{{option.nombre}}">{{option.nombre}}</option>
 				</select>
 			</div>
-			<div class="form-group">
-				<input type="number" class="form-control" ng-model="ticket.cantidad" ng-show="ticket.subtipo">
+			<div class="form-group" ng-class="{'has-error':formularioDispensa.cantidad.$invalid}">
+				<input type="number" class="form-control" name="cantidad" ng-model="ticket.cantidad" ng-show="ticket.subtipo" min="0">
 			</div>
 		</div>
 		<button id="anadirButton" class="btn btn-primary" ng-click="anadir(ticket)" ng-show="ticket.cantidad">Añadir</button>

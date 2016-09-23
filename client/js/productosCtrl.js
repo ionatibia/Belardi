@@ -20,7 +20,7 @@ app.controller('ProductosCtrl', ['$scope','$location','ProductosServ','Flash', f
 		//tipos y subtipos
 		$scope.tipos = ProductosServ.tipos;
 		$scope.subtipos = ProductosServ.subtipos;
-		$scope.subtiposDispensa = [];
+		/*$scope.subtiposDispensa = [];
 		$scope.subtiposBarra = []
 		for (var i = 0; i < $scope.subtipos.length; i++) {
 			if($scope.subtipos[i].dispensa){
@@ -28,7 +28,7 @@ app.controller('ProductosCtrl', ['$scope','$location','ProductosServ','Flash', f
 			}else {
 				$scope.subtiposBarra.push($scope.subtipos[i])
 			}
-		}
+		}*/
 	}
 	
 	$scope.seleccionTipo = function (tipo) {
