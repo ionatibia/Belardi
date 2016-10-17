@@ -12,7 +12,7 @@ var log4js = require('log4js');
 log4js.configure({
       appenders: [
         { type: 'console' },
-        { type: 'file', filename: 'logs/users.log', category: 'auth' }
+        { type: 'file', filename: '../logs/users.log', category: 'auth' }
       ]
     });
 var log = log4js.getLogger('auth');
@@ -76,13 +76,13 @@ exports.emailLogin = function(req, res) {
             } else {
                 log.warn("Contraseña incorrecta usuario: "+user.numero)
                 return res
-                    .status(404)
+                    .status(401)
                     .send("Contraseña incorrecta")
             }
         }else{
             log.info("Peticion de login no existe usuario: "+req.body.correo)
             return res
-                .status(204)//no content
+                .status(401)//no content
                 .send("usuario no existe");
         }
     });

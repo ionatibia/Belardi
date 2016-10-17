@@ -1,0 +1,15 @@
+hierba:
+	-interior
+		-variedades
+	-exterior
+		-variedades
+
+extraccion:
+	-seco
+	-hielo
+	-bho
+
+
+CUOTA
+
+recuento diario trimestral, con totales

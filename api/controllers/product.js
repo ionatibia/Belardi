@@ -10,16 +10,16 @@ var path = require('path'),
 	lodash = require('lodash');
 //log
 var log4js = require('log4js');
+//var log4js2 = require('log4js');
 log4js.configure({
 	  appenders: [
 	    { type: 'console' },
-	    { type: 'file', filename: 'logs/product.log', category: 'product' },
-	    { type: 'file', filename: 'logs/ajusteInventario.log', category: 'ajuste'}
+	    { type: 'file', filename: '../logs/product.log', category: 'product' },
 	  ]
 	});
     
 var log = log4js.getLogger('product');
-var logAjuste = log4js.getLogger('ajuste');
+//var logAjuste = log4js.getLogger('ajuste');
 
 /**
  *
@@ -61,12 +61,12 @@ module.exports.find = function (req, res) {
  */
 module.exports.update = function (req, res) {
 
-	var product = req.product;
+	/*var product = req.product;
 	if (req.body.stock > req.product.stock) {
 		logAjuste.info("Añadido stock de "+req.product.stock+" a "+req.body.stock+" al producto "+req.product.nombre);
 	} else if (req.body.stock < req.product.stock) {
 		logAjuste.warn("Ajuste de inventario stock de "+req.product.stock+" a "+req.body.stock+" al producto "+req.product.nombre);
-	}
+	}*/
 	//merge del producto guardado
 	var productUpdated = lodash.assign(product,req.body);
 	//guardamos el producto modificado
