@@ -1,6 +1,8 @@
-*Reordenar app para nuevos cambios (carpetas: usuarios,productos,contabilidad)
+*Reordenar app para nuevos cambios (carpetas: usuarios,productos,contabilidad,...)
 *Usuarios:
 	-Tipos de usuario(normal/terapeutico)
+	-cambiar tipo dato numero usuario a String
+	-Si el usuario está dado de baja, 'baja'
 *Tipos (ver categorias.txt: tipo,subtipo,variedad)
 	-schema(x3): tipo(nombre,ambito(bar/dispensa(definirlos en config)) descripcion), subtipo(nombre, descripcion, schema.tipo), variedad(nombre, descripcion, schema.tipo, schema.subtipo)
 	-agregar/borrar/modificar/leer/list api(x3)
@@ -19,3 +21,15 @@
 		>igual que ingresos
 	-Total:
 		>schema con fecha, cantidad total
+*toLowerCase() para los correos (comprobar en BD)
+*Stock no puede ser negativo
+*Filter in  pagination http://www.dispatchertimer.com/angularjs/pagination-with-filtering-using-angularjs/
+	-pagination: http://plnkr.co/edit/81fPZxpnOQnIHQgp957q?p=preview
+*Config URL y demas, angularjs.constant
+	-definir: 	.constant('config', {
+				    appName: 'My App',
+				    appVersion: 2.0,
+				    apiUrl: 'http://www.google.com?api'
+				});
+	-En el controlador a usar, inyectarlo
+	-usar: config.appName
