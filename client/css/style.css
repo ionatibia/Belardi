@@ -15,6 +15,10 @@ body{
     font-family: fuente;
     src: url('../fonts/Urban Elegance Bold.ttf');
 }
+section{
+	width: 90%;
+	margin: auto;
+}
 
 /*NavBar*/
 .navbar-default .navbar-nav>.active>a, .navbar-default .navbar-nav>.active>a:focus, .navbar-default .navbar-nav>.active>a:hover{

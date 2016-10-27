@@ -101,6 +101,8 @@ var initGlobalConfig = function () {
 		        correo: config.server.adminUser.correo,
 		        telefono: config.server.adminUser.telefono,
 		        password: config.server.adminUser.password,
+		        tipo: config.server.adminUser.tipo,
+		        dni: config.server.adminUser.dni
 		    });
 
    			user.save(function(err){

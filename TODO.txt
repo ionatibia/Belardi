@@ -25,7 +25,7 @@
 *Stock no puede ser negativo
 *Filter in  pagination http://www.dispatchertimer.com/angularjs/pagination-with-filtering-using-angularjs/
 	-pagination: http://plnkr.co/edit/81fPZxpnOQnIHQgp957q?p=preview
-*Config URL y demas, angularjs.constant
+*Config URL y demas, angularjs.constant*******************************************************************************OK
 	-definir: 	.constant('config', {
 				    appName: 'My App',
 				    appVersion: 2.0,
@@ -33,3 +33,6 @@
 				});
 	-En el controlador a usar, inyectarlo
 	-usar: config.appName
+
+
+*dejado en el alta de socios

@@ -183,6 +183,37 @@ exports.emailList = function (req,res) {
     });
 }
 
+exports.baja = function (req,res) {
+    User.update({_id: req.usuario},{$set: { numero: 'baja'+req.usuario.dni }},function (err) {
+        if (err) {
+            log.error("Error dando de baja al usuario: "+req.usuario+"  Error: "+err)
+            return res
+                .status(500)
+                .send("Error dando de baja al usuario: "+err)
+        } else {
+            log.info("Dado de baja al usuario nº:"+req.usuario)
+            //devolvemos el usuario modificado
+            res.json("baja"+req.usuario.dni)
+        }
+    })
+}
+
+exports.alta = function (req,res) {
+    var num = req.num;
+    User.update({_id: req.usuario},{$set: { numero: num }},function (err) {
+        if (err) {
+            log.error("Error dando de alta al usuario: "+req.usuario+"  Error: "+err)
+            return res
+                .status(500)
+                .send("Error dando de alta al usuario: "+err)
+        } else {
+            log.info("Dado de alta al usuario nº:"+req.usuario)
+            //devolvemos el usuario modificado
+            res.json(num)
+        }
+    })
+}
+
 /**
  *
  * FIND BY ID

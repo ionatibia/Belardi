@@ -9,10 +9,11 @@
 	<link rel="manifest" href="./img/favicon/manifest.json">
 	<link rel="mask-icon" href="./img/favicon/safari-pinned-tab.svg" color="#5bbad5">
 	<meta name="theme-color" content="#ffffff">
-	<title>Prueba AngularJS</title>
+	<title>Belardi</title>
 	<link rel="stylesheet" type="text/css" href="./bower_components/bootstrap/dist/css/bootstrap.min.css">
 	<link rel="stylesheet" type="text/css" href="./bower_components/angular-flash-alert/dist/angular-flash.min.css">
 	<link rel="stylesheet" type="text/css" href="./css/style.css">
+	<link rel="stylesheet" type="text/css" href="./bower_components/ngprogress/ngProgress.css">
 </head>
 <body ng-app="app" ng-controller="AppCtrl">
 <ng-include src="'views/header.html'"></ng-include>
@@ -24,14 +25,20 @@
 	<script src="./bower_components/angular/angular.min.js"></script>
 	<script src="./bower_components/angular-route/angular-route.min.js"></script>
 	<script src="./bower_components/angular-flash-alert/dist/angular-flash.min.js"></script>
+	<script src="./bower_components/q/q.js"></script>
+	<script src="./bower_components/ngprogress/build/ngprogress.min.js"></script>
 	<!--CONTROLLERS-->
 	<script src="./js/app.js"></script>
-	<script src="./js/mainCtrl.js"></script>
-	<script src="./js/dispensaCtrl.js"></script>
-	<script src="./js/sociosCtrl.js"></script>
-	<script src="./js/productosCtrl.js"></script>
-	<script src="./js/informesCtrl.js"></script>
-	<script src="./js/graficosCtrl.js"></script>
+	<script src="./js/controllers/mainCtrl.js"></script>
+	<script src="./js/controllers/dispensaCtrl.js"></script>
+	<script src="./js/controllers/sociosCtrl.js"></script>
+	<script src="./js/controllers/productosCtrl.js"></script>
+	<script src="./js/controllers/informesCtrl.js"></script>
+	<script src="./js/controllers/graficosCtrl.js"></script>
+	<script src="./js/controllers/almacenCtrl.js"></script>
+	<script src="./js/controllers/contabilidad/contabilidadCtrl.js"></script>
+	<script src="./js/controllers/contabilidad/ingresosCtrl.js"></script>
+	<script src="./js/controllers/contabilidad/gastosCtrl.js"></script>
 	<!--SERVICES-->
 	<script src="./js/services/menuService.js"></script>
 	<script src="./js/services/productos.js"></script>

@@ -1,8 +1,8 @@
 var app = angular.module('app');
 
-app.factory('TicketServ', ['$http', function ($http) {
+app.factory('TicketServ', ['$http','config', function ($http,config) {
 	var factory = {}
-	var endpoint = 'http://localhost:8000/tickets';
+	var endpoint = config.apiUrl+'/tickets';
 
 	var configGet = {
         url: endpoint,

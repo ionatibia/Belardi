@@ -1,9 +1,9 @@
 var app = angular.module('app');
 
 
-    app.factory('ProductosServ', ['$http', function ($http) {
+    app.factory('ProductosServ', ['$http','config', function ($http,config) {
         var factory = {};
-        var endpoint = 'http://localhost:8000/products';
+        var endpoint = config.apiUrl+'/products';
 
         var configGet = {
             url: endpoint,

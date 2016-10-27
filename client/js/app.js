@@ -42,15 +42,46 @@ angular.module('app',["ngRoute","ngFlash"])
 	    	templateUrl: '../views/graficos.html',
 	    	controller: 'GraficosCtrl'
 	    })
+	    .when('/almacen', {
+	    	templateUrl: '../views/almacen.html',
+	    	controller: 'AlmacenCtrl'
+	    })
+	    .when('/contabilidad', {
+	    	templateUrl: '../views/contabilidad/contabilidad.html',
+	    	controller: 'ContabilidadCtrl'
+	    })
+	    .when('/contabilidad/addIngreso', {
+	    	templateUrl: '../views/contabilidad/ingresos/addIngreso.html',
+	    	controller: 'IngresosCtrl'
+	    })
+	    .when('/contabilidad/updateIngreso', {
+	    	templateUrl: '../views/contabilidad/ingresos/updateIngreso.html',
+	    	controller: 'IngresosCtrl'
+	    })
+	    .when('/contabilidad/addGasto', {
+	    	templateUrl: '../views/contabilidad/gastos/addGasto.html',
+	    	controller: 'GastosCtrl'
+	    })
+	    .when('/contabilidad/updateGasto', {
+	    	templateUrl: '../views/contabilidad/gastos/updateGasto.html',
+	    	controller: 'GastosCtrl'
+	    })
+
 	    .otherwise({ redirectTo: '/' });
 
 	    $httpProvider.interceptors.push('HeadersInterceptor');
+	    $httpProvider.interceptors.push('LoadingInterceptor');
 	})
 	//Controller
-	.controller('AppCtrl', ['$scope','$location','$window', function ($scope,$location,$window) {
+	.controller('AppCtrl', ['$scope','$location','$window','Flash', function ($scope,$location,$window,Flash) {
 		//Active links
-		$scope.isActive = function (viewLocation) { 
-        	return viewLocation === $location.path();
+		$scope.isActive = function (viewLocation) {
+			if ($location.path().indexOf(viewLocation) > -1) {
+				return true
+			}else{
+				return false
+			}
+        	//return viewLocation === $location.path();
     	};
 
     	//Login comprobation
@@ -61,6 +92,13 @@ angular.module('app',["ngRoute","ngFlash"])
 				return false;
 			}
 		}//check login
+
+		$scope.logout = function () {
+			$window.localStorage.setItem('token', '');
+			var message = '<strong>Agur... </strong><i class="glyphicon glyphicon-grain"></i><i class="glyphicon glyphicon-grain"></i><i class="glyphicon glyphicon-grain"></i>&nbsp;<i class="glyphicon glyphicon-thumbs-up"></i>';
+		    Flash.create('success', message);
+			$location.path('/')
+		}
 	}])//AppCtrl controller
 	.factory("HeadersInterceptor", function($window){
 	      var request = function request(config){
@@ -71,4 +109,38 @@ angular.module('app',["ngRoute","ngFlash"])
 	      return {
 	          request: request
 	      };
-	});
+	})
+	.factory("LoadingInterceptor",function($q, $rootScope){
+      
+      return function(promise){
+        $rootScope.$broadcast("event:startProgress");
+        return promise
+          .then(
+            function(response){
+              $rootScope.$broadcast("event:endProgress");
+              return response;
+            },
+            function(response){ //on error
+              $rootScope.$broadcast("event:endProgress");
+              return $q.reject(response);
+            }
+          )
+          
+      }
+    })
+	.constant('config', {
+	    apiUrl: 'http://localhost:8000',
+	    tiposUsuarios: ["Normal","Terapeutico"]
+	})
+	.service("progress", ["$rootScope", "ngProgress", function($rootScope, ngProgress){
+		$rootScope.$on("event:endProgress", function(){
+			console.log("End progress");
+			ngProgress.complete();
+			// ngProgress.reset();
+		});
+		$rootScope.$on("event:startProgress", function(){
+			console.log("Start progress");
+			ngProgress.reset();
+			ngProgress.start();
+		})
+	}])

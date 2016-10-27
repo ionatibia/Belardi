@@ -1,10 +1,10 @@
 var app = angular.module('app');
 
 
-    app.factory('SociosServ', ['$http', function ($http) {
+    app.factory('SociosServ', ['$http','config', function ($http,config) {
     	var factory = {};
-        var endpoint = 'http://localhost:8000/auth/users';
-        var endpoint2 = 'http://localhost:8000/auth/signup';
+        var endpoint = config.apiUrl+'/auth/users';
+        var endpoint2 = config.apiUrl+'/auth/signup';
 
         var configGet = {
             url: endpoint,
@@ -41,6 +41,17 @@ var app = angular.module('app');
         factory.deleteSocio = function (socio) {
             configDelete.url = endpoint+"/"+socio._id;
             return $http(configDelete);
+        }
+
+        factory.bajaSocio = function (socio) {
+            configAdd.url = endpoint+"/baja/"+socio._id;
+            return $http(configAdd)
+        }
+
+        factory.altaSocio = function (socio,num) {
+            configAdd.url = endpoint+"/alta/"+socio._id;
+            configAdd.data = num;
+            return $http(configAdd)
         }
 
         factory.setSocio = function (socio) {

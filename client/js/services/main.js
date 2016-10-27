@@ -1,8 +1,8 @@
 var app = angular.module('app');
 
-    app.factory('MainServ', ['$http', function ($http) {
+    app.factory('MainServ', ['$http','config', function ($http,config) {
         var factory = {};
-        var endpoint = 'http://localhost:8000/auth/login';
+        var endpoint = config.apiUrl+'/auth/login';
 
 
         factory.login = function (user) {

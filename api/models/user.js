@@ -19,9 +19,10 @@ var validateLocalStrategyEmail = function (email) {
 
 
 var userSchema = new Schema({
+	tipo:{type:String,required: 'Please fill in a tipo'},
 	nombre:{type:String,required: 'Please fill in a nombre'},
 	apellido:{type:String},
-	numero:{type:Number,required: 'Please fill in a numero',unique: 'Number already exists'},
+	numero:{type:String,required: 'Please fill in a numero',unique: 'Number already exists'},
 	dni:{type:String,required: 'Please fill in a DNI', unique: 'DNI already exists'},
 	identificacion:{type:String, default:null},
 	correo:{type:String,required: 'Please fill in a correo',validate: [validateLocalStrategyEmail, 'Please fill a valid email address'], unique:'Email already exists', lowercase: true},

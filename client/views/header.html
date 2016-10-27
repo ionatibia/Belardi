@@ -17,8 +17,13 @@
         <li ng-class="{ active: isActive('/dispensa')}"><a href="#/dispensa">Dispensa</a></li>
         <li ng-class="{ active: isActive('/socios')}"><a href="#/socios">Socios</a></li>
         <li ng-class="{ active: isActive('/productos')}"><a href="#/productos">Productos</a></li>
+        <li ng-class="{ active: isActive('/almacen')}"><a href="#/almacen">Almacen</a></li>
+        <li ng-class="{ active: isActive('/contabilidad')}"><a href="#/contabilidad">Contabilidad</a></li>
         <li ng-class="{ active: isActive('/informes')}"><a href="#/informes">Informes</a></li>
         <li ng-class="{ active: isActive('/graficos')}"><a href="#/graficos">Graficos</a></li>
+      </ul>
+      <ul class="pull-right" ng-show="checkLogin()">
+        <li style="list-style:none"><i class="glyphicon glyphicon-user" style="color:white;margin-right:5px"></i><a class="glyphicon glyphicon-log-out" ng-click="logout()" style="cursor:pointer;color:white;margin-top:10px;margin-right:15px;"></a></li>
       </ul>      
     </div><!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->

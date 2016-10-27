@@ -1,7 +1,16 @@
+<section>
 <h1>ADDSOCIO</h1>
 <form id="formularioAddSocio" name="formularioAddSocio" class="form-group" ng-submit="addSocio(socio)" novalidate>
 
-	<div class="form-group" ng-class="{'has-error':formularioAddSocio.nombre.$invalid && formularioAddSocio.nombre.$dirty}">
+	<div class="form-group" ng-class="{'has-error':formularioAddSocio.tipo.$invalid && formularioAddSocio.tipo.$dirty}">
+		<label for="tipo" class="label label-default">Tipo: </label>
+		<select class="form-control" name="tipo" id="tipo" ng-model="socio.tipo" ng-required="true">
+			<option value="" selected disabled="">Selecciona</option>
+			<option ng-repeat="tipo in tiposUsuarios" value="{{tipo}}">{{tipo.toUpperCase()}}</option>
+		</select>
+	</div>
+
+	<div class="form-group" ng-class="{'has-error':formularioAddSocio.nombre.$invalid && formularioAddSocio.nombre.$dirty}" ng-if="socio.tipo">
 		<label for="nombre" class="label label-default">Nombre: </label>
 		<input type="text" name="nombre" id="nombre" class="form-control" ng-model="socio.nombre" ng-required="true" minlength="3" placeholder="Nombre">
 	</div>
@@ -13,7 +22,7 @@
 
 	<div class="form-group" ng-class="{'has-error':formularioAddSocio.numero.$invalid && formularioAddSocio.numero.$dirty}" ng-if="socio.nombre">
 		<label for="numero" class="label label-default">Numero: </label>
-		<input type="number" name="numero" id="numero" class="form-control" ng-model="socio.numero" ng-required="true" maxlength="3" placeholder="Numero">
+		<input type="text" name="numero" id="numero" class="form-control" ng-model="socio.numero" ng-required="true" maxlength="3" placeholder="Numero">
 	</div>
 
 	<div class="form-group" ng-class="{'has-error':formularioAddSocio.dni.$invalid && formularioAddSocio.dni.$dirty}" ng-if="socio.numero">
@@ -38,3 +47,4 @@
 
 	<input type="submit" name="submit" style="width:100%" class="btn btn-primary" value="Crear" ng-disabled="formularioAddSocio.$invalid">
 </form>
+</section>

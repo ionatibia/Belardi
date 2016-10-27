@@ -1,5 +1,14 @@
+<section>
 <h1>UpdateSocio</h1>
 <form id="formularioUpdateSocio" name="formularioUpdateSocio" class="form-group" ng-submit="updateSocio(socioSeleccionado)" novalidate>
+
+	<div class="form-group" ng-class="{'has-error':formularioAddSocio.tipo.$invalid}">
+		<label for="tipo" class="label label-default">Tipo: </label>
+		<select class="form-control" name="tipo" id="tipo" ng-model="socioSeleccionado.tipo" ng-required="true">
+			<option value="" selected disabled="">Selecciona</option>
+			<option ng-repeat="tipo in tiposUsuarios" value="{{tipo}}">{{tipo.toUpperCase()}}</option>
+		</select>
+	</div>
 
 	<div class="form-group" ng-class="{'has-error':formularioUpdateSocio.nombre.$invalid && formularioUpdateSocio.nombre.$dirty}">
 		<label for="nombre" class="label label-default">Nombre: </label>
@@ -13,7 +22,7 @@
 
 	<div class="form-group" ng-class="{'has-error':formularioUpdateSocio.numero.$invalid && formularioUpdateSocio.numero.$dirty}">
 		<label for="numero" class="label label-default">Numero: </label>
-		<input type="number" name="numero" id="numero" class="form-control" value="{{socioSeleccionado.numero}}" ng-model="socioSeleccionado.numero" ng-required="true" maxlength="3">
+		<input type="text" name="numero" id="numero" class="form-control" value="{{socioSeleccionado.numero}}" ng-model="socioSeleccionado.numero" ng-required="true" maxlength="3">
 	</div>
 
 	<div class="form-group" ng-class="{'has-error':formularioUpdateSocio.correo.$invalid && formularioUpdateSocio.correo.$dirty}">
@@ -23,3 +32,4 @@
 
 	<input type="submit" name="submit" style="width:100%" class="btn btn-primary" value="Actualizar" ng-disabled="formularioUpdateSocio.$invalid">
 </form>
+</section>

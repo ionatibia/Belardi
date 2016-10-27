@@ -17,12 +17,14 @@ module.exports = {
 	policies: 'policies/*.js',
 	routes: 'routes/*.js',
 	adminUser: {
+		tipo:'Normal',
 		nombre:'admin',
 		apellido:'istrador',
 		numero:0,
 		correo:correoAdmin,
 		telefono:635758566,
-		password:passwordEncriptada
+		password:passwordEncriptada,
+		dni:'00000000A'
 	}
   }
 };
