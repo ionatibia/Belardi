@@ -12,7 +12,7 @@ var log4js = require('log4js');
 log4js.configure({
       appenders: [
         { type: 'console' },
-        { type: 'file', filename: '../logs/users.log', category: 'auth' }
+        { type: 'file', filename: 'logs/users.log', category: 'auth' }
       ]
     });
 var log = log4js.getLogger('auth');
@@ -199,7 +199,7 @@ exports.baja = function (req,res) {
 }
 
 exports.alta = function (req,res) {
-    var num = req.num;
+    var num = req.body.numero;
     User.update({_id: req.usuario},{$set: { numero: num }},function (err) {
         if (err) {
             log.error("Error dando de alta al usuario: "+req.usuario+"  Error: "+err)

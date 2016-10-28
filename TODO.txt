@@ -1,10 +1,10 @@
 *Reordenar app para nuevos cambios (carpetas: usuarios,productos,contabilidad,...)
 *Usuarios:
-	-Tipos de usuario(normal/terapeutico)
-	-cambiar tipo dato numero usuario a String
-	-Si el usuario está dado de baja, 'baja'
+	-Tipos de usuario(normal/terapeutico)*******************************************************************************OK
+	-cambiar tipo dato numero usuario a String**************************************************************************OK
+	-Si el usuario está dado de baja, 'baja'****************************************************************************OK
 *Tipos (ver categorias.txt: tipo,subtipo,variedad)
-	-schema(x3): tipo(nombre,ambito(bar/dispensa(definirlos en config)) descripcion), subtipo(nombre, descripcion, schema.tipo), variedad(nombre, descripcion, schema.tipo, schema.subtipo)
+	-schema(x3): tipo(nombre,ambito(bar/dispensa(definirlos en config)) descripcion), subtipo(nombre, descripcion, schema.tipo), variedad(nombre, descripcion, schema.tipo, schema.subtipo)****************************************************************************************OK
 	-agregar/borrar/modificar/leer/list api(x3)
 *En añadir producto 1º ambito (bar/dispensa)
 *1 producto necesita un tipo y si es dispensa, un subtipo y una variedad

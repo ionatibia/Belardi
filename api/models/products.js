@@ -4,12 +4,13 @@ var validator = require('validator');
 
 
 var productSchema = new Schema({
-	nombre:{type:String,required: 'Please fill in a name'},
+	nombre:{type:String,required: 'Falta el nombre'},
 	descripcion:{type:String},
-	tipo:{type:String, required: 'Please fill in a type'},
-	subtipo:{type:String, required:'Please fill a subtype'},
-	precio:{type:Number, required: 'Please fill a price'},
-	iva:{type:Number,required:'Please fill a iva'},
+	tipo:{type:Schema.ObjectId,ref:'Type', required: 'Falta el tipo'},
+	subtipo:{type:Schema.ObjectId,ref:'Subtype', required:'Falta el subtipo'},
+	variedad:{type:Schema.ObjectId,ref:'Variety'}
+	precio:{type:Number, required: 'Falta el precio'},
+	iva:{type:Number,required:'Falta el IVA'},
 	stock:{type:Number,default:0},
 	fecha_alta:{type:Date, default:Date.now()}
 });

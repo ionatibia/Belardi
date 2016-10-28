@@ -22,7 +22,12 @@
 
 	<div class="form-group" ng-class="{'has-error':formularioUpdateSocio.numero.$invalid && formularioUpdateSocio.numero.$dirty}">
 		<label for="numero" class="label label-default">Numero: </label>
-		<input type="text" name="numero" id="numero" class="form-control" value="{{socioSeleccionado.numero}}" ng-model="socioSeleccionado.numero" ng-required="true" maxlength="3">
+		<input type="text" name="numero" id="numero" class="form-control" value="{{socioSeleccionado.numero}}" ng-model="socioSeleccionado.numero" ng-required="true">
+	</div>
+
+	<div class="form-group" ng-class="{'has-error':formularioAddSocio.dni.$invalid && formularioAddSocio.dni.$dirty}" ng-if="socioSeleccionado.numero">
+		<label for="dni" class="label label-default">DNI: </label>
+		<input type="text" name="dni" id="dni" class="form-control" ng-model="socioSeleccionado.dni" ng-required="true" maxlength="9" placeholder="00000000A">
 	</div>
 
 	<div class="form-group" ng-class="{'has-error':formularioUpdateSocio.correo.$invalid && formularioUpdateSocio.correo.$dirty}">

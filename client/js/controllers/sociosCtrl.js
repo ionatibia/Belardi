@@ -16,7 +16,8 @@ app.controller('SociosCtrl', ['$scope','$location', 'SociosServ','Flash','config
 	}
 	//update socio
 	$scope.updateSocio = function (socio) {
-		if (!isNaN(socio.numero)) {
+		console.log(socio.numero.indexOf('baja'))
+		if (!isNaN(socio.numero) || socio.numero.indexOf('baja') != -1) {
 			console.log(socio)
 			socio.correo = socio.correo.toLowerCase().trim()
 			SociosServ.updateSocio(socio).then(function (response) {
@@ -82,7 +83,7 @@ app.controller('SociosCtrl', ['$scope','$location', 'SociosServ','Flash','config
 		if (!isNaN(num)) {
 			if (confirm("Seguro que quieres dar de alta al socio con el número "+num)) {
 				SociosServ.altaSocio(socio,num).then(function (response) {
-					var message = '<strong>HECHO!!!</strong> El socio ha sido dado de alta correctamente';
+					var message = '<strong>HECHO!!!</strong> El socio '+response.data+' ha sido dado de alta correctamente';
 	        		Flash.create('success', message);
 	        		socio.numero = response.data;
 				}, function (err) {
@@ -93,6 +94,14 @@ app.controller('SociosCtrl', ['$scope','$location', 'SociosServ','Flash','config
 		}else{
 			var message = '<strong>ERROR!!!</strong> El número de socio debe ser un número';
 	        Flash.create('danger', message);
+		}
+	}
+
+	$scope.esBaja = function (socio) {
+		if (isNaN(parseInt(socio))) {
+			return false
+		}else{
+			return true
 		}
 	}
 

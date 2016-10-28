@@ -11,8 +11,8 @@
 			Correo: {{socio.correo}} 
 			<a id="botonUpdate" class="btn btn-primary" ng-click="seleccionSocioUpdate(socio)"><span class="glyphicon glyphicon-pencil"></span></a>
 			<a id="botonDelete" class="btn btn-danger" ng-click="deleteSocio(socio)"><span class="glyphicon glyphicon-trash"></span></a>
-			<a id="botonBaja" class="btn btn-warning" ng-if="isNaN(socio.numero)" ng-click="bajaSocio(socio)"><span class="glyphicon glyphicon-minus"></span></a>
-			<a id="botonAlta" class="btn btn-success" ng-if="!isNaN(socio.numero)" ng-click="altaSocio(socio)"><span class="glyphicon glyphicon-plus"></span></a>
+			<a id="botonBaja" class="btn btn-warning" ng-if="esBaja(socio.numero)" ng-click="bajaSocio(socio)"><span class="glyphicon glyphicon-minus"></span></a>
+			<a id="botonAlta" class="btn btn-success" ng-if="!esBaja(socio.numero)" ng-click="altaSocio(socio)"><span class="glyphicon glyphicon-plus"></span></a>
 			</li>
 		</ul>
 	</div>

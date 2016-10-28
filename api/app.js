@@ -9,9 +9,10 @@ var startConfog = require('./controllers/security/start');
 var path = require('path');
 
 // Configuramos Express
-var app = express();  
-app.use(bodyParser.json());  
+var app = express();
 app.use(bodyParser.urlencoded({extended: true}));  
+app.use(bodyParser.json());  
+ 
 app.use(cors());
 
 app.use('/public',express.static(__dirname + '/public'));

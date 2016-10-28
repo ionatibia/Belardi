@@ -50,7 +50,7 @@ var app = angular.module('app');
 
         factory.altaSocio = function (socio,num) {
             configAdd.url = endpoint+"/alta/"+socio._id;
-            configAdd.data = num;
+            configAdd.data = {"numero":num};
             return $http(configAdd)
         }
 
