@@ -2,16 +2,21 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 var validator = require('validator');
 
+var subSchema = mongoose.Schema({
+	cantidad:{type:Number},
+	fecha:{type:Date,default:Date.now()}
+})
 
 var productSchema = new Schema({
 	nombre:{type:String,required: 'Falta el nombre'},
 	descripcion:{type:String},
+	ambito:{type:String,required: 'Falta el ámbito del producto'},
 	tipo:{type:Schema.ObjectId,ref:'Type', required: 'Falta el tipo'},
 	subtipo:{type:Schema.ObjectId,ref:'Subtype', required:'Falta el subtipo'},
-	variedad:{type:Schema.ObjectId,ref:'Variety'}
+	variedad:{type:Schema.ObjectId,ref:'Variety'},
 	precio:{type:Number, required: 'Falta el precio'},
 	iva:{type:Number,required:'Falta el IVA'},
-	stock:{type:Number,default:0},
+	stock:[subSchema],
 	fecha_alta:{type:Date, default:Date.now()}
 });
 

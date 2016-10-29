@@ -11,9 +11,6 @@ module.exports = function (app) {
 	app.put('/products/:productId', middleware.ensureAuthenticated, productController.update);
 	app.delete('/products/:productId', middleware.ensureAuthenticated, productController.delete);
 
-	//types
-	app.get('/products/types', middleware.ensureAuthenticated, productController.listTypes)
-
 	//Finish by binding the product middleware
 	app.param('productId', productController.productByID);
 }

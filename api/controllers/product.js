@@ -27,8 +27,10 @@ var log = log4js.getLogger('product');
  *
  */
 exports.create = function (req, res) {
+	console.log(req.body)
 
 	var product = new Product(req.body)
+	console.log(product)
 
 	product.save(function (err) {
 		if (err) {
@@ -68,9 +70,9 @@ module.exports.update = function (req, res) {
 		logAjuste.warn("Ajuste de inventario stock de "+req.product.stock+" a "+req.body.stock+" al producto "+req.product.nombre);
 	}*/
 	//merge del producto guardado
-	var productUpdated = lodash.assign(product,req.body);
+	var productUpdated = lodash.assign(req.product,req.body);
 	//guardamos el producto modificado
-	Product.update({_id:product._id},productUpdated,function (err) {
+	Product.update({_id:req.product._id},productUpdated,function (err) {
 		if (err) {
 			log.error("Error actualizando producto: "+err)
 			return res
@@ -80,7 +82,7 @@ module.exports.update = function (req, res) {
 			//devolvemos el producto modificado
 			return res
 				.status(200)
-				.json(product);
+				.json(productUpdated);
 		}
 	});
 };//exports update
@@ -129,6 +131,7 @@ module.exports.list = function (req, res) {
 		}
 	});
 };//exports list
+
 
 /**
  *

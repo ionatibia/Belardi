@@ -1,0 +1,18 @@
+<section>
+<div>
+	<h1>Configuracion</h1>
+	<div class="row">
+        <h4>Tipos</h4>
+        <table class="table">
+            <td>
+                <th>Nombre</th>
+                <th>Descripcion</th>
+            </td>
+            <td ng-repeat="tipo in tipos" ng-show="tipos">
+                <tr>{{tipo.nombre}}</tr>
+                <tr>{{tipo.descripcion}}</tr>
+            </td>
+        </table>
+    </div>
+</div>
+</section>

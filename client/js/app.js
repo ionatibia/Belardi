@@ -66,6 +66,10 @@ angular.module('app',["ngRoute","ngFlash"])
 	    	templateUrl: '../views/contabilidad/gastos/updateGasto.html',
 	    	controller: 'GastosCtrl'
 	    })
+	    .when('/config', {
+	    	templateUrl: '../views/config.html',
+	    	controller: 'ConfigCtrl'
+	    })
 
 	    .otherwise({ redirectTo: '/' });
 
