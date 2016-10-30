@@ -49,20 +49,7 @@ var app = angular.module('app');
         factory.getProducto = function () {
             return factory.producto;
         }
-        //si hay que añadir mas tipos... verificar productosCtrl
-        factory.tipos = [
-            {"tipo":"dispensa"},
-            {"tipo":"barra"},
-            {"tipo":"parafernalia"}
-        ];
-        factory.subtipos = [
-            {"nombre":"hierba", "tipo":"dispensa"},
-            {"nombre":"extraccion", "tipo":"dispensa"},
-            {"nombre":"bebida", "tipo":"barra"},
-            {"nombre":"comida", "tipo":"barra"},
-            {"nombre":"papel","tipo":"parafernalia"},
-            {"nombre":"otros", "tipo":"parafernalia"}
-        ];
+
 
         return factory;
  }]);

@@ -98,7 +98,7 @@ angular.module('app',["ngRoute","ngFlash"])
 		}//check login
 
 		$scope.logout = function () {
-			$window.localStorage.setItem('token', '');
+			$window.localStorage.clear();
 			var message = '<strong>Agur... </strong><i class="glyphicon glyphicon-grain"></i><i class="glyphicon glyphicon-grain"></i><i class="glyphicon glyphicon-grain"></i>&nbsp;<i class="glyphicon glyphicon-thumbs-up"></i>';
 		    Flash.create('success', message);
 			$location.path('/')
