@@ -110,7 +110,7 @@ module.exports.delete = function (req, res) {
  */
 module.exports.list = function (req, res) {
 	//buscamos todas las variedades ordenadas
-	Variety.find().sort('-nombre').exec(function (err, varietys) {
+	Variety.find().sort('-nombre').populate('tipo').populate('subtipo').exec(function (err, varietys) {
 		if (err) {
 			log.error("Error buscando variedades: "+err)
 			return res

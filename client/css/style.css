@@ -38,6 +38,9 @@ section{
 	padding: 5px;
 	width: 100px;
 }
+#bs-example-navbar-collapse-1 > ul{
+	margin-bottom: 0px !important;
+}
 
 /*LOGIN*/
 #formularioLogin{
@@ -61,3 +64,13 @@ h1{
 	margin-top: 5px;
 	margin-bottom: 20px;
 }
+
+/*CONFIG*/
+.configTitle{
+	float:left;
+	margin-right: 5px;
+	margin-bottom: 15px;
+	font-weight: bold;
+}
+
+

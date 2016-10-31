@@ -32,7 +32,7 @@ app.factory('ConfigServ', ['$http','config', function ($http,config) {
 
     factory.delete = function (type, entity) {
         var config = {
-            url: endpoint + '/' + type + '/' + entity._id,
+            url: endpoint + '/' + type + '/' + entity,
             method: 'DELETE'
         }
         return $http(config)

@@ -110,7 +110,7 @@ module.exports.delete = function (req, res) {
  */
 module.exports.list = function (req, res) {
 	//buscamos todos los subtipos ordenados por fecha
-	Subtype.find().sort('-nombre').exec(function (err, subtypes) {
+	Subtype.find().sort('-nombre').populate('tipo').exec(function (err, subtypes) {
 		if (err) {
 			log.error("Error buscando subtipos: "+err)
 			return res

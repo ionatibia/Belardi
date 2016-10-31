@@ -1,10 +1,9 @@
 var app = angular.module('app');
 
-app.controller('ProductosCtrl', ['$scope','$location','ProductosServ','Flash', function ($scope,$location,ProductosServ,Flash) {
+app.controller('ProductosCtrl', ['$scope','$location','ProductosServ','Flash','ConfigServ','config', function ($scope,$location,ProductosServ,Flash,ConfigServ,config) {
 	if (!$scope.checkLogin()){
 		$location.path("/");
 	} else{
-		tipos();
 		//get all productos
 		ProductosServ.getAll().then(function (response) {
 			$scope.productos = response.data;
@@ -13,22 +12,29 @@ app.controller('ProductosCtrl', ['$scope','$location','ProductosServ','Flash', f
 		    Flash.create('danger', message);
 			console.log(JSON.stringify(err))
 		})
+		ConfigServ.getAll('type').then(function (response) {
+			$scope.tipos = response.data;
+		}, function (err) {
+			var message = '<strong>ERROR!!!</strong> '+JSON.stringify(err.data);
+			Flash.create('danger', message);
+			console.log(JSON.stringify(err))
+		})
+		ConfigServ.getAll('subtype').then(function (response) {
+			$scope.subtipos = response.data;
+		},function (err) {
+			var message = '<strong>ERROR!!!</strong> '+JSON.stringify(err.data);
+			Flash.create('danger', message);
+			console.log(JSON.stringify(err))
+		})
+		ConfigServ.getAll('variety').then(function (response) {
+			$scope.variedades = response.data;
+		},function (err) {
+			var message = '<strong>ERROR!!!</strong> '+JSON.stringify(err.data);
+			Flash.create('danger', message);
+			console.log(JSON.stringify(err))
+		})
 
-	}
-
-	function tipos() {
-		//tipos y subtipos
-		$scope.tipos = ProductosServ.tipos;
-		$scope.subtipos = ProductosServ.subtipos;
-		/*$scope.subtiposDispensa = [];
-		$scope.subtiposBarra = []
-		for (var i = 0; i < $scope.subtipos.length; i++) {
-			if($scope.subtipos[i].dispensa){
-				$scope.subtiposDispensa.push($scope.subtipos[i])
-			}else {
-				$scope.subtiposBarra.push($scope.subtipos[i])
-			}
-		}*/
+		$scope.ambitos = config.ambitos;
 	}
 	
 	$scope.seleccionTipo = function (tipo) {
@@ -36,6 +42,23 @@ app.controller('ProductosCtrl', ['$scope','$location','ProductosServ','Flash', f
 	}
 	//add producto
 	$scope.addProducto = function (producto) {
+		for(var t in $scope.tipos){
+			if (producto.tipo == $scope.tipos[t]._id) {
+				producto.tipo = $scope.tipos[t]
+			}
+		}
+		for(var s in $scope.subtipos){
+			if (producto.subtipo == $scope.subtipos[s]._id) {
+				producto.subtipo = $scope.subtipos[s]
+			}
+		}
+		if (producto.variedad != undefined) {
+			for(var v in $scope.variedades){
+				if (producto.variedad == $scope.variedades[v]._id) {
+					producto.variedad = $scope.variedades[v]
+				}
+			}
+		}
 		ProductosServ.addProducto(producto).then(function (response) {
 			var message = '<strong>HECHO!!!</strong> El producto ha sido guardado correctamente';
 	        Flash.create('success', message);
@@ -78,5 +101,9 @@ app.controller('ProductosCtrl', ['$scope','$location','ProductosServ','Flash', f
 	$scope.seleccionProductoUpdate = function (producto) {
 		ProductosServ.setProducto(producto);
 		$location.path('/productos/updateProducto')
+	}
+
+	$scope.stock = function (producto) {
+		return producto.stock[producto.stock.length-1].cantidad
 	}
 }])

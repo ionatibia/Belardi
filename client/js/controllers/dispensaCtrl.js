@@ -1,9 +1,8 @@
 var app = angular.module("app");
-app.controller('DispensaCtrl', ['$scope','$location','ProductosServ','SociosServ','$window','Flash','TicketServ', function ($scope,$location,ProductosServ,SociosServ,$window,Flash,TicketServ) {
+app.controller('DispensaCtrl', ['$scope','$location','ProductosServ','SociosServ','$window','Flash','TicketServ','ConfigServ','config', function ($scope,$location,ProductosServ,SociosServ,$window,Flash,TicketServ,ConfigServ,config) {
 	if (!$scope.checkLogin()){
 		$location.path("/");
 	}else{
-		tipos();
 		//get all productos
 		ProductosServ.getAll().then(function (response) {
 			$scope.productos = response.data;
@@ -25,22 +24,33 @@ app.controller('DispensaCtrl', ['$scope','$location','ProductosServ','SociosServ
 		    Flash.create('danger', message);
 			console.log(JSON.stringify(err))
 		});
+		ConfigServ.getAll('type').then(function (response) {
+			$scope.tipos = response.data;
+		}, function (err) {
+			var message = '<strong>ERROR!!!</strong> '+JSON.stringify(err.data);
+			Flash.create('danger', message);
+			console.log(JSON.stringify(err))
+		})
+
+		ConfigServ.getAll('subtype').then(function (response) {
+			$scope.subtipos = response.data;
+		},function (err) {
+			var message = '<strong>ERROR!!!</strong> '+JSON.stringify(err.data);
+			Flash.create('danger', message);
+			console.log(JSON.stringify(err))
+		})
+
+		ConfigServ.getAll('variety').then(function (response) {
+			$scope.variedades = response.data;
+		},function (err) {
+			var message = '<strong>ERROR!!!</strong> '+JSON.stringify(err.data);
+			Flash.create('danger', message);
+			console.log(JSON.stringify(err))
+		})
+
+		$scope.ambitos = config.ambitos;
 	}
 
-	function tipos() {
-		//tipos y subtipos
-		$scope.tipos = ProductosServ.tipos;
-		$scope.subtipos = ProductosServ.subtipos;
-		$scope.subtiposDispensa = [];
-		$scope.subtiposBarra = []
-		for (var i = 0; i < $scope.subtipos.length; i++) {
-			if($scope.subtipos[i].dispensa){
-				$scope.subtiposDispensa.push($scope.subtipos[i])
-			}else {
-				$scope.subtiposBarra.push($scope.subtipos[i])
-			}
-		}
-	}
 	$scope.ticketCompleto = [];
 	$scope.listaProductos = [];
 	$scope.prodDispensados = false;

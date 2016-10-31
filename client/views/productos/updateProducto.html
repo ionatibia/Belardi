@@ -9,7 +9,7 @@
 
 	<div class="form-group" ng-class="{'has-error':formularioUpdateProducto.descripcion.$invalid && formularioUpdateProducto.descripcion.$dirty}">
 		<label for="descripcion" class="label label-default">Descripcion: </label>
-		<input type="text" name="descripcion" id="descripcion" class="form-control" value="{{productoSeleccionado.descripcion}}" ng-model="productoSeleccionado.descripcion" ng-required="true" minlength="3">
+		<input type="text" name="descripcion" id="descripcion" class="form-control" value="{{productoSeleccionado.descripcion}}" ng-model="productoSeleccionado.descripcion">
 	</div>
 
 	<div class="form-group" ng-class="{'has-error':formularioUpdateProducto.precio.$invalid && formularioUpdateProducto.precio.$dirty}">

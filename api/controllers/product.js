@@ -27,9 +27,9 @@ var log = log4js.getLogger('product');
  *
  */
 exports.create = function (req, res) {
-	console.log(req.body)
 
 	var product = new Product(req.body)
+	product.stock = [{}]
 	console.log(product)
 
 	product.save(function (err) {
@@ -117,7 +117,7 @@ module.exports.delete = function (req, res) {
  */
 module.exports.list = function (req, res) {
 	//buscamos todos los articulos ordenados por fecha
-	Product.find().sort('-nombre').exec(function (err, products) {
+	Product.find().sort('-nombre').populate('tipo').populate('subtipo').populate('variedad').exec(function (err, products) {
 		if (err) {
 			log.error("Error buscando productos: "+err)
 			return res

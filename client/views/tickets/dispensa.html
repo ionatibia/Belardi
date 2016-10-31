@@ -14,30 +14,51 @@
 			<p ng-repeat="(key,item) in listaProductos" ng-model="listaProductos">{{key+1}}: {{item.producto}} -:{{item.cantidad}}</p>
 		</div>
 		<!--Productos-->
-		<label for="ticket" ng-show="socio" class="label label-default">Añadir producto</label>
+		<h3 ng-show="socio">Añadir producto</h3>
+		<label for="ambito" class="label label-default">Ambito: </label>
 		<div class="ticket" name="ticket" ng-show="socio">
 			<div class="form-group">
-				<select class="form-control" ng-model="ticket.tipo">
+				<select class="form-control" ng-model="ticket.ambito" name="ambito" id="ambito">
 					<option value="" selected disabled>Selecciona</option>
-					<option ng-repeat="tipo in tipos" value="{{tipo.tipo}}">{{tipo.tipo.toUpperCase()}}</option>
+					<option ng-repeat="ambito in ambitos" value="{{ambito.nombre}}">{{ambito.nombre}}</option>
 				</select>
 			</div>
 			<!---->
+			<label for="tipo" class="label label-default">Tipo: </label>
 			<div class="form-group">
-				<select class="form-control" ng-model="ticket.subtipo" ng-show="ticket.tipo">
+				<select class="form-control" ng-model="ticket.tipo" name="tipo" id="tipo">
 					<option value="" selected disabled>Selecciona</option>
-					<option ng-repeat="subtipo in subtipos | filter: ticket.tipo" value="{{subtipo.nombre}}">{{subtipo.nombre.toUpperCase()}}</option>
+					<option ng-repeat="tipo in tipos | filter: ticket.ambito" value="{{tipo._id}}">{{tipo.nombre.toUpperCase()}}</option>
 				</select>
 			</div>
 			<!---->
+			<label for="subtipo" class="label label-default">Subtipo: </label>
 			<div class="form-group">
-				<select class="form-control" ng-model="ticket.producto" ng-show="ticket.subtipo">
+				<select class="form-control" ng-model="ticket.subtipo" name="subtipo" id="subtipo">
 					<option value="" selected>Selecciona</option>
-					<option ng-repeat="option in productos | filter: ticket.tipo | filter: ticket.subtipo" value="{{option.nombre}}">{{option.nombre}}</option>
+					<option ng-repeat="subtipo in subtipos | filter: ticket.tipo" value="{{subtipo._id}}">{{subtipo.nombre.toUpperCase()}}</option>
 				</select>
 			</div>
+			<!---->
+			<label for="variedad" class="label label-default">Variedad: </label>
+			<div class="form-group">
+				<select class="form-control" ng-model="ticket.variedad" name="variedad" id="variedad">
+					<option value="" selected>Selecciona</option>
+					<option ng-repeat="variedad in variedades | filter: ticket.tipo | filter: ticket.subtipo" value="{{variedad._id}}">{{variedad.nombre.toUpperCase()}}</option>
+				</select>
+			</div>
+			<!---->
+			<label for="producto" class="label label-default">Producto: </label>
+			<div class="form-group">
+				<select class="form-control" ng-model="ticket.producto" name="producto" id="producto">
+					<option value="" selected>Selecciona</option>
+					<option ng-repeat="producto in productos | filter: ticket.tipo | filter: ticket.subtipo | filter: ticket.variedad" value="{{producto._id}}">{{producto.nombre.toUpperCase()}}</option>
+				</select>
+			</div>
+			<!---->
+			<label for="cantidad" class="label label-default">Cantidad: </label>
 			<div class="form-group" ng-class="{'has-error':formularioDispensa.cantidad.$invalid}">
-				<input type="number" class="form-control" name="cantidad" ng-model="ticket.cantidad" ng-show="ticket.subtipo" min="0">
+				<input type="number" class="form-control" name="cantidad" ng-model="ticket.cantidad" ng-show="ticket.producto" min="0">
 			</div>
 		</div>
 		<button id="anadirButton" class="btn btn-primary" ng-click="anadir(ticket)" ng-show="ticket.cantidad">Añadir</button>

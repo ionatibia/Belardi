@@ -1,5 +1,5 @@
 <section>
-<h1>ADDPRODUCTO</h1>
+<h1>ADD PRODUCTO</h1>
 <form id="formularioAddProducto" name="formularioAddProducto" class="form-group" ng-submit="addProducto(producto)" novalidate>
 
 	<div class="form-group" ng-class="{'has-error':formularioAddProducto.nombre.$invalid && formularioAddProducto.nombre.$dirty}">
@@ -13,22 +13,38 @@
 	</div>
 
 	<div class="form-group" ng-if="producto.nombre">
+		<label for="ambito" class="label label-default">Ambito: </label>
+		<select id="ambito" name="ambito" class="form-control" ng-model="producto.ambito" ng-required="true">
+			<option value="" selected disabled="">Selecciona</option>
+			<option ng-repeat="ambito in ambitos" value="{{ambito.nombre}}">{{ambito.nombre}}</option>
+		</select>
+	</div>
+
+	<div class="form-group" ng-if="producto.ambito">
 		<label for="tipo" class="label label-default">Tipo: </label>
 		<select id="tipo" name="tipo" class="form-control" ng-model="producto.tipo" ng-required="true" ng-change="seleccionTipo(producto.tipo)">
 			<option value="" selected disabled="">Selecciona</option>
-			<option ng-repeat="option in tipos" value="{{option.tipo}}">{{option.tipo.toUpperCase()}}</option>
+			<option ng-repeat="tipo in tipos | filter: producto.ambito" value="{{tipo._id}}">{{tipo.nombre.toUpperCase()}}</option>
 		</select>
 	</div>
 
 	<div class="form-group" ng-if="producto.tipo">
 		<label for="subtipo" class="label label-default">Subtipo: </label>
-		<select id="subtipo" name="subtipo" class="form-control" ng-model="producto.subtipo" ng-required="true">
+		<select id="subtipo" name="subtipo" class="form-control" ng-model="producto.subtipo">
 			<option value="" selected disabled="">Selecciona</option>
-			<option ng-repeat="subtipo in subtipos | filter: producto.tipo" value="{{subtipo.nombre}}">{{subtipo.nombre.toUpperCase()}}</option>
+			<option ng-repeat="subtipo in subtipos | filter: producto.tipo" value="{{subtipo._id}}">{{subtipo.nombre.toUpperCase()}}</option>
 		</select>
 	</div>
 
-	<div class="form-group" ng-class="{'has-error':formularioAddProducto.precio.$invalid && formularioAddProducto.precio.$dirty}" ng-if="producto.subtipo">
+	<div class="form-group" ng-if="producto.tipo">
+		<label for="variedad" class="label label-default">Variedad: </label>
+		<select id="variedad" name="variedad" class="form-control" ng-model="producto.variedad">
+			<option value="" selected disabled="">Selecciona</option>
+			<option ng-repeat="variedad in variedades | filter: producto.tipo | filter: producto.subtipo" value="{{variedad._id}}">{{variedad.nombre.toUpperCase()}}</option>
+		</select>
+	</div>
+
+	<div class="form-group" ng-class="{'has-error':formularioAddProducto.precio.$invalid && formularioAddProducto.precio.$dirty}" ng-if="producto.tipo">
 		<label for="precio" class="label label-default">Precio: </label>
 		<input type="number" name="precio" id="precio" class="form-control" value="{{producto.precio}}" ng-model="producto.precio" ng-required="true" placeholder="Precio sin IVA">
 	</div>
