@@ -41,6 +41,16 @@ var app = angular.module('app');
             configDelete.url = endpoint+"/"+producto._id;
             return $http(configDelete);
         }
+        factory.updateStock = function (producto) {
+            configAdd.url = endpoint+"/addStock/"+producto._id;
+            configAdd.data = producto;
+            return $http(configAdd)
+        }
+        factory.ajusteStock = function (producto) {
+            configAdd.url = endpoint+"/ajusteStock/"+producto._id;
+            configAdd.data = producto;
+            return $http(configAdd)
+        }
 
         factory.setProducto = function (producto) {
             factory.producto = producto;

@@ -11,6 +11,10 @@ module.exports = function (app) {
 	app.put('/products/:productId', middleware.ensureAuthenticated, productController.update);
 	app.delete('/products/:productId', middleware.ensureAuthenticated, productController.delete);
 
+	//stock
+	app.post('/products/addStock/:productId', middleware.ensureAuthenticated, productController.addStock);
+	app.post('/products/ajusteStock/:productId', middleware.ensureAuthenticated, productController.ajusteStock);
+
 	//Finish by binding the product middleware
 	app.param('productId', productController.productByID);
 }

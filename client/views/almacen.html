@@ -1,17 +1,101 @@
 <section>
 <h1>stock</h1>
-<form id="formularioAnadirStock" name="formularioAnadirStock" class="form-group" ng-submit="updateStock(productoSeleccionado)" novalidate>
-
+<!--AÑADIR stock-->
+<form id="formularioStock" name="formularioStock" class="form-group" ng-submit="updateStock(producto)" novalidate ng-show="productos">
+	<h3>Añadir stock</h3>
+	<label for="ambito" class="label label-default">Ambito: </label>
 	<div class="form-group">
-		<label for="nombre" class="label label-default">Nombre: </label>
-		<input type="text" name="nombre" id="nombre" class="form-control" value="{{productoSeleccionado.nombre}}" ng-model="productoSeleccionado.nombre" disabled>
+		<select class="form-control" ng-model="producto.ambito" name="ambito" id="ambito">
+			<option value="" selected disabled>Selecciona</option>
+			<option ng-repeat="ambito in ambitos" value="{{ambito.nombre}}">{{ambito.nombre}}</option>
+		</select>
 	</div>
 
-	<div class="form-group" ng-class="{'has-error':formularioAnadirStock.stock.$invalid && formularioAnadirStock.stock.$dirty}">
-		<label for="stock" class="label label-default">Stock: </label>
-		<input type="number" name="stock" id="stock" class="form-control" ng-model="productoSeleccionado.stock" ng-required="true">
+	<label for="tipo" class="label label-default">Tipo: </label>
+	<div class="form-group">
+		<select class="form-control" ng-model="producto.tipo" name="tipo" id="tipo">
+			<option value="" selected disabled>Selecciona</option>
+			<option ng-repeat="tipo in tipos | filter: producto.ambito" value="{{tipo._id}}">{{tipo.nombre.toUpperCase()}}</option>
+		</select>
 	</div>
 
-	<input type="submit" name="submit" style="width:100%" class="btn btn-primary" value="Actualizar" ng-disabled="formularioAnadirStock.$invalid">
+	<label for="subtipo" class="label label-default">Subtipo: </label>
+	<div class="form-group">
+		<select class="form-control" ng-model="producto.subtipo" name="subtipo" id="subtipo">
+			<option value="" selected>Selecciona</option>
+			<option ng-repeat="subtipo in subtipos | filter: producto.tipo" value="{{subtipo._id}}">{{subtipo.nombre.toUpperCase()}}</option>
+		</select>
+	</div>
+
+	<label for="variedad" class="label label-default">Variedad: </label>
+	<div class="form-group">
+		<select class="form-control" ng-model="producto.variedad" name="variedad" id="variedad">
+			<option value="" selected>Selecciona</option>
+			<option ng-repeat="variedad in variedades | filter: producto.tipo | filter: producto.subtipo" value="{{variedad._id}}">{{variedad.nombre.toUpperCase()}}</option>
+		</select>
+	</div>
+
+	<label for="producto" class="label label-default">Producto: </label>
+	<div class="form-group">
+		<select class="form-control" ng-model="producto.producto" name="producto" id="producto">
+			<option value="" selected disabled>Selecciona</option>
+			<option ng-repeat="producto in productos | filter: producto.tipo | filter: producto.subtipo | filter: producto.variedad" value="{{producto._id}}">{{producto.nombre.toUpperCase()}}</option>
+		</select>
+	</div>
+	<div class="form-group" ng-show="producto.producto">
+		<label for="cantidad">Cantidad a añadir: </label>
+		<input type="number" name="cantidad" id="cantidad" class="form-control" min="1" ng-model="producto.cantidad">
+	</div>
+	<input type="submit" name="submit" class="btn btn-primary" value="Añadir Stock" ng-disabled="!producto.cantidad">
 </form>
+<!---->
+<!--AJUSTE INVENTARIO-->
+<form id="formularioStockAjuste" name="formularioStockAjuste" class="form-group" ng-submit="ajusteStock(productoAjuste)" novalidate ng-show="productos">
+	<h3>Ajuste stock</h3>
+	<label for="ambito" class="label label-default">Ambito: </label>
+	<div class="form-group">
+		<select class="form-control" ng-model="productoAjuste.ambito" name="ambito" id="ambito">
+			<option value="" selected disabled>Selecciona</option>
+			<option ng-repeat="ambito in ambitos" value="{{ambito.nombre}}">{{ambito.nombre}}</option>
+		</select>
+	</div>
+
+	<label for="tipo" class="label label-default">Tipo: </label>
+	<div class="form-group">
+		<select class="form-control" ng-model="productoAjuste.tipo" name="tipo" id="tipo">
+			<option value="" selected disabled>Selecciona</option>
+			<option ng-repeat="tipo in tipos | filter: productoAjuste.ambito" value="{{tipo._id}}">{{tipo.nombre.toUpperCase()}}</option>
+		</select>
+	</div>
+
+	<label for="subtipo" class="label label-default">Subtipo: </label>
+	<div class="form-group">
+		<select class="form-control" ng-model="productoAjuste.subtipo" name="subtipo" id="subtipo">
+			<option value="" selected>Selecciona</option>
+			<option ng-repeat="subtipo in subtipos | filter: productoAjuste.tipo" value="{{subtipo._id}}">{{subtipo.nombre.toUpperCase()}}</option>
+		</select>
+	</div>
+
+	<label for="variedad" class="label label-default">Variedad: </label>
+	<div class="form-group">
+		<select class="form-control" ng-model="productoAjuste.variedad" name="variedad" id="variedad">
+			<option value="" selected>Selecciona</option>
+			<option ng-repeat="variedad in variedades | filter: productoAjuste.tipo | filter: productoAjuste.subtipo" value="{{variedad._id}}">{{variedad.nombre.toUpperCase()}}</option>
+		</select>
+	</div>
+
+	<label for="productoAjuste" class="label label-default">Producto: </label>
+	<div class="form-group">
+		<select class="form-control" ng-model="productoAjuste.producto" name="producto" id="producto">
+			<option value="" selected>Selecciona</option>
+			<option ng-repeat="producto in productos | filter: productoAjuste.tipo | filter: productoAjuste.subtipo | filter: productoAjuste.variedad" value="{{producto._id}}">{{producto.nombre.toUpperCase()}}</option>
+		</select>
+	</div>
+	<div class="form-group" ng-show="productoAjuste.producto">
+		<label for="cantidad">Cantidad real: </label>
+		<input type="number" name="cantidad" id="cantidad" class="form-control" min="1" ng-model="productoAjuste.cantidad">
+	</div>
+	<input type="submit" name="submit" class="btn btn-warning" value="Ajustar Inventario" ng-disabled="!productoAjuste.cantidad">
+</form>
+<!-->
 </section>

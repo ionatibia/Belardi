@@ -20,6 +20,8 @@
 *DISPENSA:
 	-Un desplegable con todos los productos filtrado por tipo, subtipo y variedad
 	-desplegables para filtrar (tipo, subtipo, variedad)
+*LOG de inventario
+*Comprobar funcionamiento en Dispositivo
 
 
-*dejado en dispensa crear el ticket por partes
+*dejado en dispensa acabar el formulario

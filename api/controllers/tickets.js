@@ -12,6 +12,8 @@ var path = require('path'),
 	Product = mongoose.model('Product'),
 	lodash = require('lodash');
 var log4js = require('log4js');
+var fs = require('fs');
+var sys = require('util');
 log4js.configure({
 	  appenders: [
 	    { type: 'console' },
@@ -27,84 +29,85 @@ var Q = require('q');
  *
  */
 exports.create = function (req, res) {
-	var usuario;
-	var productos = []
-	var socio;
+	var img = req.body.firma;
+	var data = img.replace(/^data:image\/\w+;base64,/, "");
+	var buf = new Buffer(data, 'base64');
+	var firmaUrl = 'public/firmas/' + req.body.socio+Date.now() + '.png';
+	fs.writeFile(firmaUrl, buf);
 	var promises = [];
-	for (var i = 0; i < req.body.ticket.length; i++) {
-		var promise = Product.findOne({tipo:req.body.ticket[i].tipo, subtipo: req.body.ticket[i].subtipo, nombre: req.body.ticket[i].producto}, function (err,product) {
+	var socioObj = {};
+	var userObj = {};
+	var productos = req.body.productos;
+	var socio = req.body.socio
+	var user = req.user
+	var productosTicket = [];
+
+	//buscar usuario
+	var promiseUser = User.findOne({_id: user}, function (err,user) {
+		if (err) {
+			console.log(err)
+			return res
+				.status(400)
+				.send("Error buscando usuarios: "+err);
+		}else{
+			userObj = user
+		}
+	})
+	promises.push(promiseUser);
+
+	//buscar socio
+	var promiseSocio = User.findOne({numero: socio}, function (err,user) {
+		if (err) {
+			console.log(err)
+			return res
+				.status(400)
+				.send("Error buscando usuarios: "+err);
+		}else{
+			socioObj = user
+		}
+	})
+	promises.push(promiseSocio);
+
+	//actualizar stock de los productos y crear array dispensa para el ticket
+	for(var i in productos){
+		var cantidad = productos[i].cantidad
+		var stockBefore = productos[i].stock[productos[i].stock.length-1].cantidad;
+		productos[i].stock.push({'cantidad':stockBefore-cantidad})
+		var stockCompleto = productos[i].stock
+
+		var promise = Product.update({_id: productos[i]._id},{$set:{stock: stockCompleto}},function (err) {
 			if (err) {
-				console.log(err)
-				log.warn('Error buscando producto '+req.body.ticket[i].producto)
-				res.send('Error buscando producto '+req.body.ticket[i].producto)
-			}
-			if (product) {
-				productos.push(product)
+				console.log(err)//falta el log de inventario
+				return res
+					.status(400)
+					.send("Error guardando productos: "+err);
 			}else{
-				console.log("No se encuentra el producto "+req.body.ticket[i].producto)
-				log.warn('Producto '+req.body.ticket[i].producto+' no encontrado')
-				res.send('Producto '+req.body.ticket[i].producto+' no encontrado')
+				productosTicket.push({'producto':productos[i],'cantidad':cantidad})
 			}
 		})
 		promises.push(promise);
 	}
-
-	Q.all(promises).then(function (response) {
-		console.log(response)
-		console.log(JSON.stringify(productos))
-	}, function (err) {
-		console.log(err)
-	})
 	
 
-	/*for (var i = 0; i < req.body.ticket.length; i++) {
-		Product.findOne({tipo:req.body.ticket[i].tipo, subtipo: req.body.ticket[i].subtipo, nombre: req.body.ticket[i].producto}, function (err,product) {
-			console.log("guardado producto "+i)
+	Q.all(promises).then(function (response) {
+		var ticket = new Ticket({'usuario':userObj,'socio':socioObj,'dispensa':productosTicket,'firmaUrl':firmaUrl})
+		ticket.save(function (err) {
 			if (err) {
 				console.log(err)
-				log.warn('Error buscando producto '+req.body.ticket[i].producto)
-				res.send('Error buscando producto '+req.body.ticket[i].producto)
-			}
-			if (product) {
-				productos.push(product)
+				return res
+					.status(400)
+					.send("Error guardando productos: "+err);
 			}else{
-				console.log("No se encuentra el producto "+req.body.ticket[i].producto)
-				log.warn('Producto '+req.body.ticket[i].producto+' no encontrado')
-				res.send('Producto '+req.body.ticket[i].producto+' no encontrado')
+				return res
+					.status(200)
+					.send(ticket);
 			}
 		})
-	}
-
-	User.findOne({numero:req.body.socio},function (err, user) {
-		if (err) {
-			console.log(err)
-			log.warn('Error buscando usuario '+req.body.socio)
-			res.send('Error buscando usuario '+req.body.socio)
-		}
-		if (user) {
-			console.log("guardado sovio")
-			socio = user;
-		}else{
-			console.log("No se encuentra el usuario "+req.body.socio)
-			log.warn('Usuario '+req.body.socio+' no encontrado')
-			res.send('Usuario '+req.body.socio+' no encontrado')
-		}
-	});
-	User.findOne({_id:req.user},function (err, user) {
-		if (err) {
-			console.log(err)
-			log.warn('Error buscando usuario '+req.user)
-			res.send('Error buscando usuario '+req.user)
-		}
-		if (user) {
-			console.log("usuario guardado")
-			usuario = user;
-		}else{
-			console.log("No se encuentra el usuario "+req.user)
-			log.warn('Usuario '+req.user+' no encontrado')
-			res.send('Usuario '+req.user+' no encontrado')
-		}
-	});*/
+	}, function (err) {
+		return res
+			.status(400)
+			.send("Error guardando ticket: "+err);
+	})
 	
 };//exports create
 

@@ -1,21 +1,38 @@
 <section>
+<!--MODAL-->
+<script type="text/ng-template" id="acuerdoTemplate.html">
+    <div class="panel-heading">
+        <h1>Acuerdo</h1>
+    </div>
+    <p>
+    
+    <div class="panel-footer">
+        <button class="btn btn-primary" ng-click="cancelarModal()">Cancelar</button>
+    </div>
+    </p>
+</script>
+<!---->
 <div id="containerFormulario" class="container-fluid form-group">
 	<h1 class="h1">DISPENSA</h1>
-	<form id="formularioDispensa" name="formularioDispensa" novalidate>
+	<form id="formularioDispensa" name="formularioDispensa" novalidate ng-show="productos">
 		<!--Numero socio-->
-		<div class="form-group" ng-show="listaProductos == ''">
+		<div class="form-group" ng-show="!prodDispensados">
 			<label for="numeroSocio" class="label label-default">Nº Socio: </label>
 			<select class="form-control" ng-model="socio" name="numeroSocio">
 				<option value="" selected disabled>Selecciona</option>
 				<option ng-repeat="socio in socios" value="{{socio.numero}}">{{socio.numero}}</option>
 			</select>
 		</div>
-		<div id="listaProductos">
-			<p ng-repeat="(key,item) in listaProductos" ng-model="listaProductos">{{key+1}}: {{item.producto}} -:{{item.cantidad}}</p>
+		<div id="listaProductos" ng-show="prodDispensados">
+			<h3>Socio nº: {{socio}}</h3>
+			<h4>Productos</h4>
+			<small>
+			<p ng-repeat="(key,item) in listaProductos" ng-model="listaProductos">{{key+1}}: {{item.nombre}} -:{{item.cantidad}}</p>
+			</small>
 		</div>
 		<!--Productos-->
 		<h3 ng-show="socio">Añadir producto</h3>
-		<label for="ambito" class="label label-default">Ambito: </label>
+		<label for="ambito" class="label label-default" ng-show="socio">Ambito: </label>
 		<div class="ticket" name="ticket" ng-show="socio">
 			<div class="form-group">
 				<select class="form-control" ng-model="ticket.ambito" name="ambito" id="ambito">
@@ -62,7 +79,16 @@
 			</div>
 		</div>
 		<button id="anadirButton" class="btn btn-primary" ng-click="anadir(ticket)" ng-show="ticket.cantidad">Añadir</button>
-		<button id="submitButton" class="btn btn-primary" ng-click="finalizar(socio)" ng-disabled="formularioDispensa.$invalid || listaProductos == ''">Finalizar</button>
+		<button id="preFinal" class="btn btn-primary" ng-click="preFinal()" ng-show="prodDispensados" ng-disabled="paraEnviar">Finalizar</button>
+
+		<br>
+		<div ng-show="paraEnviar">
+			<input type="checkbox" name="acuerdo" ng-model="acuerdo">Acepto el <a ng-click="modalAcuerdo()">acuerdo</a>
+		</div>
+		<br>
+		<canvas drawing style="background:#fff" id="lienzo" ng-show="paraEnviar"></canvas>
+
+		<button id="submitButton" class="btn btn-primary" ng-click="finalizar(socio)" ng-disabled="!paraEnviar && !acuerdo">Enviar</button>
 	</form>
 </div>
 </section>

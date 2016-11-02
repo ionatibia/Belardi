@@ -9,7 +9,7 @@ var config = require('./security/config');
 exports.createToken = function(user) {  
   var payload = {
   	//en el token guardamos la _id del usuario
-    sub: user._id,
+    sub: user,
     //cuando se crea
     iat: moment().unix(),
     //cuando caduca

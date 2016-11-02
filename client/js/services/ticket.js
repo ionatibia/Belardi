@@ -25,8 +25,8 @@ app.factory('TicketServ', ['$http','config', function ($http,config) {
     factory.getAll = function () {
     	return $http()
     }
-    factory.addTicket = function (ticket,socio) {
-    	configAdd.data = {'ticket':ticket,'socio':socio}
+    factory.addTicket = function (ticket) {
+    	configAdd.data = ticket
     	return $http(configAdd)
     }
     factory.readTicket = function (ticket) {

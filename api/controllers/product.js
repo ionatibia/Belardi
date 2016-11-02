@@ -132,6 +132,40 @@ module.exports.list = function (req, res) {
 	});
 };//exports list
 
+module.exports.addStock = function (req,res) {
+	var stockBefore = req.product.stock[req.product.stock.length-1].cantidad;
+	var stockAfter = req.body.cantidad + stockBefore;
+	req.product.stock.push({'cantidad':stockAfter})
+	req.product.save(function (err) {
+		if (err) {
+			console.log(err)//falta el log de inventario
+			return res
+				.status(400)
+				.send("Error guardando productos: "+err);
+		}else{
+			return res
+				.status(200)
+				.json(req.product);
+		}
+	})
+}
+
+module.exports.ajusteStock = function (req,res) {
+	req.product.stock.push({'cantidad':req.body.cantidad})
+	req.product.save(function (err) {
+		if (err) {
+			console.log(err)//falta el log de inventario
+			return res
+				.status(400)
+				.send("Error guardando productos: "+err);
+		}else{
+			return res
+				.status(200)
+				.json(req.product);
+		}
+	})
+}
+
 
 /**
  *
