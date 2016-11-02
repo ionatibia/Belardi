@@ -133,7 +133,7 @@ angular.module('app',["ngRoute","ngFlash","ngDialog"])
       }
     })
 	.constant('config', {
-	    apiUrl: 'http://localhost:8000',
+	    apiUrl: 'http://192.168.1.43:8000',
 	    tiposUsuarios: ["Normal","Terapeutico"],
 	    ambitos: [{'nombre':"Barra"},{'nombre':"Dispensa"}]
 	})

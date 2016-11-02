@@ -106,11 +106,7 @@ app.controller('DispensaCtrl', ['$scope','$location','ProductosServ','SociosServ
 			return $scope.esMovil.Android()
 		}
 	}
-	if($scope.esMovil.cualquiera()){
-		console.log("yes")
-	}else{
-		console.log("NO")
-	}
+	
 	$scope.paraEnviar = false;
 	$scope.preFinal = function () {
 		$scope.paraEnviar = true;
@@ -123,8 +119,91 @@ app.controller('DispensaCtrl', ['$scope','$location','ProductosServ','SociosServ
 		ngDialog.closeAll()
 	}
 
-}])//controller
-.directive("drawing", function(){
+	var movimientos = new Array();
+    var pulsado;
+
+	var canvasDiv = document.getElementById('lienzo');
+	canvas = document.createElement('canvas');
+	canvas.setAttribute('width', 200);
+	canvas.setAttribute('height', 200);
+	canvas.setAttribute('id', 'canvas');
+	canvasDiv.appendChild(canvas);
+	if(typeof G_vmlCanvasManager != 'undefined') {
+	    canvas = G_vmlCanvasManager.initElement(canvas);
+	}
+	context = canvas.getContext("2d");
+	if ($scope.esMovil.cualquiera()) {
+		$('#canvas').bind('touchstart',function(event){
+			var e = event.originalEvent;
+			e.preventDefault();
+			pulsado = true;
+			console.log(this.offsetLeft)
+			movimientos.push([e.targetTouches[0].pageX - this.offsetLeft,e.targetTouches[0].pageY - this.offsetTop,false]);
+			console.log(movimientos)
+			repinta();
+		});
+
+		$('#canvas').bind('touchmove',function(event){
+			if(pulsado){
+				movimientos.push([event.targetTouches[0].pageX - this.offsetLeft,event.targetTouches[0].pageY - this.offsetTop,true]);
+		        repinta();
+		      }
+		});
+
+		$('#canvas').bind('touchend',function(event){
+			pulsado = false;
+		});
+	}else{
+		$('#canvas').mousedown(function(e){
+	      pulsado = true;
+	      movimientos.push([e.pageX - this.offsetLeft,
+	          e.pageY - this.offsetTop,
+	          false]);
+	      repinta();
+	    });
+	}
+	
+    $('#canvas').mousemove(function(e){
+      if(pulsado){
+          movimientos.push([e.pageX - this.offsetLeft,
+              e.pageY - this.offsetTop,
+              true]);
+        repinta();
+      }
+    });
+ 
+    $('#canvas').mouseup(function(e){
+      pulsado = false;
+    });
+ 
+    $('#canvas').mouseleave(function(e){
+      pulsado = false;
+    });
+    repinta();
+
+    function repinta(){
+		canvas.width = canvas.width; // Limpia el lienzo
+
+		context.strokeStyle = "#0000a0";
+		context.lineJoin = "round";
+		context.lineWidth = 6;
+
+		for(var i=0; i < movimientos.length; i++)
+		{     
+			context.beginPath();
+			if(movimientos[i][2] && i){
+				context.moveTo(movimientos[i-1][0], movimientos[i-1][1]);
+			}else{
+				context.moveTo(movimientos[i][0], movimientos[i][1]);
+			}
+			context.lineTo(movimientos[i][0], movimientos[i][1]);
+			context.closePath();
+			context.stroke();
+		}
+	}
+
+}]);//controller
+/*.directive("drawing", function(){
   return {
     restrict: "A",
     link: function($scope, element){
@@ -137,43 +216,64 @@ app.controller('DispensaCtrl', ['$scope','$location','ProductosServ','SociosServ
       var lastX;
       var lastY;
 
-      element.bind('mousedown', function(event){
-        if(event.offsetX!==undefined){
-          lastX = event.offsetX;
-          lastY = event.offsetY;
-        } else { // Firefox compatibility
-          lastX = event.layerX - event.currentTarget.offsetLeft;
-          lastY = event.layerY - event.currentTarget.offsetTop;
-        }
+      if($scope.esMovil.cualquiera()){
+			element.bind('touchstart',function(event){
+				var e = event.originalEvent;
+				e.preventDefault();
+				if(event.offsetX!==undefined){
+		            currentX = event.offsetX;
+		            currentY = event.offsetY;
+		          } else {
+		            currentX = event.layerX - event.currentTarget.offsetLeft;
+		            currentY = event.layerY - event.currentTarget.offsetTop;
+		            alert(JSON.stringify(event))
+		          }
 
-        // begins new line
-        $scope.ctx.beginPath();
+		          draw(lastX, lastY, currentX, currentY);
+		          // set current coordinates to last one
+		          lastX = currentX;
+		          lastY = currentY;
+				});
+		}else{
+			element.bind('mousedown', function(event){
+	        if(event.offsetX!==undefined){
+	          lastX = event.offsetX;
+	          lastY = event.offsetY;
+	        } else { // Firefox compatibility
+	          lastX = event.layerX - event.currentTarget.offsetLeft;
+	          lastY = event.layerY - event.currentTarget.offsetTop;
+	        }
 
-        drawing = true;
-      });
-      element.bind('mousemove', function(event){
-        if(drawing){
-          // get current mouse position
-          if(event.offsetX!==undefined){
-            currentX = event.offsetX;
-            currentY = event.offsetY;
-          } else {
-            currentX = event.layerX - event.currentTarget.offsetLeft;
-            currentY = event.layerY - event.currentTarget.offsetTop;
-          }
+	        // begins new line
+	        $scope.ctx.beginPath();
 
-          draw(lastX, lastY, currentX, currentY);
+	        drawing = true;
+	      });
+	      element.bind('mousemove', function(event){
+	        if(drawing){
+	          // get current mouse position
+	          if(event.offsetX!==undefined){
+	            currentX = event.offsetX;
+	            currentY = event.offsetY;
+	          } else {
+	            currentX = event.layerX - event.currentTarget.offsetLeft;
+	            currentY = event.layerY - event.currentTarget.offsetTop;
+	          }
 
-          // set current coordinates to last one
-          lastX = currentX;
-          lastY = currentY;
-        }
+	          draw(lastX, lastY, currentX, currentY);
 
-      });
-      element.bind('mouseup', function(event){
-        // stop drawing
-        drawing = false;
-      });
+	          // set current coordinates to last one
+	          lastX = currentX;
+	          lastY = currentY;
+	        }
+
+	      });
+	      element.bind('mouseup', function(event){
+	        // stop drawing
+	        drawing = false;
+	      });
+		}//if es movil
+      
 
       // canvas reset
       function reset(){
@@ -192,4 +292,4 @@ app.controller('DispensaCtrl', ['$scope','$location','ProductosServ','SociosServ
       }
     }
   };
-});
+});*/

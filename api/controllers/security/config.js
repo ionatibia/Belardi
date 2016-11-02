@@ -6,7 +6,7 @@ module.exports = {
   TOKEN_SECRET: process.env.TOKEN_SECRET || "belardi2016Nati2016Arrobinet2016",
   server: {
   	server_port: process.env.OPENSHIFT_NODEJS_PORT || process.env.PORT || 8000,
-  	server_ip: process.env.OPENSHIFT_NODEJS_IP || process.env.IP || '127.0.0.1',
+  	server_ip: process.env.OPENSHIFT_NODEJS_IP || process.env.IP || '192.168.1.43',
   	db:{
   		uri: process.env.MONGO_URI || 'localhost' + '/belardi',
   		user: '',

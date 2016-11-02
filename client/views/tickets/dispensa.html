@@ -86,7 +86,8 @@
 			<input type="checkbox" name="acuerdo" ng-model="acuerdo">Acepto el <a ng-click="modalAcuerdo()">acuerdo</a>
 		</div>
 		<br>
-		<canvas drawing style="background:#fff" id="lienzo" ng-show="paraEnviar"></canvas>
+		<!--<canvas drawing style="background:#fff" id="lienzo" ng-show="paraEnviar"></canvas>-->
+		<div id="lienzo" style="width: 200px; height: 200px; background: #fff;"></div>
 
 		<button id="submitButton" class="btn btn-primary" ng-click="finalizar(socio)" ng-disabled="!paraEnviar && !acuerdo">Enviar</button>
 	</form>
