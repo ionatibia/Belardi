@@ -27,7 +27,7 @@
 			<h3>Socio nº: {{socio}}</h3>
 			<h4>Productos</h4>
 			<small>
-			<p ng-repeat="(key,item) in listaProductos" ng-model="listaProductos">{{key+1}}: {{item.nombre}} -:{{item.cantidad}}</p>
+			<p ng-repeat="(key,item) in listaProductos" ng-model="listaProductos">{{item.cantidad}}: {{item.nombre}}</p>
 			</small>
 		</div>
 		<!--Productos-->
@@ -73,7 +73,7 @@
 				</select>
 			</div>
 			<!---->
-			<label for="cantidad" class="label label-default">Cantidad: </label>
+			<label for="cantidad" class="label label-default" ng-show="ticket.producto">Cantidad: </label>
 			<div class="form-group" ng-class="{'has-error':formularioDispensa.cantidad.$invalid}">
 				<input type="number" class="form-control" name="cantidad" ng-model="ticket.cantidad" ng-show="ticket.producto" min="0">
 			</div>
@@ -82,14 +82,47 @@
 		<button id="preFinal" class="btn btn-primary" ng-click="preFinal()" ng-show="prodDispensados" ng-disabled="paraEnviar">Finalizar</button>
 
 		<br>
+		<center>
+		<div ng-show="paraEnviar" class="table-responsive">
+			<h3>Ticket para socio: {{socio}}</h3>
+			<table class="table table-striped">
+				<thead>
+	            <tr style="background-color: #333333; color: white">
+	                <th>Cantidad</th>
+	                <th>Producto</th>
+	                <th>Precio</th>
+	                <th>IVA</th>
+	            </tr>
+	            </thead>
+	            <tbody>
+	            	<tr ng-repeat="producto in listaProductos">
+	            		<td>{{producto.cantidad}}</td>
+	            		<td>{{producto.nombre}}</td>
+	            		<td>{{producto.precio}}</td>
+	            		<td>{{producto.iva}}</td>
+	            	</tr>
+	            	<tr>
+	            		<td colspan="2">Sub Total</td>
+	            		<td>{{subtotal()}}</td>
+	            		<td>{{subtotalIva()}}</td>
+	            	</tr>
+	            	<tr>
+	            		<td colspan="3">TOTAL</td>
+	            		<td>{{totalTicket()}}</td>
+	            	</tr>
+	            </tbody>
+			</table>
+		</div>
 		<div ng-show="paraEnviar">
 			<input type="checkbox" name="acuerdo" ng-model="acuerdo">Acepto el <a ng-click="modalAcuerdo()">acuerdo</a>
 		</div>
 		<br>
-		<!--<canvas drawing style="background:#fff" id="lienzo" ng-show="paraEnviar"></canvas>-->
-		<div id="lienzo" style="width: 200px; height: 200px; background: #fff;"></div>
+		<!--<canvas drawing style="background:#fff" id="lienzo" ng-show="acuerdo"></canvas>-->
+		
+		<div id="lienzo" style="width: 300px; height: 300px; background: #fff;" ng-show="acuerdo"></div>
+		</center>
 
-		<button id="submitButton" class="btn btn-primary" ng-click="finalizar(socio)" ng-disabled="!paraEnviar && !acuerdo">Enviar</button>
+		<button id="submitButton" class="btn btn-primary" ng-click="finalizar(socio)" ng-disabled="!acuerdo">Enviar</button>
 	</form>
 </div>
 </section>

@@ -27,10 +27,7 @@ var log = log4js.getLogger('type');
  *
  */
 exports.create = function (req, res) {
-	console.log(req.body)
-
 	var type = new Type(req.body)
-	console.log(type)
 
 	type.save(function (err) {
 		if (err) {
@@ -110,7 +107,7 @@ module.exports.delete = function (req, res) {
  */
 module.exports.list = function (req, res) {
 	//buscamos todos los tipos ordenados por fecha
-	Type.find().sort('-nombre').exec(function (err, types) {
+	Type.find().sort('nombre').exec(function (err, types) {
 		if (err) {
 			log.error("Error buscando tipos: "+err)
 			return res

@@ -38,6 +38,7 @@ app.controller('SociosCtrl', ['$scope','$location', 'SociosServ','Flash','config
 		if (!isNaN(socio.numero)) {
 			socio.correo = socio.correo.toLowerCase().trim()
 			SociosServ.addSocio(socio).then(function (response) {
+				console.log(response.data)
 				var message = '<strong>HECHO!!!</strong> El usuario ha sido guardado correctamente';
 		        Flash.create('success', message);
 		        $location.path('/socios')

@@ -36,7 +36,6 @@ app.controller('AlmacenCtrl', ['$scope','ProductosServ','ConfigServ','config','F
 	}
 
 	$scope.updateStock = function (prod) {
-		console.log(prod)
 		var obj = {}
 		for(var p in $scope.productos){
 			if ($scope.productos[p]._id = prod.producto) {
@@ -47,6 +46,11 @@ app.controller('AlmacenCtrl', ['$scope','ProductosServ','ConfigServ','config','F
 		ProductosServ.updateStock(obj).then(function (response) {
 			var message = '<strong>HECHO!!!</strong> stock del producto '+response.data.nombre+' actualizado';
 			Flash.create('success', message);
+			for(var p in $scope.productos){
+				if ($scope.productos[p]._id = prod.producto) {
+					$scope.productos[p].cantidad = prod.cantidad;
+				}
+			}
 		}, function (err) {
 			var message = '<strong>ERROR!!!</strong> '+JSON.stringify(err.data);
 			Flash.create('danger', message);
@@ -69,6 +73,11 @@ app.controller('AlmacenCtrl', ['$scope','ProductosServ','ConfigServ','config','F
 		ProductosServ.ajusteStock(obj).then(function (response) {
 			var message = '<strong>HECHO!!!</strong> stock del producto '+response.data.nombre+' ajustado';
 			Flash.create('success', message);
+			for(var p in $scope.productos){
+				if ($scope.productos[p]._id = prod.producto) {
+					$scope.productos[p].cantidad = prod.cantidad;
+				}
+			}
 		}, function (err) {
 			var message = '<strong>ERROR!!!</strong> '+JSON.stringify(err.data);
 			Flash.create('danger', message);

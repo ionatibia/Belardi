@@ -34,7 +34,7 @@ app.controller('ConfigCtrl', ['$scope','$location','Flash','$window','ConfigServ
 		ConfigServ.add('type',type).then(function (response){
 			var message = '<strong>HECHO!!!</strong> el tipo se ha guardado correctamente';
 			Flash.create('success', message);
-			$scope.tipos.push(type)
+			$scope.tipos.push(response.data)
 			ngDialog.closeAll()
 		}, function (err) {
 			var message = '<strong>ERROR!!!</strong> '+JSON.stringify(err.data);
@@ -47,11 +47,12 @@ app.controller('ConfigCtrl', ['$scope','$location','Flash','$window','ConfigServ
 				subtype.tipo = $scope.tipos[i]
 			}
 		}
-		console.log(subtype)
 		ConfigServ.add('subtype',subtype).then(function (response){
 			var message = '<strong>HECHO!!!</strong> el subtipo se ha guardado correctamente';
 			Flash.create('success', message);
-			$scope.subtipos.push(subtype)
+			var obj = response.data;
+			obj.tipo = subtype.tipo;
+			$scope.subtipos.push(obj)
 			ngDialog.closeAll()
 		}, function (err) {
 			var message = '<strong>ERROR!!!</strong> '+JSON.stringify(err.data);
@@ -72,7 +73,10 @@ app.controller('ConfigCtrl', ['$scope','$location','Flash','$window','ConfigServ
 		ConfigServ.add('variety',variety).then(function (response){
 			var message = '<strong>HECHO!!!</strong> la variedad se ha guardado correctamente';
 			Flash.create('success', message);
-			$scope.variedades.push(variety)
+			var obj = response.data;
+			obj.tipo = variety.tipo;
+			obj.subtipo = variety.subtipo;
+			$scope.variedades.push(obj)
 			ngDialog.closeAll()
 		}, function (err) {
 			var message = '<strong>ERROR!!!</strong> '+JSON.stringify(err.data);
@@ -92,7 +96,9 @@ app.controller('ConfigCtrl', ['$scope','$location','Flash','$window','ConfigServ
 				ConfigServ.delete('type',tipo).then(function (response) {
 					var message = '<strong>HECHO!!!</strong> el tipo se ha borrado correctamente';
 					Flash.create('success', message);
-					$scope.tipos.splice($scope.tipos.indexOf(tipo,1))
+					console.log(tipo)
+					$scope.tipos.splice($scope.tipos.indexOf(tipo),1)
+					console.log($scope.tipos)
 				}, function(err) {
 					var message = '<strong>ERROR!!!</strong> '+JSON.stringify(err.data);
 					Flash.create('danger', message);
@@ -116,7 +122,7 @@ app.controller('ConfigCtrl', ['$scope','$location','Flash','$window','ConfigServ
 				ConfigServ.delete('subtype',subtipo).then(function (response) {
 					var message = '<strong>HECHO!!!</strong> el subtipo se ha borrado correctamente';
 					Flash.create('success', message);
-					$scope.subtipos.splice($scope.subtipos.indexOf(subtipo,1))
+					$scope.subtipos.splice($scope.subtipos.indexOf(subtipo),1)
 				}, function(err) {
 					var message = '<strong>ERROR!!!</strong> '+JSON.stringify(err.data);
 					Flash.create('danger', message);
@@ -141,6 +147,7 @@ app.controller('ConfigCtrl', ['$scope','$location','Flash','$window','ConfigServ
 	}
 
 	$scope.updateType = function (tipo) {
+		console.log(tipo)
 		ConfigServ.update('type',tipo).then(function (response){
 			var message = '<strong>HECHO!!!</strong> el tipo se ha modificado correctamente';
 			Flash.create('success', message);

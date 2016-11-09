@@ -27,10 +27,8 @@ var log = log4js.getLogger('subtype');
  *
  */
 exports.create = function (req, res) {
-	console.log(req.body)
 
 	var subtype = new Subtype(req.body)
-	console.log(subtype)
 
 	subtype.save(function (err) {
 		if (err) {
@@ -110,7 +108,7 @@ module.exports.delete = function (req, res) {
  */
 module.exports.list = function (req, res) {
 	//buscamos todos los subtipos ordenados por fecha
-	Subtype.find().sort('-nombre').populate('tipo').exec(function (err, subtypes) {
+	Subtype.find().sort('nombre').populate('tipo').exec(function (err, subtypes) {
 		if (err) {
 			log.error("Error buscando subtipos: "+err)
 			return res

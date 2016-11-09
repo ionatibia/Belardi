@@ -24,4 +24,4 @@
 *Comprobar funcionamiento en Dispositivo
 
 
-*dejado en dispensa acabar el formulario
+*dejado en dispensa acabar el ticket
