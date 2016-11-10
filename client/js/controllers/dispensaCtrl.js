@@ -105,14 +105,33 @@ app.controller('DispensaCtrl', ['$scope','$location','ProductosServ','SociosServ
 		    Flash.create('danger', message);
 		}
 	}
-
+	$scope.cuenta = 0;
 	$scope.subtotal = function () {
 		var cuenta = 0;
 		for(var p in $scope.listaProductos){
 			var tmp = $scope.listaProductos[p].precio * $scope.listaProductos[p].cantidad
 			cuenta += tmp
 		}
+		$scope.cuenta = cuenta
 		return cuenta
+	}
+	$scope.cuentaIva = 0;
+	$scope.subtotalIva = function () {
+		var cuentaIva = 0;
+		for(var p in $scope.listaProductos){
+			var tmp = $scope.listaProductos[p].precio * $scope.listaProductos[p].cantidad
+			var iva = $scope.listaProductos[p].iva / 100;
+			cuentaIva += (tmp * iva)
+		}
+		var cuentaRedondeada = cuentaIva.toFixed(2)//Math.round(cuentaIva * 100) / 100
+		$scope.cuentaIva = cuentaRedondeada;
+		return cuentaRedondeada;
+	}
+
+	$scope.totalTicket = function () {
+		var total = 0;
+		total = parseInt($scope.cuenta) + parseInt($scope.cuentaIva)
+		return total
 	}
 
 	$scope.stock = function (producto) {

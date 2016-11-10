@@ -18,12 +18,16 @@
 		<!--Numero socio-->
 		<div class="form-group" ng-show="!prodDispensados">
 			<label for="numeroSocio" class="label label-default">Nº Socio: </label>
-			<select class="form-control" ng-model="socio" name="numeroSocio">
+			<input list="socios" name="socio" ng-model="socio" class="form-control">
+			<datalist id="socios">
+				<option ng-repeat="socio in socios" value="{{socio.numero}}">{{socio.numero}}</option>
+			</datalist>
+			<!--<select class="form-control select-editable" ng-model="socio" name="numeroSocio">
 				<option value="" selected disabled>Selecciona</option>
 				<option ng-repeat="socio in socios" value="{{socio.numero}}">{{socio.numero}}</option>
-			</select>
+			</select>-->
 		</div>
-		<div id="listaProductos" ng-show="prodDispensados">
+		<div id="listaProductos" ng-show="prodDispensados" ng-if="!paraEnviar">
 			<h3>Socio nº: {{socio}}</h3>
 			<h4>Productos</h4>
 			<small>
@@ -31,61 +35,64 @@
 			</small>
 		</div>
 		<!--Productos-->
-		<h3 ng-show="socio">Añadir producto</h3>
-		<label for="ambito" class="label label-default" ng-show="socio">Ambito: </label>
-		<div class="ticket" name="ticket" ng-show="socio">
-			<div class="form-group">
-				<select class="form-control" ng-model="ticket.ambito" name="ambito" id="ambito">
-					<option value="" selected disabled>Selecciona</option>
-					<option ng-repeat="ambito in ambitos" value="{{ambito.nombre}}">{{ambito.nombre}}</option>
-				</select>
+
+			<h3 ng-show="socio && !paraEnviar">Añadir producto</h3>
+			<label for="ambito" class="label label-default" ng-show="socio && !paraEnviar">Ambito: </label>
+			<div class="ticket" name="ticket" ng-show="socio && !paraEnviar">
+				<div class="form-group">
+					<select class="form-control" ng-model="ticket.ambito" name="ambito" id="ambito">
+						<option value="" selected disabled>Selecciona</option>
+						<option ng-repeat="ambito in ambitos" value="{{ambito.nombre}}">{{ambito.nombre}}</option>
+					</select>
+				</div>
+				<!---->
+				<label for="tipo" class="label label-default" ng-show="!paraEnviar">Tipo: </label>
+				<div class="form-group" ng-show="!paraEnviar">
+					<select class="form-control" ng-model="ticket.tipo" name="tipo" id="tipo">
+						<option value="" selected disabled>Selecciona</option>
+						<option ng-repeat="tipo in tipos | filter: ticket.ambito" value="{{tipo._id}}">{{tipo.nombre.toUpperCase()}}</option>
+					</select>
+				</div>
+				<!---->
+				<label for="subtipo" class="label label-default" ng-show="!paraEnviar">Subtipo: </label>
+				<div class="form-group" ng-show="!paraEnviar">
+					<select class="form-control" ng-model="ticket.subtipo" name="subtipo" id="subtipo">
+						<option value="" selected>Selecciona</option>
+						<option ng-repeat="subtipo in subtipos | filter: ticket.tipo" value="{{subtipo._id}}">{{subtipo.nombre.toUpperCase()}}</option>
+					</select>
+				</div>
+				<!---->
+				<label for="variedad" class="label label-default" ng-show="!paraEnviar">Variedad: </label>
+				<div class="form-group" ng-show="!paraEnviar">
+					<select class="form-control" ng-model="ticket.variedad" name="variedad" id="variedad">
+						<option value="" selected>Selecciona</option>
+						<option ng-repeat="variedad in variedades | filter: ticket.tipo | filter: ticket.subtipo" value="{{variedad._id}}">{{variedad.nombre.toUpperCase()}}</option>
+					</select>
+				</div>
+				<!---->
+				<label for="producto" class="label label-default" ng-show="!paraEnviar">Producto: </label>
+				<div class="form-group" ng-show="!paraEnviar">
+					<select class="form-control" ng-model="ticket.producto" name="producto" id="producto">
+						<option value="" selected>Selecciona</option>
+						<option ng-repeat="producto in productos | filter: ticket.tipo | filter: ticket.subtipo | filter: ticket.variedad" value="{{producto._id}}">{{producto.nombre.toUpperCase()}}</option>
+					</select>
+				</div>
+				<!---->
+				<label for="cantidad" class="label label-default" ng-show="ticket.producto && !paraEnviar">Cantidad: </label>
+				<div class="form-group" ng-class="{'has-error':formularioDispensa.cantidad.$invalid}">
+					<input type="number" class="form-control" name="cantidad" ng-model="ticket.cantidad" ng-show="ticket.producto && !paraEnviar" min="0">
+				</div>
 			</div>
-			<!---->
-			<label for="tipo" class="label label-default">Tipo: </label>
-			<div class="form-group">
-				<select class="form-control" ng-model="ticket.tipo" name="tipo" id="tipo">
-					<option value="" selected disabled>Selecciona</option>
-					<option ng-repeat="tipo in tipos | filter: ticket.ambito" value="{{tipo._id}}">{{tipo.nombre.toUpperCase()}}</option>
-				</select>
-			</div>
-			<!---->
-			<label for="subtipo" class="label label-default">Subtipo: </label>
-			<div class="form-group">
-				<select class="form-control" ng-model="ticket.subtipo" name="subtipo" id="subtipo">
-					<option value="" selected>Selecciona</option>
-					<option ng-repeat="subtipo in subtipos | filter: ticket.tipo" value="{{subtipo._id}}">{{subtipo.nombre.toUpperCase()}}</option>
-				</select>
-			</div>
-			<!---->
-			<label for="variedad" class="label label-default">Variedad: </label>
-			<div class="form-group">
-				<select class="form-control" ng-model="ticket.variedad" name="variedad" id="variedad">
-					<option value="" selected>Selecciona</option>
-					<option ng-repeat="variedad in variedades | filter: ticket.tipo | filter: ticket.subtipo" value="{{variedad._id}}">{{variedad.nombre.toUpperCase()}}</option>
-				</select>
-			</div>
-			<!---->
-			<label for="producto" class="label label-default">Producto: </label>
-			<div class="form-group">
-				<select class="form-control" ng-model="ticket.producto" name="producto" id="producto">
-					<option value="" selected>Selecciona</option>
-					<option ng-repeat="producto in productos | filter: ticket.tipo | filter: ticket.subtipo | filter: ticket.variedad" value="{{producto._id}}">{{producto.nombre.toUpperCase()}}</option>
-				</select>
-			</div>
-			<!---->
-			<label for="cantidad" class="label label-default" ng-show="ticket.producto">Cantidad: </label>
-			<div class="form-group" ng-class="{'has-error':formularioDispensa.cantidad.$invalid}">
-				<input type="number" class="form-control" name="cantidad" ng-model="ticket.cantidad" ng-show="ticket.producto" min="0">
-			</div>
-		</div>
-		<button id="anadirButton" class="btn btn-primary" ng-click="anadir(ticket)" ng-show="ticket.cantidad">Añadir</button>
-		<button id="preFinal" class="btn btn-primary" ng-click="preFinal()" ng-show="prodDispensados" ng-disabled="paraEnviar">Finalizar</button>
+			<button id="anadirButton" class="btn btn-primary" ng-click="anadir(ticket)" ng-show="ticket.cantidad">Añadir</button>
+			<button id="preFinal" class="btn btn-primary" ng-click="preFinal()" ng-show="prodDispensados" ng-disabled="paraEnviar" ng-if="!paraEnviar">Finalizar</button>
+
+		
 
 		<br>
 		<center>
 		<div ng-show="paraEnviar" class="table-responsive">
 			<h3>Ticket para socio: {{socio}}</h3>
-			<table class="table table-striped">
+			<table class="table table-striped" style="text-align:center">
 				<thead>
 	            <tr style="background-color: #333333; color: white">
 	                <th>Cantidad</th>
@@ -98,17 +105,17 @@
 	            	<tr ng-repeat="producto in listaProductos">
 	            		<td>{{producto.cantidad}}</td>
 	            		<td>{{producto.nombre}}</td>
-	            		<td>{{producto.precio}}</td>
-	            		<td>{{producto.iva}}</td>
+	            		<td>{{producto.precio}} €</td>
+	            		<td>{{producto.iva}} %</td>
 	            	</tr>
 	            	<tr>
 	            		<td colspan="2">Sub Total</td>
-	            		<td>{{subtotal()}}</td>
-	            		<td>{{subtotalIva()}}</td>
+	            		<td>{{subtotal()}} €</td>
+	            		<td>{{subtotalIva()}} €</td>
 	            	</tr>
 	            	<tr>
-	            		<td colspan="3">TOTAL</td>
-	            		<td>{{totalTicket()}}</td>
+	            		<td colspan="2">TOTAL</td>
+	            		<td colspan="2">{{totalTicket()}} €</td>
 	            	</tr>
 	            </tbody>
 			</table>

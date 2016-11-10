@@ -1,20 +1,24 @@
 <section>
 <div>
 	<h1>SOCIOS</h1>
-	<a href="#/socios/addSocio" class="glyphicon glyphicon-plus"></a>
+	<a href="#/socios/addSocio" class="glyphicon glyphicon-plus"></a>&nbsp;({{socios.length}})
 	<input type="text" name="buscador" ng-model="buscador" placeholder="Buscar" class="form-control">
 	<div id="listaSocios">
 		<ul class="list-group">
-			<li class="list-group-item" ng-repeat="socio in socios | filter: buscador">{{socio.nombre}} {{socio.apellido}} <br/>
+			<li class="list-group-item" ng-repeat="socio in socios | filter: buscador" ng-if="(socio.numero != '0')">{{socio.nombre}} {{socio.apellido}} <br/>
+			<p ng-if="esBaja(socio.numero)" style="color:red">Baja</p>
+			<small ng-if="!esBaja(socio.numero)">
 			Número: {{socio.numero}}<br/>
 			Tipo: {{socio.tipo}}<br/>
-			Correo: {{socio.correo}} 
+			Correo: {{socio.correo}}
+			</small> 
 			<a id="botonUpdate" class="btn btn-primary" ng-click="seleccionSocioUpdate(socio)"><span class="glyphicon glyphicon-pencil"></span></a>
 			<a id="botonDelete" class="btn btn-danger" ng-click="deleteSocio(socio)"><span class="glyphicon glyphicon-trash"></span></a>
-			<a id="botonBaja" class="btn btn-warning" ng-if="esBaja(socio.numero)" ng-click="bajaSocio(socio)"><span class="glyphicon glyphicon-minus"></span></a>
-			<a id="botonAlta" class="btn btn-success" ng-if="!esBaja(socio.numero)" ng-click="altaSocio(socio)"><span class="glyphicon glyphicon-plus"></span></a>
+			<a id="botonBaja" class="btn btn-warning" ng-if="!esBaja(socio.numero)" ng-click="bajaSocio(socio)"><span class="glyphicon glyphicon-minus"></span></a>
+			<a id="botonAlta" class="btn btn-success" ng-if="esBaja(socio.numero)" ng-click="altaSocio(socio)"><span class="glyphicon glyphicon-plus"></span></a>
 			</li>
 		</ul>
 	</div>
+	<!--<pagination ng-model="currentPage" total-items="todos.length" max-size="maxSize" boundary-links="true"></pagination>-->
 </div>
 </section>

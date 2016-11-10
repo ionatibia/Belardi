@@ -4,7 +4,8 @@ var validator = require('validator');
 
 var subSchema = mongoose.Schema({
 	cantidad:{type:Number, default:0},
-	fecha:{type:Date,default:Date.now()}
+	fecha:{type:Date,default:Date.now()},
+	observaciones:{type:String,default:''}
 })
 
 var productSchema = new Schema({
@@ -17,7 +18,8 @@ var productSchema = new Schema({
 	precio:{type:Number, required: 'Falta el precio'},
 	iva:{type:Number,required:'Falta el IVA'},
 	stock:[subSchema],
-	fecha_alta:{type:Date, default:Date.now()}
+	fecha_alta:{type:Date, default:Date.now()},
+	baja:{type:Boolean,default:false}
 });
 
 module.exports = mongoose.model('Product', productSchema);

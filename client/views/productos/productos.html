@@ -5,7 +5,16 @@
 	<input type="text" name="buscador" ng-model="buscador" placeholder="Buscar" class="form-control">
 	<div id="listaProductos">
 		<ul class="list-group" ng-show="productos">
-			<li class="list-group-item" ng-repeat="producto in productos | filter: buscador">{{producto.nombre}} <br/><small>{{producto.descripcion}} <br/>Tipo: {{producto.tipo.nombre.toUpperCase()}}<br/>Subtipo: {{producto.subtipo.nombre.toUpperCase()}}<br/>Variedad: {{producto.variedad.nombre.toUpperCase()}}<br/>Stock: {{stock(producto)}}</small><a id="botonUpdate" class="btn btn-primary" ng-click="seleccionProductoUpdate(producto)"><span class="glyphicon glyphicon-pencil"></span></a><a id="botonDelete" class="btn btn-danger" ng-click="deleteProducto(producto)"><span class="glyphicon glyphicon-trash"></span></a></li>
+
+			<li class="list-group-item" ng-repeat="producto in productos | filter: buscador" >{{producto.nombre}} <br/>
+			<p ng-if="producto.baja" style="color:red">Baja</p>
+			<small ng-if="!producto.baja">{{producto.descripcion}} <br/>Tipo: {{producto.tipo.nombre.toUpperCase()}}<br/>Subtipo: {{producto.subtipo.nombre.toUpperCase()}}<br/>Variedad: {{producto.variedad.nombre.toUpperCase()}}<br/>Stock: {{stock(producto)}}</small>
+
+			<a id="botonUpdate" class="btn btn-primary" ng-click="seleccionProductoUpdate(producto)"><span class="glyphicon glyphicon-pencil"></span></a>
+			<a id="botonDelete" class="btn btn-danger" ng-click="deleteProducto(producto)"><span class="glyphicon glyphicon-trash"></span></a>
+			<a id="botonBaja" class="btn btn-warning" ng-if="!producto.baja" ng-click="bajaProducto(producto)"><span class="glyphicon glyphicon-minus"></span></a>
+			<a id="botonAlta" class="btn btn-success" ng-if="producto.baja" ng-click="altaProducto(producto)"><span class="glyphicon glyphicon-plus"></span></a>
+			</li>
 		</ul>
 	</div>
 </div>

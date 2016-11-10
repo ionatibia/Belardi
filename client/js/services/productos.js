@@ -51,6 +51,14 @@ var app = angular.module('app');
             configAdd.data = producto;
             return $http(configAdd)
         }
+        factory.bajaProducto = function (producto) {
+            configGet.url = endpoint+"/baja/"+producto._id;
+            return $http(configGet)
+        }
+        factory.altaProducto = function (producto) {
+            configGet.url = endpoint+"/alta/"+producto._id;
+            return $http(configGet)
+        }
 
         factory.setProducto = function (producto) {
             factory.producto = producto;

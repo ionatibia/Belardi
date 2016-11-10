@@ -15,6 +15,10 @@ module.exports = function (app) {
 	app.post('/products/addStock/:productId', middleware.ensureAuthenticated, productController.addStock);
 	app.post('/products/ajusteStock/:productId', middleware.ensureAuthenticated, productController.ajusteStock);
 
+	//baja/alta
+	app.get('/products/baja/:productId', middleware.ensureAuthenticated, productController.baja);
+	app.get('/products/alta/:productId', middleware.ensureAuthenticated, productController.alta);
+
 	//Finish by binding the product middleware
 	app.param('productId', productController.productByID);
 }

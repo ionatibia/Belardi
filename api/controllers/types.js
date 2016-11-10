@@ -9,17 +9,13 @@ var path = require('path'),
 	Type = mongoose.model('Type'),
 	lodash = require('lodash');
 //log
-var log4js = require('log4js');
-//var log4js2 = require('log4js');
-log4js.configure({
-	  appenders: [
-	    { type: 'console' },
-	    { type: 'file', filename: 'logs/type.log', category: 'type' },
-	  ]
-	});
-    
-var log = log4js.getLogger('type');
-//var logAjuste = log4js.getLogger('ajuste');
+var winston = require('winston');
+var logger = new (winston.Logger)({
+    transports: [
+        new (winston.transports.Console)(),
+        new (winston.transports.File)({ filename: 'logs/types.log' })
+    ]
+});
 
 /**
  *
@@ -31,11 +27,12 @@ exports.create = function (req, res) {
 
 	type.save(function (err) {
 		if (err) {
-			log.error("Error guardando tipo: "+err)
+			logger.error("Error guardando tipo")
 			return res
 				.status(400)
-				.send("Error guardando tipo: "+err)
+				.send("Error guardando tipo: "+err.errmsg)
 		} else {
+			logger.info("Guardado tipo "+type.nombre)
 			return res
 				.status(200)
 				.json(type);
@@ -64,11 +61,12 @@ module.exports.update = function (req, res) {
 	//guardamos el tipo modificado
 	Type.update({_id:req.type._id},typeUpdated,function (err) {
 		if (err) {
-			log.error("Error actualizando tipo: "+err)
+			logger.error("Error actualizando tipo")
 			return res
 				.status(400)
-				.send("Error actualizando tipo: "+err);
+				.send("Error actualizando tipo: "+err.errmsg);
 		} else {
+			logger.info("Actualizado tipo "+typeUpdated.nombre)
 			//devolvemos el tipo modificado
 			return res
 				.status(200)
@@ -88,11 +86,12 @@ module.exports.delete = function (req, res) {
 	//borramos el tipo
 	type.remove(function (err) {
 		if (err) {
-			log.error("Error borrando tipo: "+err)
+			logger.error("Error borrando tipo")
 			return res
 				.status(400)
-				.send("Error borrando tipo: "+err);
+				.send("Error borrando tipo: "+err.errmsg);
 		} else {
+			logger.info("Borrado el tipo "+type.nombre)
 			return res
 				.status(200)
 				.json(req.type);
@@ -109,10 +108,10 @@ module.exports.list = function (req, res) {
 	//buscamos todos los tipos ordenados por fecha
 	Type.find().sort('nombre').exec(function (err, types) {
 		if (err) {
-			log.error("Error buscando tipos: "+err)
+			logger.error("Error buscando tipos")
 			return res
 				.status(400)
-				.send("Error buscando tipos: "+err);
+				.send("Error buscando tipos: "+err.errmsg);
 		} else {
 			//devolvemos todos los tipos
 			return res
@@ -131,7 +130,7 @@ module.exports.list = function (req, res) {
 module.exports.typeByID = function (req, res, next, id) {
 	//si el _id no es un objeto mongo valido
 	if (!mongoose.Types.ObjectId.isValid(id)) {
-		log.error("El ID del tipo no es valido")
+		logger.error("El ID del tipo no es valido")
 		return res
 			.status(400)
 			.send("El ID del tipo no es valido");
@@ -139,10 +138,10 @@ module.exports.typeByID = function (req, res, next, id) {
 	//busca el tipo mediante _id
 	Type.findById(id).exec(function (err, type) {
 		if (err) {
-			log.error("Error buscando tipos por ID: "+err)
+			logger.error("Error buscando tipos por ID")
 			return next(err);
 		} else if (!type) {
-			log.warn("No hay tipos con el id: "+id)
+			logger.warn("No hay tipos con el id: "+id)
 			return res
 				.status(404)
 				.send("No hay tipos con el id: "+id);

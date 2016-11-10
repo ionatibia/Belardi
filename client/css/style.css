@@ -19,6 +19,9 @@ section{
 	width: 90%;
 	margin: auto;
 }
+a:hover{
+	text-decoration: none;
+}
 
 /*NavBar*/
 .navbar-default .navbar-nav>.active>a, .navbar-default .navbar-nav>.active>a:focus, .navbar-default .navbar-nav>.active>a:hover{

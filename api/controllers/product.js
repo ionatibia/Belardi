@@ -9,17 +9,20 @@ var path = require('path'),
 	Product = mongoose.model('Product'),
 	lodash = require('lodash');
 //log
-var log4js = require('log4js');
-//var log4js2 = require('log4js');
-log4js.configure({
-	  appenders: [
-	    { type: 'console' },
-	    { type: 'file', filename: 'logs/product.log', category: 'product' },
-	  ]
-	});
-    
-var log = log4js.getLogger('product');
-//var logAjuste = log4js.getLogger('ajuste');
+var winston = require('winston');
+var logger = new (winston.Logger)({
+    transports: [
+        new (winston.transports.Console)(),
+        new (winston.transports.File)({ filename: 'logs/products.log' })
+    ]
+});
+
+var loggerAjuste = new (winston.Logger)({
+    transports: [
+        new (winston.transports.Console)(),
+        new (winston.transports.File)({ filename: 'logs/inventario.log' })
+    ]
+});
 
 /**
  *
@@ -34,11 +37,12 @@ exports.create = function (req, res) {
 
 	product.save(function (err) {
 		if (err) {
-			log.error("Error guardando producto: "+err)
+			logger.error("Error guardando producto: "+err)
 			return res
 				.status(400)
-				.send("Error guardando producto: "+err)
+				.send("Error guardando producto: "+err.errmsg)
 		} else {
+			logger.info("Creado el producto: "+product.nombre)
 			//devolvemos el articulo
 			return res
 				.status(200)
@@ -62,23 +66,17 @@ module.exports.find = function (req, res) {
  *
  */
 module.exports.update = function (req, res) {
-
-	/*var product = req.product;
-	if (req.body.stock > req.product.stock) {
-		logAjuste.info("Añadido stock de "+req.product.stock+" a "+req.body.stock+" al producto "+req.product.nombre);
-	} else if (req.body.stock < req.product.stock) {
-		logAjuste.warn("Ajuste de inventario stock de "+req.product.stock+" a "+req.body.stock+" al producto "+req.product.nombre);
-	}*/
 	//merge del producto guardado
 	var productUpdated = lodash.assign(req.product,req.body);
 	//guardamos el producto modificado
 	Product.update({_id:req.product._id},productUpdated,function (err) {
 		if (err) {
-			log.error("Error actualizando producto: "+err)
+			logger.error("Error actualizando producto")
 			return res
 				.status(400)
-				.send("Error actualizando producto: "+err);
+				.send("Error actualizando producto: "+err.errmsg);
 		} else {
+			logger.info("Producto "+productUpdated.nombre+' actualizado')
 			//devolvemos el producto modificado
 			return res
 				.status(200)
@@ -98,11 +96,12 @@ module.exports.delete = function (req, res) {
 	//borramos el producto
 	product.remove(function (err) {
 		if (err) {
-			log.error("Error borrando producto: "+err)
+			logger.error("Error borrando producto: "+product.nombre)
 			return res
 				.status(400)
-				.send("Error borrando producto: "+err);
+				.send("Error borrando producto: "+err.errmsg);
 		} else {
+			logger.info("Borrado producto "+product.nombre)
 			return res
 				.status(200)
 				.json(product);
@@ -117,12 +116,12 @@ module.exports.delete = function (req, res) {
  */
 module.exports.list = function (req, res) {
 	//buscamos todos los articulos ordenados por fecha
-	Product.find().sort('-nombre').populate('tipo').populate('subtipo').populate('variedad').exec(function (err, products) {
+	Product.find().sort('nombre').populate('tipo').populate('subtipo').populate('variedad').exec(function (err, products) {
 		if (err) {
-			log.error("Error buscando productos: "+err)
+			logger.error("Error buscando productos")
 			return res
 				.status(400)
-				.send("Error buscando productos: "+err);
+				.send("Error buscando productos: "+err.errmsg);
 		} else {
 			//devolvemos todos los articulos
 			return res
@@ -138,11 +137,12 @@ module.exports.addStock = function (req,res) {
 	req.product.stock.push({'cantidad':stockAfter})
 	req.product.save(function (err) {
 		if (err) {
-			console.log(err)//falta el log de inventario
+			loggerAjuste.error("Error añadiendo stock al producto "+req.product.nombre)
 			return res
 				.status(400)
-				.send("Error guardando productos: "+err);
+				.send("Error añadiendo stock: "+err.errmsg);
 		}else{
+			loggerAjuste.info("Añadido "+req.body.cantidad+" al producto "+req.product.nombre)
 			return res
 				.status(200)
 				.json(req.product);
@@ -151,14 +151,58 @@ module.exports.addStock = function (req,res) {
 }
 
 module.exports.ajusteStock = function (req,res) {
-	req.product.stock.push({'cantidad':req.body.cantidad})
+	if (req.body.observaciones != '' && req.body.observaciones != null && req.body.observaciones != undefined) {
+		req.product.stock.push({'cantidad':req.body.cantidad, 'observaciones':req.body.observaciones});
+	}else{
+		req.product.stock.push({'cantidad':req.body.cantidad})
+	}
 	req.product.save(function (err) {
 		if (err) {
-			console.log(err)//falta el log de inventario
+			loggerAjuste.error("Error ajustando stock al producto "+req.product.nombre)
 			return res
 				.status(400)
-				.send("Error guardando productos: "+err);
+				.send("Error ajustando stock: "+err.errmsg);
 		}else{
+			if (req.body.observaciones != '' && req.body.observaciones != null && req.body.observaciones != undefined){
+				loggerAjuste.warn("Ajustado stock de producto "+req.product.nombre+" a "+req.body.cantidad+". Observaciones: "+req.body.observaciones+". User: "+req.user.dni)
+			}else{
+				loggerAjuste.warn("Ajustado stock de producto "+req.product.nombre+" a "+req.body.cantidad+". User: "+req.user.dni)
+			}
+			
+			return res
+				.status(200)
+				.json(req.product);
+		}
+	})
+}
+
+module.exports.baja = function (req,res) {
+	req.product.baja = true;
+	req.product.save(function (err) {
+		if (err) {
+			logger.error("Error dando de baja el producto "+req.product.nombre)
+			return res
+				.status(400)
+				.send("Error añadiendo stock: "+err.errmsg);
+		}else{
+			logger.info("Dado de baja el producto "+req.product.nombre)
+			return res
+				.status(200)
+				.json(req.product);
+		}
+	})
+}
+
+module.exports.alta = function (req,res) {
+	req.product.baja = false;
+	req.product.save(function (err) {
+		if (err) {
+			logger.error("Error dando de alta el producto "+req.product.nombre)
+			return res
+				.status(400)
+				.send("Error añadiendo stock: "+err.errmsg);
+		}else{
+			logger.info("Dado de alta el producto "+req.product.nombre)
 			return res
 				.status(200)
 				.json(req.product);
@@ -175,7 +219,7 @@ module.exports.ajusteStock = function (req,res) {
 module.exports.productByID = function (req, res, next, id) {
 	//si el _id no es un objeto mongo valido
 	if (!mongoose.Types.ObjectId.isValid(id)) {
-		log.error("El ID del producto no es valido")
+		logger.error("El ID del producto no es valido")
 		return res
 			.status(400)
 			.send("El ID del producto no es valido");
@@ -183,10 +227,10 @@ module.exports.productByID = function (req, res, next, id) {
 	//busca el producto mediante _id
 	Product.findById(id).exec(function (err, product) {
 		if (err) {
-			log.error("Error buscando producto por ID: "+err)
+			logger.error("Error buscando producto por ID")
 			return next(err);
 		} else if (!product) {
-			log.warn("No hay productos con el id: "+id)
+			logger.warn("No hay productos con el id: "+id)
 			return res
 				.status(404)
 				.send("No hay productos con el id: "+id);

@@ -8,14 +8,13 @@ var crypto = require('./crypto');
 //lodash
 var lodash = require('lodash');
 //log
-var log4js = require('log4js');
-log4js.configure({
-      appenders: [
-        { type: 'console' },
-        { type: 'file', filename: 'logs/users.log', category: 'auth' }
-      ]
-    });
-var log = log4js.getLogger('auth');
+var winston = require('winston');
+var logger = new (winston.Logger)({
+    transports: [
+        new (winston.transports.Console)(),
+        new (winston.transports.File)({ filename: 'logs/auth.log' })
+    ]
+});
 
 /**
  *
@@ -28,8 +27,12 @@ exports.emailSignup = function(req, res) {
             .status(400)
             .send("Faltan datos")
     }
-    if (req.body.password) {
+    if (req.body.password != '' && req.body.password != undefined && req.body.password != null) {
         var pass = crypto.encriptar(req.body.correo,req.body.password);
+    }else{
+        return res
+            .status(400)
+            .send("Falta la contraseña")
     }
 
     var user = new User(req.body);
@@ -37,12 +40,12 @@ exports.emailSignup = function(req, res) {
 
     user.save(function(err){
         if (err) {
-            log.error("Fallo al guardar usuario: "+err)
+            logger.error("Fallo al guardar usuario: "+user.dni);
             return res
                 .status(400)//bad request
-                .send("fallo al guardar usuario"+err)
+                .send("fallo al guardar usuario "+err.errmsg)
         }
-        log.info("Creado el usuario nº:"+user.numero+';')
+        logger.info("Creado el usuario nº:"+user.numero+' DNI: '+user.dni)
         delete user.password;
         return res
             .status(200)//ok
@@ -65,22 +68,27 @@ exports.emailLogin = function(req, res) {
     var pass = crypto.encriptar(req.body.correo,req.body.password);
 
     User.findOne({correo: req.body.correo.toLowerCase()}, function(err, user) {
+        if (err) {
+            return res
+                .status(400)
+                .send("Error buscando usuario para login "+err.errmsg)
+        }
         if (user) {
             if (user.password === pass) {
-                log.info("Accediendo el usuario nº:"+user.numero)
+                logger.info("Accediendo el usuario nº:"+user.numero)
                 //si se loguea correctamente enviamos el token al cliente
                 return res
                     .status(200)//ok
                     //enviamos el token al cliente para que lo guarde y lo utilice en cada peticion
                     .send({token: service.createToken(user)});
             } else {
-                log.warn("Contraseña incorrecta usuario: "+user.numero)
+                logger.warn("Contraseña incorrecta usuario: "+user.numero)
                 return res
                     .status(401)
                     .send("Contraseña incorrecta")
             }
         }else{
-            log.info("Peticion de login no existe usuario: "+req.body.correo)
+            logger.info("Peticion de login no existe usuario: "+req.body.correo)
             return res
                 .status(401)//no content
                 .send("usuario no existe");
@@ -100,22 +108,32 @@ exports.emailUpdate = function (req,res) {
             .status(400)
             .send("Faltan datos")
     }
+    
+    var pass;
     //cogemos el usuario desde el ID pasado
     var user = req.usuario;
-    //quitamos el password
-    delete req.body.password;
     //Merge del usuario pasado y el guardado (solo se guardan los datos nuevos que no sean null
     var userUpdated = lodash.assign(user,req.body);
+
+    if (req.body.password == '' || req.body.password == null || req.body.password == undefined) {
+        delete userUpdated.password
+    }else{
+        pass = crypto.encriptar(req.body.correo,req.body.password);
+        userUpdated.password = pass;
+    }
+    
     //guardamos el usuario modificado
     User.update({_id: user._id},userUpdated,function (err) {
         if (err) {
-            log.error("Error actualizando usuario: "+userUpdated.numero)
+            logger.error("Error actualizando socio: "+user.dni)
             return res
-                .status(500)
-                .send("Error actualizando el usuario: "+err)
+                .status(400)
+                .send("Error actualizando el socio: "+err.errmsg)
         } else {
-            log.info("Modificado el usuario nº:"+user.numero)
+            logger.info("Modificado el socio: "+user.dni+' por el usuario: '+req.user.dni)
+            console.log(userUpdated)
             //devolvemos el usuario modificado
+            delete userUpdated.password
             res.json(userUpdated)
         }
     })
@@ -131,7 +149,7 @@ exports.emailDelete = function (req,res) {
     var user = req.usuario;
     //si el username es admin NO lo borramos
     if (req.usuario.username == 'admin') {
-        log.warn("No se puede borar el usuario administrador")
+        logger.warn("No se puede borar el usuario administrador. Usuario: "+req.user.dni)
         return res
             .status(401)
             .send("No se puede borrar el usuario admin")
@@ -139,12 +157,12 @@ exports.emailDelete = function (req,res) {
     //borramos el usuario
     user.remove(function (err) {
         if (err) {
-            log.error("Error al borrar usuario: "+req.usuario.numero)
+            logger.error("Error al borrar usuario: "+req.usuario.dni)
             return res
                 .status(500)
-                .send("Error al borrar usuario: "+err)
+                .send("Error al borrar usuario: "+err.errmsg)
         } else {
-            log.warn("Borrado el usuario nº:"+user.numero)
+            logger.warn("Borrado el usuario:"+user.dni)
             //devolvemos el usuario borrado
             res.json(user)
         }
@@ -172,10 +190,10 @@ exports.emailList = function (req,res) {
     //buscamos todos los usuarios ordenados alfabeticamente
     User.find().sort({username: 1}).exec(function (err, users) {
         if (err) {
-            log.error("Error buscando usuarios")
+            logger.error("Error buscando usuarios")
             return res
                 .status(400)
-                .send("Error buscando usuarios: "+err)
+                .send("Error buscando usuarios: "+err.errmsg)
         } else {
             //devolvemos los usuarios
             res.json(users);
@@ -186,12 +204,12 @@ exports.emailList = function (req,res) {
 exports.baja = function (req,res) {
     User.update({_id: req.usuario},{$set: { numero: 'baja'+req.usuario.dni }},function (err) {
         if (err) {
-            log.error("Error dando de baja al usuario: "+req.usuario+"  Error: "+err)
+            logger.error("Error dando de baja al usuario: "+req.usuario.dni)
             return res
                 .status(500)
-                .send("Error dando de baja al usuario: "+err)
+                .send("Error dando de baja al usuario: "+err.errmsg)
         } else {
-            log.info("Dado de baja al usuario nº:"+req.usuario)
+            logger.info("Dado de baja al usuario: "+req.usuario.dni)
             //devolvemos el usuario modificado
             res.json("baja"+req.usuario.dni)
         }
@@ -202,12 +220,12 @@ exports.alta = function (req,res) {
     var num = req.body.numero;
     User.update({_id: req.usuario},{$set: { numero: num }},function (err) {
         if (err) {
-            log.error("Error dando de alta al usuario: "+req.usuario+"  Error: "+err)
+            logger.error("Error dando de alta al usuario: "+req.usuario.dni)
             return res
                 .status(500)
-                .send("Error dando de alta al usuario: "+err)
+                .send("Error dando de alta al usuario: "+err.errmsg)
         } else {
-            log.info("Dado de alta al usuario nº:"+req.usuario)
+            logger.info("Dado de alta al usuario: "+req.usuario.dni)
             //devolvemos el usuario modificado
             res.json(num)
         }
@@ -222,7 +240,7 @@ exports.alta = function (req,res) {
 module.exports.userByID = function (req, res, next, id) {
     //si el _id no es de un objeto de mongo valido
     if (!mongoose.Types.ObjectId.isValid(id)) {
-        log.error("Id de usuario invalida: "+id)
+        logger.error("Id de usuario invalida: "+id)
         return res.status(400).send({
             message: 'User is invalid'
         });
@@ -230,7 +248,7 @@ module.exports.userByID = function (req, res, next, id) {
     //buscamos el usuario mediante ID
     User.findById(id).populate('user', 'displayName').exec(function (err, user) {
         if (err) {
-            log.error("Error buscando usuario por ID: "+id)
+            logger.error("Error buscando usuario por ID: "+id)
             return next(err);
         } else if (!user) {
             return res.status(404).send({

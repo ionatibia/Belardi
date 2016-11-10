@@ -9,17 +9,13 @@ var path = require('path'),
 	Variety = mongoose.model('Variety'),
 	lodash = require('lodash');
 //log
-var log4js = require('log4js');
-//var log4js2 = require('log4js');
-log4js.configure({
-	  appenders: [
-	    { type: 'console' },
-	    { type: 'file', filename: 'logs/variety.log', category: 'variety' },
-	  ]
-	});
-    
-var log = log4js.getLogger('variety');
-//var logAjuste = log4js.getLogger('ajuste');
+var winston = require('winston');
+var logger = new (winston.Logger)({
+    transports: [
+        new (winston.transports.Console)(),
+        new (winston.transports.File)({ filename: 'logs/varietyes.log' })
+    ]
+});
 
 /**
  *
@@ -27,18 +23,16 @@ var log = log4js.getLogger('variety');
  *
  */
 exports.create = function (req, res) {
-	console.log(req.body)
-
 	var variety = new Variety(req.body)
-	console.log(variety)
 
 	variety.save(function (err) {
 		if (err) {
-			log.error("Error guardando la variedad: "+err)
+			logger.error("Error guardando la variedad")
 			return res
 				.status(400)
-				.send("Error guardando la variedad: "+err)
+				.send("Error guardando la variedad: "+err.errmsg)
 		} else {
+			logger.info("Creada la variedad "+variety.nombre)
 			return res
 				.status(200)
 				.json(variety);
@@ -67,11 +61,12 @@ module.exports.update = function (req, res) {
 	//guardamos la variedad modificada
 	Variety.update({_id:req.variety._id},varietyUpdated,function (err) {
 		if (err) {
-			log.error("Error actualizando la variedad: "+err)
+			logger.error("Error actualizando la variedad")
 			return res
 				.status(400)
-				.send("Error actualizando la variedad: "+err);
+				.send("Error actualizando la variedad: "+err.errmsg);
 		} else {
+			logger.info("Actualizada la variedad "+varietyUpdated.nombre)
 			//devolvemos la variedad modificado
 			return res
 				.status(200)
@@ -91,11 +86,12 @@ module.exports.delete = function (req, res) {
 	//borramos la variedad
 	variety.remove(function (err) {
 		if (err) {
-			log.error("Error borrando la variedad: "+err)
+			logger.error("Error borrando la variedad")
 			return res
 				.status(400)
-				.send("Error borrando la variedad: "+err);
+				.send("Error borrando la variedad: "+err.errmsg);
 		} else {
+			logger.info("Borrada la variedad "+variety.nombre)
 			return res
 				.status(200)
 				.json(req.variety);
@@ -112,10 +108,10 @@ module.exports.list = function (req, res) {
 	//buscamos todas las variedades ordenadas
 	Variety.find().sort('-nombre').populate('tipo').populate('subtipo').exec(function (err, varietys) {
 		if (err) {
-			log.error("Error buscando variedades: "+err)
+			logger.error("Error buscando variedades")
 			return res
 				.status(400)
-				.send("Error buscando variedades: "+err);
+				.send("Error buscando variedades: "+err.errmsg);
 		} else {
 			//devolvemos todos los variedads
 			return res
@@ -134,7 +130,7 @@ module.exports.list = function (req, res) {
 module.exports.varietyByID = function (req, res, next, id) {
 	//si el _id no es un objeto mongo valido
 	if (!mongoose.Types.ObjectId.isValid(id)) {
-		log.error("El ID de la variedad no es valido")
+		logger.error("El ID de la variedad no es valido")
 		return res
 			.status(400)
 			.send("El ID de la variedad no es valido");
@@ -142,10 +138,10 @@ module.exports.varietyByID = function (req, res, next, id) {
 	//busca la variedad mediante _id
 	Variety.findById(id).exec(function (err, variety) {
 		if (err) {
-			log.error("Error buscando la variedads por ID: "+err)
+			logger.error("Error buscando la variedads por ID")
 			return next(err);
 		} else if (!variety) {
-			log.warn("No hay variedads con el id: "+id)
+			logger.warn("No hay variedads con el id: "+id)
 			return res
 				.status(404)
 				.send("No hay variedads con el id: "+id);

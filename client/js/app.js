@@ -135,7 +135,8 @@ angular.module('app',["ngRoute","ngFlash","ngDialog"])
 	.constant('config', {
 	    apiUrl: 'http://localhost:8000',
 	    tiposUsuarios: ["Normal","Terapeutico"],
-	    ambitos: [{'nombre':"Barra"},{'nombre':"Dispensa"},{'nombre':'Otros'}]
+	    ambitos: [{'nombre':"Barra"},{'nombre':"Dispensa"},{'nombre':'Otros'}],
+	    descuentoTeraupeutico: 20
 	})
 	.service("progress", ["$rootScope", "ngProgress", function($rootScope, ngProgress){
 		$rootScope.$on("event:endProgress", function(){

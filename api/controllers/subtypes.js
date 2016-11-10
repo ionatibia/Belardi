@@ -9,17 +9,13 @@ var path = require('path'),
 	Subtype = mongoose.model('Subtype'),
 	lodash = require('lodash');
 //log
-var log4js = require('log4js');
-//var log4js2 = require('log4js');
-log4js.configure({
-	  appenders: [
-	    { type: 'console' },
-	    { type: 'file', filename: 'logs/subtype.log', category: 'subtype' },
-	  ]
-	});
-    
-var log = log4js.getLogger('subtype');
-//var logAjuste = log4js.getLogger('ajuste');
+var winston = require('winston');
+var logger = new (winston.Logger)({
+    transports: [
+        new (winston.transports.Console)(),
+        new (winston.transports.File)({ filename: 'logs/subtypes.log' })
+    ]
+});
 
 /**
  *
@@ -32,11 +28,12 @@ exports.create = function (req, res) {
 
 	subtype.save(function (err) {
 		if (err) {
-			log.error("Error guardando subtipo: "+err)
+			logger.error("Error guardando subtipo")
 			return res
 				.status(400)
-				.send("Error guardando subtipo: "+err)
+				.send("Error guardando subtipo: "+err.errmsg)
 		} else {
+			logger.info("Guardado el subtipo "+subtype.nombre)
 			return res
 				.status(200)
 				.json(subtype);
@@ -65,11 +62,12 @@ module.exports.update = function (req, res) {
 	//guardamos el subtipo modificado
 	Subtype.update({_id:req.subtype._id},subtypeUpdated,function (err) {
 		if (err) {
-			log.error("Error actualizando subtipo: "+err)
+			logger.error("Error actualizando subtipo")
 			return res
 				.status(400)
-				.send("Error actualizando subtipo: "+err);
+				.send("Error actualizando subtipo: "+err.errmsg);
 		} else {
+			logger.info("Actualizado el subtipo "+subtypeUpdated.nombre)
 			//devolvemos el subtipo modificado
 			return res
 				.status(200)
@@ -89,11 +87,12 @@ module.exports.delete = function (req, res) {
 	//borramos el subtipo
 	subtype.remove(function (err) {
 		if (err) {
-			log.error("Error borrando subtipo: "+err)
+			logger.error("Error borrando subtipo")
 			return res
 				.status(400)
-				.send("Error borrando subtipo: "+err);
+				.send("Error borrando subtipo: "+err.errmsg);
 		} else {
+			logger.info("Borrado subtipo "+subtype.nombre)
 			return res
 				.status(200)
 				.json(req.subtype);
@@ -110,10 +109,10 @@ module.exports.list = function (req, res) {
 	//buscamos todos los subtipos ordenados por fecha
 	Subtype.find().sort('nombre').populate('tipo').exec(function (err, subtypes) {
 		if (err) {
-			log.error("Error buscando subtipos: "+err)
+			logger.error("Error buscando subtipos")
 			return res
 				.status(400)
-				.send("Error buscando subtipos: "+err);
+				.send("Error buscando subtipos: "+err.errmsg);
 		} else {
 			//devolvemos todos los subtipos
 			return res
@@ -140,7 +139,7 @@ module.exports.subtypeByID = function (req, res, next, id) {
 	//busca el subtipo mediante _id
 	Subtype.findById(id).exec(function (err, subtype) {
 		if (err) {
-			log.error("Error buscando subtipos por ID: "+err)
+			log.error("Error buscando subtipos por ID")
 			return next(err);
 		} else if (!subtype) {
 			log.warn("No hay subtipos con el id: "+id)

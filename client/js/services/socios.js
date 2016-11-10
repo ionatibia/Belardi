@@ -16,7 +16,6 @@ var app = angular.module('app');
         }
 
         var configAdd = {
-            url:endpoint2,
             method:"POST",
         }
 
@@ -35,6 +34,7 @@ var app = angular.module('app');
             return $http(configPut)
         }
         factory.addSocio = function (socio) {
+            configAdd.url = endpoint2;
             configAdd.data = socio;
             return $http(configAdd);
         }

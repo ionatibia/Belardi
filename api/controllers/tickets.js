@@ -14,13 +14,13 @@ var path = require('path'),
 var log4js = require('log4js');
 var fs = require('fs');
 var sys = require('util');
-log4js.configure({
-	  appenders: [
-	    { type: 'console' },
-	    { type: 'file', filename: 'logs/ticket.log', category: 'ticket' }
-	  ]
-	});
-var log = log4js.getLogger('ticket');
+var winston = require('winston');
+var logger = new (winston.Logger)({
+    transports: [
+        new (winston.transports.Console)(),
+        new (winston.transports.File)({ filename: 'logs/tickets.log' })
+    ]
+});
 var Q = require('q');
 
 /**
@@ -48,7 +48,7 @@ exports.create = function (req, res) {
 			console.log(err)
 			return res
 				.status(400)
-				.send("Error buscando usuarios: "+err);
+				.send("Error buscando usuarios: "+err.errmsg);
 		}else{
 			userObj = user
 		}
@@ -61,7 +61,7 @@ exports.create = function (req, res) {
 			console.log(err)
 			return res
 				.status(400)
-				.send("Error buscando usuarios: "+err);
+				.send("Error buscando usuarios: "+err.errmsg);
 		}else{
 			socioObj = user
 		}
@@ -72,15 +72,20 @@ exports.create = function (req, res) {
 	for(var i in productos){
 		var cantidad = productos[i].cantidad
 		var stockBefore = productos[i].stock[productos[i].stock.length-1].cantidad;
+		if (stockBefore < cantidad) {
+			return res
+				.status(500)
+				.send("Hay menos stock que el requerido")
+		}
 		productos[i].stock.push({'cantidad':stockBefore-cantidad})
 		var stockCompleto = productos[i].stock
 
 		var promise = Product.update({_id: productos[i]._id},{$set:{stock: stockCompleto}},function (err) {
 			if (err) {
-				console.log(err)//falta el log de inventario
+				logger.error("Error guardando stock nuevo en productos")
 				return res
 					.status(400)
-					.send("Error guardando productos: "+err);
+					.send("Error guardando productos: "+err.errmsg);
 			}else{
 				productosTicket.push({'producto':productos[i],'cantidad':cantidad})
 			}
@@ -93,20 +98,22 @@ exports.create = function (req, res) {
 		var ticket = new Ticket({'usuario':userObj,'socio':socioObj,'dispensa':productosTicket,'firmaUrl':firmaUrl})
 		ticket.save(function (err) {
 			if (err) {
-				console.log(err)
+				logger.error("Error guardando ticket de socio "+socioObj.dni+'. Usuario: '+userObj.dni+'. Fecha: '+ticket.fecha)
 				return res
 					.status(400)
-					.send("Error guardando productos: "+err);
+					.send("Error guardando productos: "+err.errmsg);
 			}else{
+				logger.info("Guardado ticket de socio "+socioObj.dni+'. Usuario: '+userObj.dni+'. Fecha: '+ticket.fecha)
 				return res
 					.status(200)
 					.send(ticket);
 			}
 		})
 	}, function (err) {
+		logger.error("Error al ejecutar las promises")
 		return res
 			.status(400)
-			.send("Error guardando ticket: "+err);
+			.send("Error guardando ticket: "+err.errmsg);
 	})
 	
 };//exports create
@@ -133,10 +140,10 @@ module.exports.update = function (req, res) {
 	//guardamos el ticket modificado
 	Ticket.update({_id:ticket._id},ticketUpdated,function (err) {
 		if (err) {
-			log.error("Error actualizando ticket: "+err)
+			logger.error("Error actualizando ticket")
 			return res
 				.status(400)
-				.send("Error actualizando ticket: "+err);
+				.send("Error actualizando ticket: "+err.errmsg);
 		} else {
 			//devolvemos el ticketo modificado
 			return res
@@ -157,10 +164,10 @@ module.exports.delete = function (req, res) {
 	//borramos el ticket
 	ticket.remove(function (err) {
 		if (err) {
-			log.error("Error borrando ticket: "+err)
+			logger.error("Error borrando ticket")
 			return res
 				.status(400)
-				.send("Error borrando ticket: "+err);
+				.send("Error borrando ticket: "+err.errmsg);
 		} else {
 			return res
 				.status(200)
@@ -176,12 +183,12 @@ module.exports.delete = function (req, res) {
  */
 module.exports.list = function (req, res) {
 	//buscamos todos los tickets ordenados por fecha
-	Ticket.find().sort('-fecha').exec(function (err, ticket) {
+	Ticket.find().sort('fecha').populate('usuario').populate('socio').exec(function (err, ticket) {
 		if (err) {
-			log.error("Error buscando tickets: "+err)
+			logger.error("Error buscando tickets")
 			return res
 				.status(400)
-				.send("Error buscando tickets: "+err);
+				.send("Error buscando tickets: "+err.errmsg);
 		} else {
 			//devolvemos todos los tickets
 			return res
@@ -199,18 +206,18 @@ module.exports.list = function (req, res) {
 module.exports.ticketByID = function (req, res, next, id) {
 	//si el _id no es un objeto mongo valido
 	if (!mongoose.Types.ObjectId.isValid(id)) {
-		log.error("El ID del ticket no es valido")
+		logger.error("El ID del ticket no es valido")
 		return res
 			.status(400)
 			.send("El ID del ticket no es valido");
 	}
 	//busca el ticket mediante _id
-	Ticket.findById(id).exec(function (err, ticket) {
+	Ticket.findById(id).populate('socio').populate('usuario').exec(function (err, ticket) {
 		if (err) {
-			log.error("Error buscando ticket por ID: "+err)
+			logger.error("Error buscando ticket por ID")
 			return next(err);
 		} else if (!ticket) {
-			log.warn("No hay tickets con el id: "+id)
+			logger.warn("No hay tickets con el id: "+id)
 			return res
 				.status(404)
 				.send("No hay tickets con el id: "+id);

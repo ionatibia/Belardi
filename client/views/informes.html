@@ -1,5 +1,53 @@
 <section>
 <div>
 	<h1>INFORMES</h1>
+	<div class="row">
+		<div class="btn-group" style="width:100%">
+			<label class="btn btn-default" ng-model="tipoInforme" btn-radio="'tri'" id="tri" ng-click="cambio('tri')">Trimestral
+			</label>
+			<label class="btn btn-default" ng-model="tipoInforme" btn-radio="'eus'" id="eus" ng-click="cambio('eus')">Eusfac
+			</label>
+			<label class="btn btn-default" ng-model="tipoInforme" btn-radio="'tic'" id="tic" ng-click="cambio('tic')">Tiquets
+			</label>
+		</div>
+	</div>
+	<!--
+	TIKETS
+	-->
+	<div ng-if="tipoInforme == 'tic'">
+		<h3>Informe Tiquets</h3>
+		<div class="span6 col-md-6">
+			<input data-provide="datepicker" ng-model="startDate" id="startDate" class="form-control">
+		</div>
+		<div class="span6 col-md-6">
+			<input data-provide="datepicker" ng-model="endDate" id="endDate" class="form-control">
+		</div>
+		<button class="btn btn-primary" ng-click="ensena()">Ver</button>
+
+		<div class="span5 col-md-5" id="sandbox-container"><input type="text" class="form-control"></div>
+	</div>
+	<!--
+	FIN TIKETS
+	-->
+
+	<!--
+	EUSFAC
+	-->
+	<div ng-if="tipoInforme == 'eus'">
+		<h3>Informe EUSFAC</h3>
+	</div>
+	<!--
+	FIN EUSFAC
+	-->
+
+	<!--
+	TRIMESTRAL
+	-->
+	<div ng-if="tipoInforme == 'tri'">
+		<h3>Informe Trimestral</h3>
+	</div>
+	<!--
+	FIN TRIMESTRAL
+	-->
 </div>
 </section>

@@ -8,7 +8,7 @@ app.controller('ProductosCtrl', ['$scope','$location','ProductosServ','Flash','C
 		ProductosServ.getAll().then(function (response) {
 			$scope.productos = response.data;
 		}, function (err) {
-			var message = '<strong>ERROR!!!</strong> '+JSON.stringify(err.data.message);
+			var message = '<strong>ERROR!!!</strong> '+JSON.stringify(err.data);
 		    Flash.create('danger', message);
 			console.log(JSON.stringify(err))
 		})
@@ -64,7 +64,7 @@ app.controller('ProductosCtrl', ['$scope','$location','ProductosServ','Flash','C
 	        Flash.create('success', message);
 	        $location.path('/productos')
 		}, function (err) {
-			var message = '<strong>ERROR!!!</strong> '+JSON.stringify(err.data.message);
+			var message = '<strong>ERROR!!!</strong> '+JSON.stringify(err.data);
 	        Flash.create('danger', message);
 		})
 	}
@@ -75,7 +75,7 @@ app.controller('ProductosCtrl', ['$scope','$location','ProductosServ','Flash','C
 	        Flash.create('success', message);
 	        $location.path('/productos')
 		}, function (err) {
-			var message = '<strong>ERROR!!!</strong> '+JSON.stringify(err.data.message);
+			var message = '<strong>ERROR!!!</strong> '+JSON.stringify(err.data);
 	        Flash.create('danger', message);
 		})
 	}
@@ -87,7 +87,7 @@ app.controller('ProductosCtrl', ['$scope','$location','ProductosServ','Flash','C
 	        	Flash.create('success', message);
 	        	$scope.productos.splice($scope.productos.indexOf(producto), 1);
 			}, function (err) {
-				var message = '<strong>ERROR!!!</strong> '+JSON.stringify(err.data.message);
+				var message = '<strong>ERROR!!!</strong> '+JSON.stringify(err.data);
 	        	Flash.create('danger', message);
 			})
 		}
@@ -105,5 +105,35 @@ app.controller('ProductosCtrl', ['$scope','$location','ProductosServ','Flash','C
 
 	$scope.stock = function (producto) {
 		return producto.stock[producto.stock.length-1].cantidad
+	}
+
+	$scope.bajaProducto = function (producto) {
+		ProductosServ.bajaProducto(producto).then(function (response) {
+			var message = '<strong>HECHO!!!</strong> El producto ha sido dado de baja correctamente';
+        	Flash.create('success', message);
+        	for(var i in $scope.productos){
+        		if ($scope.productos[i]._id == producto._id) {
+        			$scope.productos[i].baja = true;
+        		}
+        	}
+		}, function (err) {
+			var message = '<strong>ERROR!!!</strong> '+JSON.stringify(err.data);
+        	Flash.create('danger', message);
+		})
+	}
+
+	$scope.altaProducto = function (producto) {
+		ProductosServ.altaProducto(producto).then(function (response) {
+			var message = '<strong>HECHO!!!</strong> El producto ha sido dado de alta correctamente';
+        	Flash.create('success', message);
+        	for(var i in $scope.productos){
+        		if ($scope.productos[i]._id == producto._id) {
+        			$scope.productos[i].baja = false;
+        		}
+        	}
+		}, function (err) {
+			var message = '<strong>ERROR!!!</strong> '+JSON.stringify(err.data);
+        	Flash.create('danger', message);
+		})
 	}
 }])

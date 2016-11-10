@@ -87,13 +87,17 @@
 	<label for="productoAjuste" class="label label-default">Producto: </label>
 	<div class="form-group">
 		<select class="form-control" ng-model="productoAjuste.producto" name="producto" id="producto">
-			<option value="" selected>Selecciona</option>
+			<option value="" selected disabled>Selecciona</option>
 			<option ng-repeat="producto in productos | filter: productoAjuste.tipo | filter: productoAjuste.subtipo | filter: productoAjuste.variedad" value="{{producto._id}}">{{producto.nombre.toUpperCase()}}</option>
 		</select>
 	</div>
 	<div class="form-group" ng-show="productoAjuste.producto">
 		<label for="cantidad">Cantidad real: </label>
 		<input type="number" name="cantidad" id="cantidad" class="form-control" min="1" ng-model="productoAjuste.cantidad">
+	</div>
+	<div class="form-group" ng-show="productoAjuste.producto">
+		<label for="observaciones">Observaciones: </label>
+		<textarea class="form-control" name="observaciones" id="observaciones" ng-model="productoAjuste.observaciones"></textarea>
 	</div>
 	<input type="submit" name="submit" class="btn btn-warning" value="Ajustar Inventario" ng-disabled="!productoAjuste.cantidad">
 </form>

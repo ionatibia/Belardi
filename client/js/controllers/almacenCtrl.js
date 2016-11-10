@@ -62,14 +62,15 @@ app.controller('AlmacenCtrl', ['$scope','ProductosServ','ConfigServ','config','F
 	}
 
 	$scope.ajusteStock = function (prod) {
-		console.log(prod)
 		var obj = {}
 		for(var p in $scope.productos){
 			if ($scope.productos[p]._id = prod.producto) {
 				obj = $scope.productos[p];
 				obj.cantidad = prod.cantidad
+				obj.observaciones = prod.observaciones
 			}
 		}
+		console.log(obj)
 		ProductosServ.ajusteStock(obj).then(function (response) {
 			var message = '<strong>HECHO!!!</strong> stock del producto '+response.data.nombre+' ajustado';
 			Flash.create('success', message);

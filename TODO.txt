@@ -1,26 +1,54 @@
 
-*Stock de productos
-	-schema: fecha, stock
-	-agregar/list/buscar por fecha api(x3)
 *crossfilter con filtros para filtrar los datos para los totales
+
+*descuento en ticket
+
+*datepicker: https://bootstrap-datepicker.readthedocs.io/en/latest/
+
+*config
+	-cantidad cuota + % iva
+	-cantidad total si no hay registros en la bd 
 
 *Contabilidad
 	-Ingresos:
 		>schema con fecha e ingreso(cantidad, descripcion, ambito y si es dispensa controlar que se)
 		>-agregar/list/buscar por fecha api
-	-Gastos:
-		>igual que ingresos
+		>tipos ingreso:
+			.cuotas (subschema para socio)(añadir cuota anual)
+			.aportaciones
+			.otros
+		>Pagina contabilidad
+			.total
+			.tabla gastos
+			.tabla ingresos
+			.IVA consulta por fechas
 	-Total:
 		>schema con fecha, cantidad total
+	-Gastos:
+		>igual que ingresos
+		>tipos gastos
+			.factura
+			.nominas
+			.otros
+
+*Informes
+	-trimestral
+		.seleccionar fechas
+		.crear pdf con registros
+		.cada registro dia completo "cuotas €, dispensa €, fecha"
+	-eusfac
+		.ver que piden y sacar los datos con form por fechas
+	-tickets pdf con registro de tickets con/sin firma según fechas
+	
+
 *toLowerCase() para los correos (comprobar en BD)
-*Stock no puede ser negativo
+
 *Filter in  pagination http://www.dispatchertimer.com/angularjs/pagination-with-filtering-using-angularjs/
 	-pagination: http://plnkr.co/edit/81fPZxpnOQnIHQgp957q?p=preview
 
 *DISPENSA:
-	-Un desplegable con todos los productos filtrado por tipo, subtipo y variedad
-	-desplegables para filtrar (tipo, subtipo, variedad)
-*LOG de inventario
+	-select inputs editables (solo socio)
+
 *Comprobar funcionamiento en Dispositivo
 
 

@@ -25,14 +25,14 @@
 		<input type="text" name="numero" id="numero" class="form-control" value="{{socioSeleccionado.numero}}" ng-model="socioSeleccionado.numero" ng-required="true">
 	</div>
 
-	<div class="form-group" ng-class="{'has-error':formularioAddSocio.dni.$invalid && formularioAddSocio.dni.$dirty}" ng-if="socioSeleccionado.numero">
-		<label for="dni" class="label label-default">DNI: </label>
-		<input type="text" name="dni" id="dni" class="form-control" ng-model="socioSeleccionado.dni" ng-required="true" maxlength="9" placeholder="00000000A">
-	</div>
-
 	<div class="form-group" ng-class="{'has-error':formularioUpdateSocio.correo.$invalid && formularioUpdateSocio.correo.$dirty}">
 		<label for="correo" class="label label-default">Correo: </label>
 		<input type="email" name="correo" id="correo" class="form-control" value="{{socioSeleccionado.correo}}" ng-model="socioSeleccionado.correo" ng-required="true">
+	</div>
+
+	<div class="form-group">
+		<label for="password" class="label label-default">Password: </label>
+		<input type="password" name="password" id="password" class="form-control" value="{{socioSeleccionado.password}}" ng-model="socioSeleccionado.password">
 	</div>
 
 	<input type="submit" name="submit" style="width:100%" class="btn btn-primary" value="Actualizar" ng-disabled="formularioUpdateSocio.$invalid">

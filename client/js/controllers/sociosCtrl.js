@@ -16,9 +16,8 @@ app.controller('SociosCtrl', ['$scope','$location', 'SociosServ','Flash','config
 	}
 	//update socio
 	$scope.updateSocio = function (socio) {
-		console.log(socio.numero.indexOf('baja'))
+		console.log(socio)
 		if (!isNaN(socio.numero) || socio.numero.indexOf('baja') != -1) {
-			console.log(socio)
 			socio.correo = socio.correo.toLowerCase().trim()
 			SociosServ.updateSocio(socio).then(function (response) {
 		        var message = '<strong>HECHO!!!</strong> El usuario ha sido modificado correctamente';
@@ -38,12 +37,10 @@ app.controller('SociosCtrl', ['$scope','$location', 'SociosServ','Flash','config
 		if (!isNaN(socio.numero)) {
 			socio.correo = socio.correo.toLowerCase().trim()
 			SociosServ.addSocio(socio).then(function (response) {
-				console.log(response.data)
 				var message = '<strong>HECHO!!!</strong> El usuario ha sido guardado correctamente';
 		        Flash.create('success', message);
 		        $location.path('/socios')
 			}, function (err) {
-				console.log(err)
 				var message = '<strong>ERROR!!!</strong> '+JSON.stringify(err.data);
 		        Flash.create('danger', message);
 			})
@@ -67,15 +64,20 @@ app.controller('SociosCtrl', ['$scope','$location', 'SociosServ','Flash','config
 	}
 
 	$scope.bajaSocio = function (socio) {
-		if (confirm("Seguro que quieres dar de baja al socio??")) {
-			SociosServ.bajaSocio(socio).then(function (response) {
-				var message = '<strong>HECHO!!!</strong> El socio ha sido dado de baja correctamente';
-	        	Flash.create('success', message);
-	        	socio.numero = response.data;
-			}, function (err) {
-				var message = '<strong>ERROR!!!</strong> '+JSON.stringify(err.data);
-	        	Flash.create('danger', message);
-			})
+		if (socio.numero == '0') {
+			var message = '<strong>ERROR!!!</strong> no puedes dar de baja al socio administrador';
+        	Flash.create('danger', message);
+		}else{
+			if (confirm("Seguro que quieres dar de baja al socio??")) {
+				SociosServ.bajaSocio(socio).then(function (response) {
+					var message = '<strong>HECHO!!!</strong> El socio ha sido dado de baja correctamente';
+		        	Flash.create('success', message);
+		        	socio.numero = response.data;
+				}, function (err) {
+					var message = '<strong>ERROR!!!</strong> '+JSON.stringify(err.data);
+		        	Flash.create('danger', message);
+				})
+			}
 		}
 	}
 
@@ -100,9 +102,9 @@ app.controller('SociosCtrl', ['$scope','$location', 'SociosServ','Flash','config
 
 	$scope.esBaja = function (socio) {
 		if (isNaN(parseInt(socio))) {
-			return false
-		}else{
 			return true
+		}else{
+			return false
 		}
 	}
 
@@ -115,5 +117,6 @@ app.controller('SociosCtrl', ['$scope','$location', 'SociosServ','Flash','config
 		SociosServ.setSocio(socio);
 		$location.path('/socios/updateSocio')
 	}
+	
 
 }]);
