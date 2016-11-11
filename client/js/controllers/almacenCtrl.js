@@ -32,7 +32,7 @@ app.controller('AlmacenCtrl', ['$scope','ProductosServ','ConfigServ','config','F
 			console.log(JSON.stringify(err))
 		})
 
-		$scope.ambitos = config.ambitos;
+		//$scope.ambitos = config.ambitos;
 	}
 
 	$scope.updateStock = function (prod) {
@@ -70,7 +70,7 @@ app.controller('AlmacenCtrl', ['$scope','ProductosServ','ConfigServ','config','F
 				obj.observaciones = prod.observaciones
 			}
 		}
-		console.log(obj)
+
 		ProductosServ.ajusteStock(obj).then(function (response) {
 			var message = '<strong>HECHO!!!</strong> stock del producto '+response.data.nombre+' ajustado';
 			Flash.create('success', message);

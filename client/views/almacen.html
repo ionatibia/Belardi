@@ -3,19 +3,20 @@
 <!--AÑADIR stock-->
 <form id="formularioStock" name="formularioStock" class="form-group" ng-submit="updateStock(producto)" novalidate ng-show="productos">
 	<h3>Añadir stock</h3>
-	<label for="ambito" class="label label-default">Ambito: </label>
+	<!--<label for="ambito" class="label label-default">Ambito: </label>
 	<div class="form-group">
 		<select class="form-control" ng-model="producto.ambito" name="ambito" id="ambito">
 			<option value="" selected disabled>Selecciona</option>
 			<option ng-repeat="ambito in ambitos" value="{{ambito.nombre}}">{{ambito.nombre}}</option>
 		</select>
-	</div>
+	</div>-->
 
 	<label for="tipo" class="label label-default">Tipo: </label>
 	<div class="form-group">
 		<select class="form-control" ng-model="producto.tipo" name="tipo" id="tipo">
 			<option value="" selected disabled>Selecciona</option>
-			<option ng-repeat="tipo in tipos | filter: producto.ambito" value="{{tipo._id}}">{{tipo.nombre.toUpperCase()}}</option>
+			<!--<option ng-repeat="tipo in tipos | filter: producto.ambito" value="{{tipo._id}}">{{tipo.nombre.toUpperCase()}}</option>-->
+			<option ng-repeat="tipo in tipos" value="{{tipo._id}}">{{tipo.nombre.toUpperCase()}}</option>
 		</select>
 	</div>
 
@@ -52,19 +53,20 @@
 <!--AJUSTE INVENTARIO-->
 <form id="formularioStockAjuste" name="formularioStockAjuste" class="form-group" ng-submit="ajusteStock(productoAjuste)" novalidate ng-show="productos">
 	<h3>Ajuste stock</h3>
-	<label for="ambito" class="label label-default">Ambito: </label>
+	<!--<label for="ambito" class="label label-default">Ambito: </label>
 	<div class="form-group">
 		<select class="form-control" ng-model="productoAjuste.ambito" name="ambito" id="ambito">
 			<option value="" selected disabled>Selecciona</option>
 			<option ng-repeat="ambito in ambitos" value="{{ambito.nombre}}">{{ambito.nombre}}</option>
 		</select>
-	</div>
+	</div>-->
 
 	<label for="tipo" class="label label-default">Tipo: </label>
 	<div class="form-group">
 		<select class="form-control" ng-model="productoAjuste.tipo" name="tipo" id="tipo">
 			<option value="" selected disabled>Selecciona</option>
-			<option ng-repeat="tipo in tipos | filter: productoAjuste.ambito" value="{{tipo._id}}">{{tipo.nombre.toUpperCase()}}</option>
+			<!--<option ng-repeat="tipo in tipos | filter: productoAjuste.ambito" value="{{tipo._id}}">{{tipo.nombre.toUpperCase()}}</option>-->
+			<option ng-repeat="tipo in tipos" value="{{tipo._id}}">{{tipo.nombre.toUpperCase()}}</option>
 		</select>
 	</div>
 

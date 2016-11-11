@@ -11,7 +11,7 @@ var subSchema = mongoose.Schema({
 var productSchema = new Schema({
 	nombre:{type:String,required: 'Falta el nombre'},
 	descripcion:{type:String},
-	ambito:{type:String,required: 'Falta el ámbito del producto'},
+	//ambito:{type:String,required: 'Falta el ámbito del producto'},
 	tipo:{type:Schema.ObjectId,ref:'Type', required: 'Falta el tipo'},
 	subtipo:{type:Schema.ObjectId,ref:'Subtype'},
 	variedad:{type:Schema.ObjectId,ref:'Variety'},

@@ -36,42 +36,43 @@
 		</div>
 		<!--Productos-->
 
-			<h3 ng-show="socio && !paraEnviar">Añadir producto</h3>
-			<label for="ambito" class="label label-default" ng-show="socio && !paraEnviar">Ambito: </label>
+			<h3 ng-show="socio && !paraEnviar && socios.length != 0">Añadir producto</h3>
+			<!--<label for="ambito" class="label label-default" ng-show="socio && !paraEnviar">Ambito: </label>
 			<div class="ticket" name="ticket" ng-show="socio && !paraEnviar">
 				<div class="form-group">
 					<select class="form-control" ng-model="ticket.ambito" name="ambito" id="ambito">
 						<option value="" selected disabled>Selecciona</option>
 						<option ng-repeat="ambito in ambitos" value="{{ambito.nombre}}">{{ambito.nombre}}</option>
 					</select>
-				</div>
+				</div>-->
 				<!---->
-				<label for="tipo" class="label label-default" ng-show="!paraEnviar">Tipo: </label>
-				<div class="form-group" ng-show="!paraEnviar">
+				<label for="tipo" class="label label-default" ng-show="socio && !paraEnviar && socios.length != 0">Tipo: </label>
+				<div class="form-group" ng-show="socio && !paraEnviar && socios.length != 0">
 					<select class="form-control" ng-model="ticket.tipo" name="tipo" id="tipo">
 						<option value="" selected disabled>Selecciona</option>
-						<option ng-repeat="tipo in tipos | filter: ticket.ambito" value="{{tipo._id}}">{{tipo.nombre.toUpperCase()}}</option>
+						<!--<option ng-repeat="tipo in tipos | filter: ticket.ambito" value="{{tipo._id}}">{{tipo.nombre.toUpperCase()}}</option>-->
+						<option ng-repeat="tipo in tipos" value="{{tipo._id}}">{{tipo.nombre.toUpperCase()}}</option>
 					</select>
 				</div>
 				<!---->
-				<label for="subtipo" class="label label-default" ng-show="!paraEnviar">Subtipo: </label>
-				<div class="form-group" ng-show="!paraEnviar">
+				<label for="subtipo" class="label label-default" ng-show="socio && !paraEnviar && socios.length != 0">Subtipo: </label>
+				<div class="form-group" ng-show="socio && !paraEnviar && socios.length != 0">
 					<select class="form-control" ng-model="ticket.subtipo" name="subtipo" id="subtipo">
 						<option value="" selected>Selecciona</option>
 						<option ng-repeat="subtipo in subtipos | filter: ticket.tipo" value="{{subtipo._id}}">{{subtipo.nombre.toUpperCase()}}</option>
 					</select>
 				</div>
 				<!---->
-				<label for="variedad" class="label label-default" ng-show="!paraEnviar">Variedad: </label>
-				<div class="form-group" ng-show="!paraEnviar">
+				<label for="variedad" class="label label-default" ng-show="socio && !paraEnviar && socios.length != 0">Variedad: </label>
+				<div class="form-group" ng-show="socio && !paraEnviar && socios.length != 0">
 					<select class="form-control" ng-model="ticket.variedad" name="variedad" id="variedad">
 						<option value="" selected>Selecciona</option>
 						<option ng-repeat="variedad in variedades | filter: ticket.tipo | filter: ticket.subtipo" value="{{variedad._id}}">{{variedad.nombre.toUpperCase()}}</option>
 					</select>
 				</div>
 				<!---->
-				<label for="producto" class="label label-default" ng-show="!paraEnviar">Producto: </label>
-				<div class="form-group" ng-show="!paraEnviar">
+				<label for="producto" class="label label-default" ng-show="socio && !paraEnviar && socios.length != 0">Producto: </label>
+				<div class="form-group" ng-show="socio && !paraEnviar && socios.length != 0">
 					<select class="form-control" ng-model="ticket.producto" name="producto" id="producto">
 						<option value="" selected>Selecciona</option>
 						<option ng-repeat="producto in productos | filter: ticket.tipo | filter: ticket.subtipo | filter: ticket.variedad" value="{{producto._id}}">{{producto.nombre.toUpperCase()}}</option>
@@ -110,8 +111,8 @@
 	            	</tr>
 	            	<tr>
 	            		<td colspan="2">Sub Total</td>
-	            		<td>{{subtotal()}} €</td>
-	            		<td>{{subtotalIva()}} €</td>
+	            		<td>{{subtotal().toFixed(2)}} €</td>
+	            		<td>{{subtotalIva().toFixed(2)}} €</td>
 	            	</tr>
 	            	<tr>
 	            		<td colspan="2">TOTAL</td>

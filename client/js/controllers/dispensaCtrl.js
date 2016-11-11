@@ -3,6 +3,7 @@ app.controller('DispensaCtrl', ['$scope','$location','ProductosServ','SociosServ
 	if (!$scope.checkLogin()){
 		$location.path("/");
 	}else{
+		$scope.socios = [];
 		//get all productos
 		ProductosServ.getAll().then(function (response) {
 			$scope.productos = response.data;
@@ -18,8 +19,10 @@ app.controller('DispensaCtrl', ['$scope','$location','ProductosServ','SociosServ
 				if($scope.socios[i].numero == 0){
 					$scope.socios.splice($scope.socios[i],1)
 				}
-				if(isNaN($scope.socios[i].numero)){
-					$scope.socios.splice($scope.socios[i],1)
+				if ($scope.socios.length != 0) {
+					if(isNaN($scope.socios[i].numero)){
+						$scope.socios.splice($scope.socios[i],1)
+					}
 				}
 			}
 		}, function (err) {
@@ -51,7 +54,7 @@ app.controller('DispensaCtrl', ['$scope','$location','ProductosServ','SociosServ
 			console.log(JSON.stringify(err))
 		})
 
-		$scope.ambitos = config.ambitos;
+		//$scope.ambitos = config.ambitos;
 	}
 
 	$scope.ticketCompleto = {};
@@ -79,7 +82,7 @@ app.controller('DispensaCtrl', ['$scope','$location','ProductosServ','SociosServ
 			//canvas creado en funcion de pintar
 			var url = canvas.toDataURL('image/jpeg');
 
-			$scope.ticketCompleto = {'productos':$scope.listaProductos,'socio':socio,'firma':url}
+			$scope.ticketCompleto = {'productos':$scope.listaProductos,'socio':socio,'firma':url,'neto':$scope.cuenta,'iva':$scope.cuentaIva}
 
 			TicketServ.addTicket($scope.ticketCompleto).then(function (response) {
 				var message = '<strong>HECHO!!!</strong> creado ticket para socio '+socio;
@@ -109,8 +112,10 @@ app.controller('DispensaCtrl', ['$scope','$location','ProductosServ','SociosServ
 	$scope.subtotal = function () {
 		var cuenta = 0;
 		for(var p in $scope.listaProductos){
-			var tmp = $scope.listaProductos[p].precio * $scope.listaProductos[p].cantidad
-			cuenta += tmp
+			var precioBruto = $scope.listaProductos[p].precio * $scope.listaProductos[p].cantidad
+			var precioNeto = precioBruto / (($scope.listaProductos[p].iva/100)+1)
+			//var precioNetoFixed = parseFloat(precioNeto.toFixed(2))//Math.round(precioNeto * 100) / 100//
+			cuenta += precioNeto
 		}
 		$scope.cuenta = cuenta
 		return cuenta
@@ -119,18 +124,22 @@ app.controller('DispensaCtrl', ['$scope','$location','ProductosServ','SociosServ
 	$scope.subtotalIva = function () {
 		var cuentaIva = 0;
 		for(var p in $scope.listaProductos){
-			var tmp = $scope.listaProductos[p].precio * $scope.listaProductos[p].cantidad
-			var iva = $scope.listaProductos[p].iva / 100;
-			cuentaIva += (tmp * iva)
+			var precioBruto = $scope.listaProductos[p].precio * $scope.listaProductos[p].cantidad
+			var precioNeto = precioBruto / (($scope.listaProductos[p].iva/100)+1);
+			var iva = precioBruto - precioNeto
+			cuentaIva += iva
 		}
-		var cuentaRedondeada = cuentaIva.toFixed(2)//Math.round(cuentaIva * 100) / 100
-		$scope.cuentaIva = cuentaRedondeada;
-		return cuentaRedondeada;
+		//var cuentaRedondeada = cuentaIva.toFixed(2)//Math.round(cuentaIva * 100) / 100
+		$scope.cuentaIva = cuentaIva;
+		return cuentaIva;
 	}
 
 	$scope.totalTicket = function () {
 		var total = 0;
-		total = parseInt($scope.cuenta) + parseInt($scope.cuentaIva)
+		total = parseFloat($scope.cuenta) + parseFloat($scope.cuentaIva)
+		//var totalRedondeado = total.toFixed(2)
+		//var totalAjustado = Math.round(totalRedondeado)
+		$scope.total = total;
 		return total
 	}
 

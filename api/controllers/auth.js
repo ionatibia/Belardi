@@ -29,11 +29,11 @@ exports.emailSignup = function(req, res) {
     }
     if (req.body.password != '' && req.body.password != undefined && req.body.password != null) {
         var pass = crypto.encriptar(req.body.correo,req.body.password);
-    }else{
+    }/*else{
         return res
             .status(400)
             .send("Falta la contraseña")
-    }
+    }*/
 
     var user = new User(req.body);
     user.password = pass;

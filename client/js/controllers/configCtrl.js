@@ -27,7 +27,7 @@ app.controller('ConfigCtrl', ['$scope','$location','Flash','$window','ConfigServ
 			console.log(JSON.stringify(err))
 		})
 
-		$scope.ambitos = config.ambitos;
+		//$scope.ambitos = config.ambitos;
 	}
 
 	$scope.addType = function (type) {
@@ -237,7 +237,6 @@ app.controller('ConfigCtrl', ['$scope','$location','Flash','$window','ConfigServ
 		ngDialog.open({template: 'subtypeTemplateUpdate.html', className: 'ngdialog-theme-default', scope:$scope, overlay:false});
 	}
 	$scope.updateVariedad = function (variedad) {
-		console.log(variedad)
 		$scope.varietySeleccionado = variedad;
 		ngDialog.open({template: 'varietyTemplateUpdate.html', className: 'ngdialog-theme-default', scope:$scope, overlay:false});
 	}

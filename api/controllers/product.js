@@ -33,7 +33,6 @@ exports.create = function (req, res) {
 
 	var product = new Product(req.body)
 	product.stock = [{}]
-	console.log(product)
 
 	product.save(function (err) {
 		if (err) {

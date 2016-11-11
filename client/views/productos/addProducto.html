@@ -12,19 +12,20 @@
 		<input type="text" name="descripcion" id="descripcion" class="form-control" value="{{producto.descripcion}}" ng-model="producto.descripcion" minlength="3" placeholder="Descripcion">
 	</div>
 
-	<div class="form-group" ng-if="producto.nombre">
+	<!--<div class="form-group" ng-if="producto.nombre">
 		<label for="ambito" class="label label-default">Ambito: </label>
 		<select id="ambito" name="ambito" class="form-control" ng-model="producto.ambito" ng-required="true">
 			<option value="" selected disabled="">Selecciona</option>
 			<option ng-repeat="ambito in ambitos" value="{{ambito.nombre}}">{{ambito.nombre}}</option>
 		</select>
-	</div>
+	</div>-->
 
-	<div class="form-group" ng-if="producto.ambito">
+	<div class="form-group" ng-if="producto.nombre">
 		<label for="tipo" class="label label-default">Tipo: </label>
 		<select id="tipo" name="tipo" class="form-control" ng-model="producto.tipo" ng-required="true" ng-change="seleccionTipo(producto.tipo)">
 			<option value="" selected disabled="">Selecciona</option>
-			<option ng-repeat="tipo in tipos | filter: producto.ambito" value="{{tipo._id}}">{{tipo.nombre.toUpperCase()}}</option>
+			<!--<option ng-repeat="tipo in tipos | filter: producto.ambito" value="{{tipo._id}}">{{tipo.nombre.toUpperCase()}}</option>-->
+			<option ng-repeat="tipo in tipos" value="{{tipo._id}}">{{tipo.nombre.toUpperCase()}}</option>
 		</select>
 	</div>
 
@@ -46,11 +47,11 @@
 
 	<div class="form-group" ng-class="{'has-error':formularioAddProducto.precio.$invalid && formularioAddProducto.precio.$dirty}" ng-if="producto.tipo">
 		<label for="precio" class="label label-default">Precio: </label>
-		<input type="number" name="precio" id="precio" class="form-control" value="{{producto.precio}}" ng-model="producto.precio" ng-required="true" placeholder="Precio sin IVA">
+		<input type="number" name="precio" id="precio" class="form-control" value="{{producto.precio}}" ng-model="producto.precio" ng-required="true" placeholder="Precio CON IVA">
 	</div>
 
 	<div class="form-group" ng-class="{'has-error':formularioAddProducto.iva.$invalid && formularioAddProducto.iva.$dirty}" ng-if="producto.precio">
-		<label for="iva" class="label label-default">iva: </label>
+		<label for="iva" class="label label-default">Iva: </label>
 		<input type="number" name="iva" id="iva" class="form-control" value="{{producto.iva}}" ng-model="producto.iva" ng-required="true" placeholder="% IVA">
 	</div>
 

@@ -34,7 +34,7 @@ app.controller('ProductosCtrl', ['$scope','$location','ProductosServ','Flash','C
 			console.log(JSON.stringify(err))
 		})
 
-		$scope.ambitos = config.ambitos;
+		//$scope.ambitos = config.ambitos;
 	}
 	
 	$scope.seleccionTipo = function (tipo) {

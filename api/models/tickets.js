@@ -12,7 +12,9 @@ var ticketSchema = new Schema({
 	usuario:{type:Schema.ObjectId,ref:'User',required:'Obligatorio numero de usuario'},
 	socio:{type:Schema.ObjectId,ref:'User',required:'Obligatorio numero de socio'},
 	dispensa:[subSchema],
-	firmaUrl:{type:String, required:'Obligatorio firma del socio'}
+	firmaUrl:{type:String, required:'Obligatorio firma del socio'},
+	neto:{type:Number,required:'Obligatorio precio neto'},
+	iva:{type:Number,required:'Obligatorio iva'}
 });
 
 module.exports = mongoose.model('Ticket', ticketSchema);

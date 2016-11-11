@@ -8,20 +8,22 @@
     <p>
     <form id="formAddType" name="formAddType" class="form-group" ng-submit="addType(type)" novalidate>
         <div class="panel-body">
-            <div class="form-group" ng-class="{'has:error':formAddType.ambito.$invalid && formAddType.ambito.$dirty}">
+            <!--<div class="form-group" ng-class="{'has:error':formAddType.ambito.$invalid && formAddType.ambito.$dirty}">
                 <label for="ambito" class="label label-default">Ambito: </label>
                 <select id="ambito" name="ambito" class="form-control" ng-model="type.ambito" ng-required="true">
                     <option value="" selected disabled>Selecciona</option>
                     <option ng-repeat="ambito in ambitos" value="{{ambito.nombre}}">{{ambito.nombre.toUpperCase()}}</option>
                 </select>
-            </div>
+            </div>-->
             <div class="form-group" ng-class="{'has-error':formAddType.nombre.$invalid && formAddType.nombre.$dirty}">
                 <label for="nombreTipo" class="label label-default">Nombre: </label>
-                <input type="text" name="nombreTipo" id="nombreTipo" ng-model="type.nombre" ng-disabled="!type.ambito" ng-required="true" maxlength="20">
+                <!--<input type="text" name="nombreTipo" id="nombreTipo" ng-model="type.nombre" ng-disabled="!type.ambito" ng-required="true" maxlength="20">-->
+                <input type="text" name="nombreTipo" id="nombreTipo" ng-model="type.nombre" ng-required="true" maxlength="20">
             </div>
             <div class="form-group">
                 <label for="descripcionTipo" class="label label-default">Descripcion: </label>
-                <input type="text" name="descripcionTipo" id="descripcionTipo" ng-model="type.descripcion" ng-disabled="!type.ambito">
+                <!--<input type="text" name="descripcionTipo" id="descripcionTipo" ng-model="type.descripcion" ng-disabled="!type.ambito">-->
+                <input type="text" name="descripcionTipo" id="descripcionTipo" ng-model="type.descripcion">
             </div>
         </div>
         <div class="panel-footer">
@@ -40,13 +42,13 @@
     <p>
     <form id="formUpdateType" name="formUpdateType" class="form-group" ng-submit="updateType(tipoSeleccionado)" novalidate>
         <div class="panel-body">
-            <div class="form-group" ng-class="{'has:error':formUpdateType.ambito.$invalid && formUpdateType.ambito.$dirty}">
+            <!--<div class="form-group" ng-class="{'has:error':formUpdateType.ambito.$invalid && formUpdateType.ambito.$dirty}">
                 <label for="ambito" class="label label-default">Ambito: </label>
                 <select id="ambito" name="ambito" class="form-control" ng-model="tipoSeleccionado.ambito" ng-required="true">
                     <option value="" selected disabled>Selecciona</option>
                     <option ng-repeat="ambito in ambitos" value="{{ambito.nombre}}">{{ambito.nombre.toUpperCase()}}</option>
                 </select>
-            </div>
+            </div>-->
             <div class="form-group" ng-class="{'has-error':formUpdateType.nombre.$invalid && formUpdateType.nombre.$dirty}">
                 <label for="nombreTipo" class="label label-default">Nombre: </label>
                 <input type="text" name="nombreTipo" id="nombreTipo" ng-model="tipoSeleccionado.nombre" ng-required="true" maxlength="20">
@@ -225,7 +227,6 @@
             <thead>
             <tr style="background-color: #333333; color: white">
                 <th>Nombre</th>
-                <th>Ambito</th>
                 <th>Descripcion</th>
                 <th>Controles</th>
             </tr>
@@ -233,7 +234,6 @@
             <tbody>
             <tr ng-repeat="tipo in tipos">
                 <td>{{tipo.nombre}}</td>
-                <td>{{tipo.ambito}}</td>
                 <td>{{tipo.descripcion}}</td>
                 <td>
                     <button class="btn btn-primary" ng-click="updateTipo(tipo)"><i class="glyphicon glyphicon-edit"></i></button>

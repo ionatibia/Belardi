@@ -1,5 +1,8 @@
-
+*controlar fecha baja
+*controlar en tipos,subtipos,variedades que no exista 1 igual (en cliente)
 *crossfilter con filtros para filtrar los datos para los totales
+
+*redondear precios en cliente
 
 *descuento en ticket
 
