@@ -1,6 +1,7 @@
-*controlar fecha baja
-*controlar en tipos,subtipos,variedades que no exista 1 igual (en cliente)
+
 *crossfilter con filtros para filtrar los datos para los totales
+*añadir totales cuotas en el informe trimestral
+
 
 *redondear precios en cliente
 
@@ -55,4 +56,4 @@
 *Comprobar funcionamiento en Dispositivo
 
 
-*dejado en dispensa acabar el ticket
+*dejado en funcion crear array con totales por dia

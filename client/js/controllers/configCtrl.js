@@ -42,24 +42,37 @@ app.controller('ConfigCtrl', ['$scope','$location','Flash','$window','ConfigServ
 		})
 	}
 	$scope.addSubType = function (subtype) {
+		var existe = false;
 		for(var i in $scope.tipos){
 			if ($scope.tipos[i]._id == subtype.tipo) {
 				subtype.tipo = $scope.tipos[i]
 			}
 		}
-		ConfigServ.add('subtype',subtype).then(function (response){
-			var message = '<strong>HECHO!!!</strong> el subtipo se ha guardado correctamente';
-			Flash.create('success', message);
-			var obj = response.data;
-			obj.tipo = subtype.tipo;
-			$scope.subtipos.push(obj)
+		for(var e in $scope.subtipos){
+			if ($scope.subtipos[e].nombre == subtype.nombre && $scope.subtipos[e].tipo.nombre == subtype.tipo.nombre) {
+				existe = true;
+			}
+		}
+		if (existe) {
 			ngDialog.closeAll()
-		}, function (err) {
-			var message = '<strong>ERROR!!!</strong> '+JSON.stringify(err.data);
+			var message = '<strong>ERROR!!!</strong> el subtipo ya existe';
 			Flash.create('danger', message);
-		})
+		}else{
+			ConfigServ.add('subtype',subtype).then(function (response){
+				var message = '<strong>HECHO!!!</strong> el subtipo se ha guardado correctamente';
+				Flash.create('success', message);
+				var obj = response.data;
+				obj.tipo = subtype.tipo;
+				$scope.subtipos.push(obj)
+				ngDialog.closeAll()
+			}, function (err) {
+				var message = '<strong>ERROR!!!</strong> '+JSON.stringify(err.data);
+				Flash.create('danger', message);
+			})
+		}
 	}
 	$scope.addVariety = function (variety) {
+		var existe = false
 		for(var i in $scope.tipos){
 			if ($scope.tipos[i]._id == variety.tipo) {
 				variety.tipo = $scope.tipos[i]
@@ -70,18 +83,28 @@ app.controller('ConfigCtrl', ['$scope','$location','Flash','$window','ConfigServ
 				variety.subtipo = $scope.subtipos[i]
 			}
 		}
-		ConfigServ.add('variety',variety).then(function (response){
-			var message = '<strong>HECHO!!!</strong> la variedad se ha guardado correctamente';
-			Flash.create('success', message);
-			var obj = response.data;
-			obj.tipo = variety.tipo;
-			obj.subtipo = variety.subtipo;
-			$scope.variedades.push(obj)
+		for(var e in $scope.variedades){
+			if ($scope.variedades[e].nombre == variety.nombre && $scope.variedades[e].tipo.nombre == variety.tipo.nombre && $scope.variedades[e].subtipo.nombre == variety.subtipo.nombre) {}
+				existe = true;
+		}
+		if (existe) {
 			ngDialog.closeAll()
-		}, function (err) {
-			var message = '<strong>ERROR!!!</strong> '+JSON.stringify(err.data);
+			var message = '<strong>ERROR!!!</strong> la variedad ya existe';
 			Flash.create('danger', message);
-		})
+		}else{
+			ConfigServ.add('variety',variety).then(function (response){
+				var message = '<strong>HECHO!!!</strong> la variedad se ha guardado correctamente';
+				Flash.create('success', message);
+				var obj = response.data;
+				obj.tipo = variety.tipo;
+				obj.subtipo = variety.subtipo;
+				$scope.variedades.push(obj)
+				ngDialog.closeAll()
+			}, function (err) {
+				var message = '<strong>ERROR!!!</strong> '+JSON.stringify(err.data);
+				Flash.create('danger', message);
+			})
+		}
 	}
 
 	$scope.borrarTipo = function(tipo) {
@@ -219,26 +242,26 @@ app.controller('ConfigCtrl', ['$scope','$location','Flash','$window','ConfigServ
 	}
 	//MODALS
 	$scope.crearTipo = function () {
-		ngDialog.open({template: 'typeTemplate.html', className: 'ngdialog-theme-default', scope:$scope, overlay:false});
+		ngDialog.open({template: 'typeTemplate.html', className: 'ngdialog-theme-default', scope:$scope, overlay:true,showClose:true});
 	}
 	$scope.crearSubtipo = function () {
-		ngDialog.open({template: 'subtypeTemplate.html', className: 'ngdialog-theme-default', scope:$scope, overlay:false});
+		ngDialog.open({template: 'subtypeTemplate.html', className: 'ngdialog-theme-default', scope:$scope, ooverlay:true,showClose:true});
 	}
 	$scope.crearVariedad = function () {
-		ngDialog.open({template: 'varietyTemplate.html', className: 'ngdialog-theme-default', scope:$scope, overlay:false});
+		ngDialog.open({template: 'varietyTemplate.html', className: 'ngdialog-theme-default', scope:$scope, overlay:true,showClose:true});
 	}
 
 	$scope.updateTipo = function (tipo) {
 		$scope.tipoSeleccionado = tipo;
-		ngDialog.open({template: 'typeTemplateUpdate.html', className: 'ngdialog-theme-default', scope:$scope, overlay:false});
+		ngDialog.open({template: 'typeTemplateUpdate.html', className: 'ngdialog-theme-default', scope:$scope, overlay:true,showClose:true});
 	}
 	$scope.updateSubtipo = function (subtipo) {
 		$scope.subtypeSeleccionado = subtipo;
-		ngDialog.open({template: 'subtypeTemplateUpdate.html', className: 'ngdialog-theme-default', scope:$scope, overlay:false});
+		ngDialog.open({template: 'subtypeTemplateUpdate.html', className: 'ngdialog-theme-default', scope:$scope, overlay:true,showClose:true});
 	}
 	$scope.updateVariedad = function (variedad) {
 		$scope.varietySeleccionado = variedad;
-		ngDialog.open({template: 'varietyTemplateUpdate.html', className: 'ngdialog-theme-default', scope:$scope, overlay:false});
+		ngDialog.open({template: 'varietyTemplateUpdate.html', className: 'ngdialog-theme-default', scope:$scope, overlay:true,showClose:true});
 	}
 
 	$scope.cancelarModal = function () {

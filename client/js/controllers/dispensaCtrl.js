@@ -26,7 +26,7 @@ app.controller('DispensaCtrl', ['$scope','$location','ProductosServ','SociosServ
 				}
 			}
 		}, function (err) {
-			var message = '<strong>ERROR!!!</strong> '+JSON.stringify(err.data.message);
+			var message = '<strong>ERROR!!!</strong> '+JSON.stringify(err.data);
 		    Flash.create('danger', message);
 			console.log(JSON.stringify(err))
 		});
@@ -113,6 +113,11 @@ app.controller('DispensaCtrl', ['$scope','$location','ProductosServ','SociosServ
 		var cuenta = 0;
 		for(var p in $scope.listaProductos){
 			var precioBruto = $scope.listaProductos[p].precio * $scope.listaProductos[p].cantidad
+			for(var s in $scope.socios){
+				if ($scope.socios[s].numero == $scope.socio && $scope.socios[s].tipo == 'Terapeutico') {
+					precioBruto = precioBruto - ((precioBruto * config.descuentoTeraupeutico) / 100)
+				}
+			}
 			var precioNeto = precioBruto / (($scope.listaProductos[p].iva/100)+1)
 			//var precioNetoFixed = parseFloat(precioNeto.toFixed(2))//Math.round(precioNeto * 100) / 100//
 			cuenta += precioNeto
@@ -125,6 +130,11 @@ app.controller('DispensaCtrl', ['$scope','$location','ProductosServ','SociosServ
 		var cuentaIva = 0;
 		for(var p in $scope.listaProductos){
 			var precioBruto = $scope.listaProductos[p].precio * $scope.listaProductos[p].cantidad
+			for(var s in $scope.socios){
+				if ($scope.socios[s].numero == $scope.socio && $scope.socios[s].tipo == 'Terapeutico') {
+					precioBruto = precioBruto - ((precioBruto * config.descuentoTeraupeutico) / 100)
+				}
+			}
 			var precioNeto = precioBruto / (($scope.listaProductos[p].iva/100)+1);
 			var iva = precioBruto - precioNeto
 			cuentaIva += iva

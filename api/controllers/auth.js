@@ -202,7 +202,7 @@ exports.emailList = function (req,res) {
 }
 
 exports.baja = function (req,res) {
-    User.update({_id: req.usuario},{$set: { numero: 'baja'+req.usuario.dni }},function (err) {
+    User.update({_id: req.usuario},{$set: { numero: 'baja'+req.usuario.dni, fecha_baja: Date.now() }},function (err) {
         if (err) {
             logger.error("Error dando de baja al usuario: "+req.usuario.dni)
             return res
@@ -218,7 +218,7 @@ exports.baja = function (req,res) {
 
 exports.alta = function (req,res) {
     var num = req.body.numero;
-    User.update({_id: req.usuario},{$set: { numero: num }},function (err) {
+    User.update({_id: req.usuario},{$set: { numero: num, fecha_alta: Date.now() }},function (err) {
         if (err) {
             logger.error("Error dando de alta al usuario: "+req.usuario.dni)
             return res

@@ -30,10 +30,11 @@ var Q = require('q');
  */
 exports.create = function (req, res) {
 	var img = req.body.firma;
-	var data = img.replace(/^data:image\/\w+;base64,/, "");
-	var buf = new Buffer(data, 'base64');
-	var firmaUrl = 'public/firmas/' + req.body.socio+Date.now() + '.png';
-	fs.writeFile(firmaUrl, buf);
+	//console.log(img)
+	//var data = img.replace(/^data:image\/\w+;base64,/, "");
+	//var buf = new Buffer(data, 'base64');
+	//var firmaUrl = 'public/firmas/' + req.body.socio+Date.now() + '.png';
+	//fs.writeFile(firmaUrl, buf);
 	var promises = [];
 	var socioObj = {};
 	var userObj = {};
@@ -48,7 +49,7 @@ exports.create = function (req, res) {
 			console.log(err)
 			return res
 				.status(400)
-				.send("Error buscando usuarios: "+err.errmsg);
+				.send("Error buscando usuarios: "+err);
 		}else{
 			userObj = user
 		}
@@ -61,7 +62,7 @@ exports.create = function (req, res) {
 			console.log(err)
 			return res
 				.status(400)
-				.send("Error buscando usuarios: "+err.errmsg);
+				.send("Error buscando usuarios: "+err);
 		}else{
 			socioObj = user
 		}
@@ -85,7 +86,7 @@ exports.create = function (req, res) {
 				logger.error("Error guardando stock nuevo en productos")
 				return res
 					.status(400)
-					.send("Error guardando productos: "+err.errmsg);
+					.send("Error guardando productos: "+err);
 			}else{
 				productosTicket.push({'producto':productos[i],'cantidad':cantidad})
 			}
@@ -95,13 +96,13 @@ exports.create = function (req, res) {
 	
 
 	Q.all(promises).then(function (response) {
-		var ticket = new Ticket({'usuario':userObj,'socio':socioObj,'dispensa':productosTicket,'firmaUrl':firmaUrl})
+		var ticket = new Ticket({'usuario':userObj,'socio':socioObj,'dispensa':productosTicket,'firmaUrl':img, 'neto':req.body.neto, 'iva':req.body.iva})
 		ticket.save(function (err) {
 			if (err) {
 				logger.error("Error guardando ticket de socio "+socioObj.dni+'. Usuario: '+userObj.dni+'. Fecha: '+ticket.fecha)
 				return res
 					.status(400)
-					.send("Error guardando productos: "+err.errmsg);
+					.send("Error guardando ticket: "+err);
 			}else{
 				logger.info("Guardado ticket de socio "+socioObj.dni+'. Usuario: '+userObj.dni+'. Fecha: '+ticket.fecha)
 				return res
@@ -113,7 +114,7 @@ exports.create = function (req, res) {
 		logger.error("Error al ejecutar las promises")
 		return res
 			.status(400)
-			.send("Error guardando ticket: "+err.errmsg);
+			.send("Error guardando ticket: "+err);
 	})
 	
 };//exports create
@@ -143,7 +144,7 @@ module.exports.update = function (req, res) {
 			logger.error("Error actualizando ticket")
 			return res
 				.status(400)
-				.send("Error actualizando ticket: "+err.errmsg);
+				.send("Error actualizando ticket: "+err);
 		} else {
 			//devolvemos el ticketo modificado
 			return res
@@ -167,7 +168,7 @@ module.exports.delete = function (req, res) {
 			logger.error("Error borrando ticket")
 			return res
 				.status(400)
-				.send("Error borrando ticket: "+err.errmsg);
+				.send("Error borrando ticket: "+err);
 		} else {
 			return res
 				.status(200)
@@ -188,7 +189,7 @@ module.exports.list = function (req, res) {
 			logger.error("Error buscando tickets")
 			return res
 				.status(400)
-				.send("Error buscando tickets: "+err.errmsg);
+				.send("Error buscando tickets: "+err);
 		} else {
 			//devolvemos todos los tickets
 			return res

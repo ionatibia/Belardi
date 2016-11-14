@@ -76,4 +76,21 @@ h1{
 	font-weight: bold;
 }
 
+/*INFORMES*/
+#ticketDiv{
+	background-color: white;
+	padding: 20px;
+	margin-top: 20px;
+	border-radius: 15px;
+	background-image: url("../img/papel.jpg");
+}
+#startDiv, #endDiv{
+	margin-bottom: 10px;
+}
+#ticketDiv > button{
+	margin-bottom: 30px;
+}
+
+
+
 
