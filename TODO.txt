@@ -1,16 +1,11 @@
-
+*consumo mensual (ir rellenando desde dispensa y vaciar todos los 1 de mes)
 *crossfilter con filtros para filtrar los datos para los totales
 *añadir totales cuotas en el informe trimestral
 
 
 *redondear precios en cliente
 
-*descuento en ticket
-
-*datepicker: https://bootstrap-datepicker.readthedocs.io/en/latest/
-
 *config
-	-cantidad cuota + % iva
 	-cantidad total si no hay registros en la bd 
 
 *Contabilidad

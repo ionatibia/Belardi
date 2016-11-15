@@ -172,7 +172,40 @@ app.controller('InformesCtrl', ['$scope','$location','Flash','InformesSrv','conf
 						crearArray(dia,mes,ano,neto,iva)
 					}
 				}
-				console.log(triObj)
+				var docDefinition = {
+					header: { text: 'Resumen de Dispensa diaria '+start+' a '+end, style: 'header', margin: [ 40, 10, 10, 20 ] },
+					content: [
+						{
+							table: {
+								headerRows: 1,
+								widths: [ '*', '*', '*', '*','*','*','*' ],
+								body: [
+									[ {text:'Fecha',style:'titles',fillColor:'green'}, {text:'Cuotas N',style:'titles',fillColor:'green'}, {text:'Cuotas I',style:'titles',fillColor:'green'},{text:'Cuotas T',style:'titles',fillColor:'green',bold:true}, {text:'Dispensa N',style:'titles',fillColor:'green'}, {text:'Dispensa I',style:'titles',fillColor:'green'}, {text:'Dispensa T',style:'titles',fillColor:'green',bold:true} ],
+								]
+							}
+						}
+					],
+					styles:{
+						header:{
+							fontSize:22,
+							bold:true
+						},
+						titles:{
+							alignment:'center',
+						},
+						body:{
+							fontSize:10
+						}
+					}
+				};
+				var count = 0;
+				/*for (var i = 0; i < triObj.length; i++) {
+					if (count%2 == 0) {
+						var texto = [{text:triObj[i].dia+"-"+triObj[i].mes+"-"+triObj[i].ano, style:'body'},{text:triObj[i].}]
+					}else{
+						var texto = 
+					}
+				}*/
 			}, function (err) {
 				var message = '<strong>ERROR!!!</strong> '+JSON.stringify(err.data);
 		    	Flash.create('danger', message);
@@ -181,14 +214,18 @@ app.controller('InformesCtrl', ['$scope','$location','Flash','InformesSrv','conf
 		}
 	}
 
-	var triObj = [{'dia':14,'mes':11,'ano':2016,'neto':0,'iva':0}]
+	var triObj = []
 	function crearArray(dia,mes,ano,neto,iva) {
+		var existe = false;
 		for (var i = 0; i < triObj.length; i++) {
 			if(triObj[i].dia == dia && triObj[i].mes == mes && triObj[i].ano == ano){
-				console.log("xxxxx")
 				triObj[i].neto += neto;
 				triObj[i].iva += iva
+				existe = true;
 			}
+		}
+		if (!existe) {
+			triObj.push({'dia':dia,'mes':mes,'ano':ano,'neto':neto,'iva':iva})
 		}
 	}
 	

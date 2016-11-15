@@ -210,7 +210,6 @@ exports.baja = function (req,res) {
                 .send("Error dando de baja al usuario: "+err.errmsg)
         } else {
             logger.info("Dado de baja al usuario: "+req.usuario.dni)
-            //devolvemos el usuario modificado
             res.json("baja"+req.usuario.dni)
         }
     })
@@ -226,7 +225,6 @@ exports.alta = function (req,res) {
                 .send("Error dando de alta al usuario: "+err.errmsg)
         } else {
             logger.info("Dado de alta al usuario: "+req.usuario.dni)
-            //devolvemos el usuario modificado
             res.json(num)
         }
     })

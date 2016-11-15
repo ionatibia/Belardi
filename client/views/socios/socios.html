@@ -8,6 +8,7 @@
 			<li class="list-group-item" ng-repeat="socio in socios | filter: buscador" ng-if="(socio.numero != '0')">{{socio.nombre}} {{socio.apellido}} <br/>
 			<p ng-if="esBaja(socio.numero)" style="color:red">Baja</p>
 			<small ng-if="!esBaja(socio.numero)">
+			<span ng-if="socio.cuota == 0" class="noDebe">Cuota: {{socio.cuota}}</span><span ng-if="socio.cuota != 0" class="debe">Cuota: {{socio.cuota}}</span>
 			Número: {{socio.numero}}<br/>
 			Tipo: {{socio.tipo}}<br/>
 			Correo: {{socio.correo}}

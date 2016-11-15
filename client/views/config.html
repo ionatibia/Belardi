@@ -218,9 +218,34 @@
 <!---->
     <!---------------->
 
-
 <div><small>
 	<h1>Configuracion</h1>
+
+    <!--CUOTAS-->
+    <div id="anadirCuota" class="col-xs-6">
+        <h3>Añadir cuota por Usuario</h3>
+        <div class="form-group">
+            <label for="numeroSocio" class="label label-default">Nº Socio: </label>
+            <input list="socios" name="socio" ng-model="socio" class="form-control" style="overflow:scroll">
+            <datalist id="socios">
+                <option ng-repeat="socio in socios" value="{{socio.numero}}">{{socio.numero}}</option>
+            </datalist>
+            <label for="cantidadU" class="label label-default">Cantidad: </label>
+            <input type="number" name="cantidadU" id="cantidadU" ng-model="cantidadU">
+            <button class="btn btn-primary" ng-click="anadirCuotaU(socio,cantidadU)">Añadir</button>
+        </div>
+    </div>
+
+    <div id="anadirCuota" class="col-xs-6">
+        <h3>Añadir cuota a todos</h3>
+        <div class="form-group">
+            <label for="cantidad" class="label label-default">Cantidad</label>
+            <input type="number" name="cantidad" id="cantidad" ng-model="cantidad">
+            <button class="btn btn-primary" ng-click="anadirCuotaAll(cantidad)">Añadir</button> 
+        </div>
+    </div>
+    <!--FIN CUOTAS-->
+
 	<div class="col-lg-5 table-responsive">
         <h4 class="configTitle">Tipos</h4><button class="btn btn-primary" ng-click="crearTipo()"><i class="glyphicon glyphicon-plus"></i></button>
         <table class="table table-striped table-bordered">

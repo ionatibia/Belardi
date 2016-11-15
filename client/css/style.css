@@ -75,6 +75,11 @@ h1{
 	margin-bottom: 15px;
 	font-weight: bold;
 }
+#anadirCuota{
+	height: 200px;
+	margin-bottom: 50px;
+	background-image: url("../img/papel.jpg");
+}
 
 /*INFORMES*/
 #ticketDiv{
@@ -88,7 +93,15 @@ h1{
 	margin-bottom: 10px;
 }
 #ticketDiv > button{
-	margin-bottom: 30px;
+	margin-bottom: 50px;
+}
+
+/*SOCIOS*/
+.debe{
+	color:red;
+}
+.noDebe{
+	color:green;
 }
 
 

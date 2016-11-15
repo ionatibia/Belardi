@@ -30,7 +30,8 @@ var userSchema = new Schema({
 	password:{type:String},
 	fecha_alta:{type:Date, default:Date.now()},
 	fecha_baja:{type:Date, default:null},
-	consumo_mensual:{type:Number,default:0}
+	consumo_mensual:{type:Number,default:0},
+	cuota:{type:Number,default:0}
 });
 
 module.exports = mongoose.model('User', userSchema);

@@ -1,8 +1,26 @@
 var app = angular.module("app");
-app.controller('ConfigCtrl', ['$scope','$location','Flash','$window','ConfigServ','ngDialog','config', function ($scope,$location,Flash,$window, ConfigServ,ngDialog,config) {
+app.controller('ConfigCtrl', ['$scope','$location','Flash','$window','ConfigServ','ngDialog','config','SociosServ','IngresosServ', function ($scope,$location,Flash,$window, ConfigServ,ngDialog,config,SociosServ,IngresosServ) {
 	if (!$scope.checkLogin()){
 		$location.path("/");
 	}else{
+		SociosServ.getAll().then(function (response) {
+			$scope.socios = response.data;
+			for (var i = 0; i < $scope.socios.length; i++) {
+				if($scope.socios[i].numero == 0){
+					$scope.socios.splice($scope.socios[i],1)
+				}
+				if ($scope.socios.length != 0) {
+					if(isNaN($scope.socios[i].numero)){
+						$scope.socios.splice($scope.socios[i],1)
+					}
+				}
+			}
+		}, function (err) {
+			var message = '<strong>ERROR!!!</strong> '+JSON.stringify(err.data);
+			Flash.create('danger', message);
+			console.log(JSON.stringify(err))
+		})
+
 		ConfigServ.getAll('type').then(function (response) {
 			$scope.tipos = response.data;
 		}, function (err) {
@@ -84,8 +102,9 @@ app.controller('ConfigCtrl', ['$scope','$location','Flash','$window','ConfigServ
 			}
 		}
 		for(var e in $scope.variedades){
-			if ($scope.variedades[e].nombre == variety.nombre && $scope.variedades[e].tipo.nombre == variety.tipo.nombre && $scope.variedades[e].subtipo.nombre == variety.subtipo.nombre) {}
+			if ($scope.variedades[e].nombre == variety.nombre && $scope.variedades[e].tipo.nombre == variety.tipo.nombre && $scope.variedades[e].subtipo.nombre == variety.subtipo.nombre) {
 				existe = true;
+			}	
 		}
 		if (existe) {
 			ngDialog.closeAll()
@@ -267,4 +286,40 @@ app.controller('ConfigCtrl', ['$scope','$location','Flash','$window','ConfigServ
 	$scope.cancelarModal = function () {
 		ngDialog.closeAll()
 	}
+
+	/*==============================
+	=            CUOTAS            =
+	==============================*/
+	$scope.anadirCuotaU = function (socio,cuota) {
+		var user = {};
+		for(var s in $scope.socios){
+			if ($scope.socios[s].numero == socio) {
+				user = $scope.socios[s]
+			}
+		}
+		IngresosServ.anadirCuotaU(user,cuota).then(function (response) {
+			var message = '<strong>HECHO!!!</strong> añadida cuota '+cuota+'€ al socio '+response.data.numero;
+			Flash.create('success', message);
+		}, function (err) {
+			var message = '<strong>ERROR!!!</strong> '+JSON.stringify(err.data);
+			Flash.create('danger', message);
+		})
+	}
+	$scope.anadirCuotaAll = function (cuota) {
+		var socios = []
+		for(var s in $scope.socios){
+			socios.push($scope.socios[s]._id)
+		}
+		IngresosServ.anadirCuotaAll(cuota,socios).then(function (response) {
+			var message = '<strong>HECHO!!!</strong> '+response.data;
+			Flash.create('success', message);
+		}, function (err) {
+			var message = '<strong>ERROR!!!</strong> '+JSON.stringify(err.data);
+			Flash.create('danger', message);
+			console.log(err)
+		})
+	}
+	
+	/*=====  End of CUOTAS  ======*/
+	
 }])
