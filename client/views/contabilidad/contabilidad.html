@@ -1,3 +1,227 @@
 <section>
-<h1>Contabilidad</h1>
+	<h1>Contabilidad</h1>
+
+	<!--
+	INGRESOS
+	-->
+	<h3 style="float:left;margin-bottom:10px;">INGRESOS</h3><button class="btn btn-primary" ng-click="modalIngreso()" style="margin-bottom:-30px;margin-left:15px;"><i class="glyphicon glyphicon-plus"></i></button>
+	<div id="tablaIngresos" class="row" style="clear:both">
+	<small>
+	<table class="table table-striped table-bordered tablaContabilidad">
+		<thead>
+	        <tr style="background-color: #333333; color: white">
+	            <th>Tipo</th>
+	            <th>Fecha</th>
+	            <th>Descripcion</th>
+	            <th>Nº Ingreso</th>
+	            <th>Cantidad</th>
+	            <th>IVA</th>
+	        </tr>
+        </thead>
+        <tbody>
+        	<tr ng-repeat="ingreso in ingresos">
+        		<td>{{ingreso.tipo.toUpperCase()}}</td>
+        		<td>{{fechaFormat(ingreso.fecha)}}</td>
+        		<td>{{ingreso.descripcion}}</td>
+        		<td>{{ingreso.numeroFactura}}</td>
+        		<td>{{ingreso.cantidad}}€</td>
+        		<td>{{ingreso.iva}}€</td>
+        		<!--<td><button class="btn btn-danger" ng-click="deleteIngreso(ingreso)"><i class="glyphicon glyphicon-trash"></i></button></td>-->
+        	</tr>
+        </tbody>
+    </table>
+    </small>
+	</div>
+	<!--FIN INGRESOS-->
+
+	<!--
+	GASTOS
+	-->
+	<h3 style="float:left;margin-bottom:10px;">GASTOS</h3><button class="btn btn-primary" ng-click="modalGasto()" style="margin-bottom:-30px;margin-left:15px;"><i class="glyphicon glyphicon-plus"></i></button>
+	<div id="tablaGastos" class="row" style="clear:both">
+	<small>
+	<table class="table table-striped table-bordered tablaContabilidad">
+		<thead>
+	        <tr style="background-color: #333333; color: white">
+	            <th>Tipo</th>
+	            <th>Fecha</th>
+	            <th>Descripcion</th>
+	            <th>Nº Factura</th>
+	            <th>Cantidad</th>
+	            <th>IVA</th>
+	        </tr>
+        </thead>
+        <tbody>
+        	<tr ng-repeat="gasto in gastos">
+        		<td>{{gasto.tipo.toUpperCase()}}</td>
+        		<td>{{fechaFormat(gasto.fecha)}}</td>
+        		<td>{{gasto.descripcion}}</td>
+        		<td>{{gasto.numeroFactura}}</td>
+        		<td>{{gasto.cantidad}}€</td>
+        		<td>{{gasto.iva}}€</td>
+        		<!--<td><button class="btn btn-danger" ng-click="deleteGasto(gasto)"><i class="glyphicon glyphicon-trash"></i></button></td>-->
+        	</tr>
+        </tbody>
+    </table>
+    </small>
+	</div>
+	<!--FIN GASTOS-->
+
+	<!--
+	TOTAL
+	-->
+	<div id="totalDiv" style="margin-bottom:50px;">
+		<h3>TOTAL</h3>
+		<h3 id="totalEtiq" ng-show="totales.length != 0" style="width:100%;margin-right:10px;margin-bottom:50px;">{{total.toFixed(2)}}</h3>
+	</div>
+	<!--FIN TOTAL-->
+
+	<!--
+	CONSULTA IVA
+	-->
+	<div id="ivaDiv">
+		<h3>Informe IVA</h3>
+		<div class="col-xs-6" id="startDiv">
+			<label for="startDate" class="label label-success">Fecha inicio</label>
+			<div class="input-group date" data-provide="datepicker">
+			    <input type="text" class="datepicker form-control" id="startDate" ng-model="startDate">
+			    <div class="input-group-addon">
+			        <span class="glyphicon glyphicon-th"></span>
+			    </div>
+			</div>
+		</div>
+		
+		<div class="col-xs-6" id="endDiv">
+			<label for="endDate" class="label label-success">Fecha fin</label>
+			<div class="input-group date" data-provide="datepicker">
+			    <input type="text" class="datepicker form-control" id="endDate" ng-model="endDate">
+			    <div class="input-group-addon">
+			        <span class="glyphicon glyphicon-th"></span>
+			    </div>
+			</div>
+		</div>
+		<button class="btn btn-primary" ng-click="cuentaIVA()" style="width:100%;margin-top:10px;margin-bottom:20px;">Cuenta IVA</button>
+	</div>
+	<div id="resultIva">
+		{{cuentaDeIva.iva.toFixed(2)}}
+		{{cuentaDeIva.ivaD.toFixed(2)}}
+	</div>
+	<!--FIN IVA-->
+
+	<!--
+	MODALS
+	-->
+
+	<!---------------------INGRESOS---------------------->
+	<script type="text/ng-template" id="ingresoTemplate.html">
+		<div class="panel-heading">
+	        <h1>Add Ingreso</h1>
+	    </div>
+	    <small>
+	    <form id="anadirIngreso" name="anadirIngreso" class="form-group" ng-submit="addIngreso(ingreso,socio)" novalidate>
+	    	<div class="panel-body">
+	    	<!--TIPO-->
+	    	<label for="tipo" class="label label-default">Tipo Ingreso: </label>
+	    	<select id="tipo" name="tipo" ng-model="ingreso.tipo" class="form-control" ng-required="true">
+	    		<option value="" selected disabled="">Selecciona</option>
+	    		<option ng-repeat="tipo in tiposIngreso" value="{{tipo}}">{{tipo.toUpperCase()}}</option>
+	    	</select>
+	    	</div>
+
+	    	<!--SOCIO-->
+	    	<div ng-if="ingreso.tipo == 'cuota'">
+	    		<label for="numeroSocio" class="label label-default">Nº Socio: </label>
+				<input list="socios" name="socio" ng-model="ingreso.socio" class="form-control" ng-required="true">
+				<datalist id="socios">
+					<option ng-repeat="socio in socios" value="{{socio.numero}}">{{socio.numero}}</option>
+				</datalist>
+	    	</div>
+
+	    	<!--Descripcion-->
+	    	<div ng-show="ingreso.tipo && ingreso.tipo != 'cuota'">
+	    		<label for="descripcion" class="label label-default">Descripcion: </label>
+	    		<textarea class="form-control" ng-model="ingreso.descripcion" style="resize:none"></textarea>
+	    	</div>
+	    	
+	    	<!--Numero factura-->
+	    	<div ng-show="ingreso.tipo && ingreso.tipo != 'cuota'">
+	    		<label for="numero" class="label label-default">Nº Ingreso: </label>
+	    		<input type="text" name="numero" id="numero" ng-model="ingreso.numeroFactura" class="form-control">
+	    	</div>
+
+	    	<!--Cantidad-->
+	    	<div ng-show="ingreso.tipo">
+	    		<label for="cantidad" class="label label-default">Cantidad: </label>
+	    		<input type="number" name="cantidad" id="cantidad" ng-model="ingreso.cantidad" ng-required="true" class="form-control">
+	    	</div>
+
+	    	<!--Retencion-->
+	    	<div ng-if="ingreso.tipo && ingreso.tipo == 'aportacion'">
+	    		<label for="retencion" class="label label-default">% retencion: </label>
+	    			<input type="number" name="retencion" id="retencion" ng-model="ingreso.retencion" ng-required="true" class="form-control">
+	    	</div>
+	    	
+
+	    	<div class="panel-footer">
+	            <button class="btn btn-primary" ng-disabled="anadirIngreso.$invalid">Crear</button>
+	            <button class="btn btn-primary" ng-click="cancelarModal()">Cancelar</button>
+	        </div>
+	    </form>
+	    </small>
+	</script>
+	<!---------------------FIN INGRESOS---------------------->
+
+	<!---------------------GASTOS---------------------->
+	<script type="text/ng-template" id="gastoTemplate.html">
+		<div class="panel-heading">
+	        <h1>Add Gasto</h1>
+	    </div>
+	    <small>
+	    <form id="anadirGasto" name="anadirGasto" class="form-group" ng-submit="addGasto(gasto)" novalidate>
+	    	<div class="panel-body">
+	    	<!--TIPO-->
+	    	<label for="tipo" class="label label-default">Tipo Gasto: </label>
+	    	<select id="tipo" name="tipo" ng-model="gasto.tipo" class="form-control" ng-required="true">
+	    		<option value="" selected disabled="">Selecciona</option>
+	    		<option ng-repeat="tipo in tiposGasto" value="{{tipo}}">{{tipo.toUpperCase()}}</option>
+	    	</select>
+	    	</div>
+
+	    	<!--Descripcion-->
+	    	<div ng-show="gasto.tipo">
+	    		<label for="descripcion" class="label label-default">Descripcion: </label>
+	    		<textarea class="form-control" ng-model="gasto.descripcion" style="resize:none"></textarea>
+	    	</div>
+	    	
+	    	<!--Numero factura-->
+	    	<div ng-show="gasto.tipo && gasto.tipo == 'factura'">
+	    		<label for="numero" class="label label-default">Nº Factura: </label>
+	    		<input type="text" name="numero" id="numero" ng-model="gasto.numeroFactura" class="form-control">
+	    	</div>
+
+	    	<!--Cantidad-->
+	    	<div ng-show="gasto.tipo">
+	    		<label for="cantidad" class="label label-default">Cantidad: </label>
+	    		<input type="number" name="cantidad" id="cantidad" ng-model="gasto.cantidad" ng-required="true" class="form-control">
+	    	</div>
+
+	    	<!--iva-->
+	    	<div ng-if="gasto.tipo && gasto.tipo == 'factura'">
+	    		<label for="iva" class="label label-default">IVA % (para desgravar): </label>
+	    			<input type="number" name="iva" id="iva" ng-model="gasto.iva" ng-required="true" class="form-control">
+	    	</div>
+	    	
+
+	    	<div class="panel-footer">
+	            <button class="btn btn-primary" ng-disabled="anadirGasto.$invalid">Crear</button>
+	            <button class="btn btn-primary" ng-click="cancelarModal()">Cancelar</button>
+	        </div>
+	    </form>
+	    </small>
+	</script>
+	<!---------------------FIN GASTOS---------------------->
+
+	<!--
+	FIN MODALS
+	-->
 </section>

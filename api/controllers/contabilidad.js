@@ -8,8 +8,9 @@ var mongoose = require('mongoose'),
 	User = mongoose.model('User'),
 	Ingreso = mongoose.model('Ingreso'),
 	Gasto = mongoose.model('Gasto'),
-	Total = mongoose.model('Total');
-
+	Total = mongoose.model('Total'),
+	Ticket = mongoose.model('Ticket');
+//mongoose.set('debug',true)
 var Q = require('q');
 
 //log
@@ -113,7 +114,7 @@ exports.addCuota = function (req,res) {
 =            Ingresos            =
 ================================*/
 exports.listIngresos = function (req,res) {
-	Ingreso.find().sort('fecha').exec(function (err,ingresos) {
+	Ingreso.find().sort('-fecha').exec(function (err,ingresos) {
 		if (err) {
 			logger.error("Error buscando ingresos")
 			return res
@@ -128,51 +129,171 @@ exports.listIngresos = function (req,res) {
 }
 
 exports.addIngreso = function (req,res) {
-	//comprobar tipo
+	var promises = [];
+	var totalObj = {};
+	var socioObj = {};
+	if (req.body.ingreso.tipo != 'cuota' && req.body.ingreso.tipo != 'aportacion' && req.body.ingreso.tipo != 'otros') {
+		return res
+			.status(400)
+			.send("El tipo no es el correcto")
+	}
 	if (req.body == '' || req.body == undefined) {
 		return res
 			.status(400)
 			.send("Faltan parametros")
 	}
-	var ingreso = new Ingreso(req.body);
+	var ingreso = new Ingreso(req.body.ingreso);
+	ingreso.fecha = Date.now();
 
-	ingreso.save(function (err) {
+	var prom = ingreso.save(function (err) {
 		if (err) {
 			logger.error("Error guardando ingreso")
 			return res
 				.status(500)
 				.send("Error guardando ingreso "+err)
-		}else{
-			return res
-				.status(200)
-				.send(ingreso)
 		}
+	})//ingreso save
+	promises.push(prom);
+
+	var prom2 = Total.findOne().sort({fecha: -1}).exec(function (err,total) {
+		if (err) {
+			logger.error("Error buscando total")
+			return res
+				.status(500)
+				.send("Error buscando total "+err)
+		}else{
+			if (!total) {
+				logger.error("No hay totales")
+				return res
+					.status(500)
+					.send("No hay totales. Ingresar total en config ")
+			}else{
+				totalObj = total 
+			}
+		}
+	})//find total
+	promises.push(prom2)
+
+	if (req.body.socio != undefined) {
+		var prom3 = User.findOne({numero:req.body.socio},function (err,socio) {
+			if (err) {
+				logger.error("Error buscando socio para reducir cuota")
+				return res
+					.status(500)
+					.send("Error buscando socio para reducir cuota "+err)
+			}else{
+				socioObj = socio;
+			}
+		})
+	}
+	promises.push(prom3)
+
+	Q.all(promises).then(function () {
+		var sumTotal = totalObj.cantidad + ingreso.cantidad;
+		var newTotal = new Total({'cantidad':sumTotal,'fecha':Date.now()})
+		newTotal.save(function (err) {
+			if (err) {
+				logger.error("Error guardando total")
+				return res
+					.status(500)
+					.send("Error guardando total "+err)
+			}else{
+				if (req.body.socio != undefined) {
+					var cuotaT = socioObj.cuota - (ingreso.cantidad + ingreso.iva);
+					socioObj.cuota = cuotaT;
+					socioObj.save(function (err) {
+						if (err) {
+							logger.error("Error actualizando cuota socio")
+							return res
+								.status(500)
+								.send("Error actualizando cuota socio "+err)
+						}else{
+							logger.info("Guardado ingreso "+ingreso.cantidad+"€ y sumado en total")
+							return res
+								.status(200)
+								.send(ingreso)
+						}
+					})
+				}else{
+					logger.info("Guardado ingreso "+ingreso.cantidad+"€ y sumado en total")
+					return res
+						.status(200)
+						.send(ingreso)
+				}
+			}
+		})
+	}, function (err) {
+		logger.error("Error guardando ingreso o buscando total")
+		return res
+			.status(500)
+			.send("Error guardando ingreso o buscando total "+err)
 	})
-}
+}//add ingreso
 
-exports.deleteIngreso = function (req,res) {
+/*exports.deleteIngreso = function (req,res) {
 	var ingreso = req.ingreso
+	var promises = [];
+	var totalObj = {};
 
-	ingreso.remove(function (err) {
+	var prom2 = Total.findOne().sort({fecha: -1}).exec(function (err,total) {
+		if (err) {
+			logger.error("Error buscando total")
+			return res
+				.status(500)
+				.send("Error buscando total "+err)
+		}else{
+			if (!total) {
+				logger.error("No hay totales")
+				return res
+					.status(500)
+					.send("No hay totales. Ingresar total en config ")
+			}else{
+				totalObj = total 
+			}
+		}
+	})//find total
+	promises.push(prom2)
+
+	var prom = ingreso.remove(function (err) {
 		if (err) {
 			logger.error("Error borrando ingreso")
 			return res
 				.status(500)
 				.send("Error borrando ingreso "+err)
-		}else{
-			return res
-				.status(200)
-				.send(ingreso)
 		}
+	})//delete ingreso
+	promises.push(prom);
+
+	Q.all(promises).then(function () {
+		var sumTotal = totalObj.cantidad - ingreso.cantidad;
+		var newTotal = new Total({'cantidad':sumTotal})
+		newTotal.save(function (err) {
+			if (err) {
+				logger.error("Error guardando total")
+				return res
+					.status(500)
+					.send("Error guardando total "+err)
+			}else{
+				return res
+					.status(200)
+					.send(ingreso)
+			}
+		})
+	}, function (err) {
+		logger.error("Error borrando ingreso o buscando total")
+		return res
+			.status(500)
+			.send("Error borrando ingreso o buscando total "+err)
 	})
-}
+
+}*/
 /*=====  End of Ingresos  ======*/
 
 /*================================
 =            Gastos            =
 ================================*/
 exports.listGastos = function (req,res) {
-	Gasto.find().sort('fecha').exec(function (err,gastos) {
+	Gasto.find().sort('-fecha').exec(function (err,gastos) {
 		if (err) {
 			logger.error("Error buscando gastos")
 			return res
@@ -187,29 +308,83 @@ exports.listGastos = function (req,res) {
 }
 
 exports.addGasto = function (req,res) {
-	//comprobar tipo
+	var promises = []
+	var totalObj = {}
+	if (req.body.tipo != 'factura' && req.body.tipo != 'nomina' && req.body.tipo != 'otros') {
+		return res
+			.status(400)
+			.send("El tipo no es el correcto")
+	}
 	if (req.body == '' || req.body == undefined) {
 		return res
 			.status(400)
 			.send("Faltan parametros")
 	}
 	var gasto = new Gasto(req.body);
+	gasto.fecha = Date.now()
 
-	gasto.save(function (err) {
+	var prom = gasto.save(function (err) {
 		if (err) {
 			logger.error("Error guardando gasto")
 			return res
 				.status(500)
 				.send("Error guardando gasto "+err)
-		}else{
-			return res
-				.status(200)
-				.send(gasto)
 		}
+	})//save gasto
+	promises.push(prom);
+
+	var prom2 = Total.findOne().sort({fecha: -1}).exec(function (err,total) {
+		if (err) {
+			logger.error("Error buscando total")
+			return res
+				.status(500)
+				.send("Error buscando total "+err)
+		}else{
+			if (!total) {
+				logger.error("No hay totales")
+				return res
+					.status(500)
+					.send("No hay totales. Ingresar total en config ")
+			}else{
+				totalObj = total 
+			}
+		}
+	})//find total
+	promises.push(prom2)
+
+	Q.all(promises).then(function () {
+		if (gasto.tipo == 'factura') {
+			var iva = ((parseInt(gasto.iva) / 100) + 1);
+			var sumTotal = totalObj.cantidad - (gasto.cantidad * iva)
+		}else{
+			var sumTotal = totalObj.cantidad - gasto.cantidad;
+		}
+		
+		var newTotal = new Total({'cantidad':sumTotal,'fecha':Date.now()})
+		newTotal.save(function (err) {
+			if (err) {
+				logger.error("Error guardando total")
+				return res
+					.status(500)
+					.send("Error guardando total "+err)
+			}else{
+				logger.info("Guardado gasto "+gasto.cantidad+"€ y sumado en total")
+				return res
+					.status(200)
+					.send(gasto)
+
+			}
+		})
+	}, function (err) {
+		logger.error("Error guardando gasto o buscando total")
+		return res
+			.status(500)
+			.send("Error guardando gasto o buscando total "+err)
 	})
+
 }
 
-exports.deleteGasto = function (req,res) {
+/*exports.deleteGasto = function (req,res) {
 	var gasto = req.gasto
 
 	gasto.remove(function (err) {
@@ -224,7 +399,7 @@ exports.deleteGasto = function (req,res) {
 				.send(gasto)
 		}
 	})
-}
+}*/
 /*=====  End of Gastos  ======*/
 
 /*=============================
@@ -252,6 +427,7 @@ exports.addTotal = function (req,res) {
 			.send("Faltan parametros")
 	}
 	var total = new Total(req.body);
+	total.fecha = Date.now()
 
 	total.save(function (err) {
 		if (err) {
@@ -268,6 +444,66 @@ exports.addTotal = function (req,res) {
 }
 /*=====  End of Total  ======*/
 
+exports.cuentaIva = function (req,res) {
+	if (!req.body.startDate || !req.body.endDate) {
+		return res
+			.status(400)
+			.send("Faltan parametros")
+	}
+
+	var startArray = req.body.startDate.split('/');
+	var startDate = new Date(startArray[2],(parseInt(startArray[1])-1),startArray[0])
+
+	var endArray = req.body.endDate.split('/');
+	var endDate = new Date(endArray[2],(parseInt(endArray[1])-1),endArray[0]);
+
+	var cuentaIva = 0;
+	var ivaDevolver = 0;
+
+	var promises = [];
+	var dispensas = [];
+	var facturas = [];
+
+	var prom = Ticket.find({fecha:{$gte: startDate, $lte: endDate}}, function (err,data) {
+		if (err) {
+			return res
+				.status(400)
+				.send("Error buscando tickets para cuenta iva "+err)
+		}else{
+			dispensas = data;
+		}
+	})
+	promises.push(prom)
+
+	var prom2 = Gasto.find({fecha:{$gte:startDate, $lte:endDate}},function (err,data) {
+		if (err) {
+			return res
+				.status(400)
+				.send("Error buscando gastos para cuenta iva "+err)
+		}else{
+			facturas = data;
+		}
+	})
+	promises.push(prom2)
+
+	Q.all(promises).then(function () {
+		for (var i = 0; i < dispensas.length; i++) {
+			cuentaIva += dispensas[i].iva;
+		}
+		for (var i = 0; i < facturas.length; i++) {
+			ivaDevolver += parseFloat(facturas[i].iva)
+			console.log(ivaDevolver)
+		}
+		return res
+			.status(200)
+			.send({'iva':cuentaIva, 'ivaD':ivaDevolver})
+	}, function (err) {
+		logger.error("Error buscando gasto o ticket cuenta iva")
+		return res
+			.status(500)
+			.send("Error buscando gasto o ticket cuenta iva "+err)
+	})
+}
 
 /**
  *

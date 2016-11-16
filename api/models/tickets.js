@@ -8,7 +8,7 @@ var subSchema = mongoose.Schema({
 })
 
 var ticketSchema = new Schema({
-	fecha:{type:Date, default:Date.now()},
+	fecha:{type:Date},
 	usuario:{type:Schema.ObjectId,ref:'User',required:'Obligatorio numero de usuario'},
 	socio:{type:Schema.ObjectId,ref:'User',required:'Obligatorio numero de socio'},
 	dispensa:[subSchema],

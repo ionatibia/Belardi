@@ -28,7 +28,7 @@ var userSchema = new Schema({
 	correo:{type:String,required: 'Please fill in a correo',validate: [validateLocalStrategyEmail, 'Please fill a valid email address'], unique:'Email already exists', lowercase: true},
 	telefono:{type:Number},
 	password:{type:String},
-	fecha_alta:{type:Date, default:Date.now()},
+	fecha_alta:{type:Date},
 	fecha_baja:{type:Date, default:null},
 	consumo_mensual:{type:Number,default:0},
 	cuota:{type:Number,default:0}

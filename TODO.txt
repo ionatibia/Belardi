@@ -1,17 +1,15 @@
 *consumo mensual (ir rellenando desde dispensa y vaciar todos los 1 de mes)
 *crossfilter con filtros para filtrar los datos para los totales
 *añadir totales cuotas en el informe trimestral
-
+*gastos con iva solo facturas (en cliente meter el total(conIVA) y el % iva, calcular y enviar a la api)
+*falla ivaDevolver desde api
 
 *redondear precios en cliente
 
-*config
-	-cantidad total si no hay registros en la bd 
-
 *Contabilidad
 	-Ingresos:
-		>schema con fecha e ingreso(cantidad, descripcion, ambito y si es dispensa controlar que se)
-		>-agregar/list/buscar por fecha api
+		>schema con fecha e ingreso(cantidad, descripcion, ambito y si es dispensa controlar que se)*******OK
+		>-agregar/list/buscar por fecha api****************************************************************OK
 		>tipos ingreso:
 			.cuotas (subschema para socio)(añadir cuota anual)
 			.aportaciones
@@ -19,12 +17,12 @@
 		>Pagina contabilidad
 			.total
 			.tabla gastos
-			.tabla ingresos
+			.tabla ingresos********************************************************************************OK
 			.IVA consulta por fechas
 	-Total:
-		>schema con fecha, cantidad total
+		>schema con fecha, cantidad total******************************************************************OK
 	-Gastos:
-		>igual que ingresos
+		>igual que ingresos********************************************************************************OK
 		>tipos gastos
 			.factura
 			.nominas
@@ -37,16 +35,13 @@
 		.cada registro dia completo "cuotas €, dispensa €, fecha"
 	-eusfac
 		.ver que piden y sacar los datos con form por fechas
-	-tickets pdf con registro de tickets con/sin firma según fechas
+	-tickets pdf con registro de tickets con/sin firma según fechas**************************************OK
 	
 
 *toLowerCase() para los correos (comprobar en BD)
 
 *Filter in  pagination http://www.dispatchertimer.com/angularjs/pagination-with-filtering-using-angularjs/
 	-pagination: http://plnkr.co/edit/81fPZxpnOQnIHQgp957q?p=preview
-
-*DISPENSA:
-	-select inputs editables (solo socio)
 
 *Comprobar funcionamiento en Dispositivo
 

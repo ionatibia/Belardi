@@ -8,7 +8,7 @@ var variety = new Schema({
 	descripcion:{type:String},
 	tipo:{type:Schema.ObjectId,ref:'Type', required: 'Falta el tipo'},
 	subtipo:{type:Schema.ObjectId,ref:'Subtype', required: 'Falta el subtipo'},
-	fecha_alta:{type:Date, default:Date.now()}
+	fecha_alta:{type:Date}
 });
 
 module.exports = mongoose.model('Variety', variety);

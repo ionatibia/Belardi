@@ -1,5 +1,5 @@
 var app = angular.module("app");
-app.controller('ConfigCtrl', ['$scope','$location','Flash','$window','ConfigServ','ngDialog','config','SociosServ','IngresosServ', function ($scope,$location,Flash,$window, ConfigServ,ngDialog,config,SociosServ,IngresosServ) {
+app.controller('ConfigCtrl', ['$scope','$location','Flash','$window','ConfigServ','ngDialog','config','SociosServ','ContabilidadServ', function ($scope,$location,Flash,$window, ConfigServ,ngDialog,config,SociosServ,ContabilidadServ) {
 	if (!$scope.checkLogin()){
 		$location.path("/");
 	}else{
@@ -40,6 +40,17 @@ app.controller('ConfigCtrl', ['$scope','$location','Flash','$window','ConfigServ
 		ConfigServ.getAll('variety').then(function (response) {
 			$scope.variedades = response.data;
 		},function (err) {
+			var message = '<strong>ERROR!!!</strong> '+JSON.stringify(err.data);
+			Flash.create('danger', message);
+			console.log(JSON.stringify(err))
+		})
+
+		ContabilidadServ.getTotal().then(function (response) {
+			$scope.totales = response.data;
+			if ($scope.totales.length != 0) {
+				$scope.total = $scope.totales[$scope.totales.length-1].cantidad
+			}
+		}, function (err) {
 			var message = '<strong>ERROR!!!</strong> '+JSON.stringify(err.data);
 			Flash.create('danger', message);
 			console.log(JSON.stringify(err))
@@ -297,7 +308,7 @@ app.controller('ConfigCtrl', ['$scope','$location','Flash','$window','ConfigServ
 				user = $scope.socios[s]
 			}
 		}
-		IngresosServ.anadirCuotaU(user,cuota).then(function (response) {
+		ContabilidadServ.anadirCuotaU(user,cuota).then(function (response) {
 			var message = '<strong>HECHO!!!</strong> añadida cuota '+cuota+'€ al socio '+response.data.numero;
 			Flash.create('success', message);
 		}, function (err) {
@@ -310,7 +321,7 @@ app.controller('ConfigCtrl', ['$scope','$location','Flash','$window','ConfigServ
 		for(var s in $scope.socios){
 			socios.push($scope.socios[s]._id)
 		}
-		IngresosServ.anadirCuotaAll(cuota,socios).then(function (response) {
+		ContabilidadServ.anadirCuotaAll(cuota,socios).then(function (response) {
 			var message = '<strong>HECHO!!!</strong> '+response.data;
 			Flash.create('success', message);
 		}, function (err) {
@@ -321,5 +332,23 @@ app.controller('ConfigCtrl', ['$scope','$location','Flash','$window','ConfigServ
 	}
 	
 	/*=====  End of CUOTAS  ======*/
+
+	/*=============================
+	=            TOTAL            =
+	=============================*/
+	$scope.anadirTotal = function (total) {
+		var obj = {'cantidad':total}
+		ContabilidadServ.addTotal(obj).then(function (response) {
+			var message = '<strong>HECHO!!!</strong> configurado total '+response.data.cantidad+'€';
+			Flash.create('success', message);
+			$scope.totales.push(response.data)
+		}, function (err) {
+			var message = '<strong>ERROR!!!</strong> '+JSON.stringify(err.data);
+			Flash.create('danger', message);
+			console.log(err)
+		})
+	}
+	/*=====  End of TOTAL  ======*/
+	
 	
 }])

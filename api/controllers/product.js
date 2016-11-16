@@ -32,6 +32,7 @@ var loggerAjuste = new (winston.Logger)({
 exports.create = function (req, res) {
 
 	var product = new Product(req.body)
+	product.fecha_alta = Date.now()
 	product.stock = [{}]
 
 	product.save(function (err) {

@@ -76,9 +76,20 @@ h1{
 	font-weight: bold;
 }
 #anadirCuota{
-	height: 200px;
+	height: 250px;
 	margin-bottom: 50px;
 	background-image: url("../img/papel.jpg");
+	box-shadow: 10px 10px 20px black;
+}
+#totalDiv > input{
+	margin-bottom: 20px;
+}
+#totalDiv > #totalEtiq{
+	border:2px solid black;
+	border-radius: 10px;
+	text-align: center;
+	background-color: white;
+	padding: 5px;
 }
 
 /*INFORMES*/
@@ -104,6 +115,11 @@ h1{
 	color:green;
 }
 
-
+/*CONTABILIDAD*/
+#tablaIngresos,#tablaGastos{
+	height: 300px;
+	overflow-y: scroll;
+	margin-bottom: 20px;
+}
 
 

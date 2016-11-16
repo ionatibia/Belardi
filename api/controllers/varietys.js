@@ -24,6 +24,7 @@ var logger = new (winston.Logger)({
  */
 exports.create = function (req, res) {
 	var variety = new Variety(req.body)
+	variety.fecha_alta = Date.now()
 
 	variety.save(function (err) {
 		if (err) {

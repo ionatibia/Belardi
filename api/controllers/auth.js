@@ -37,6 +37,7 @@ exports.emailSignup = function(req, res) {
 
     var user = new User(req.body);
     user.password = pass;
+    user.fecha_alta = Date.now();
 
     user.save(function(err){
         if (err) {

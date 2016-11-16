@@ -4,7 +4,7 @@ var validator = require('validator');
 
 
 var totalSchema = new Schema({
-	fecha:{type:Date,default:Date.now()},
+	fecha:{type:Date},
 	cantidad:{type:Number, required: 'Falta la cantidad'}
 });
 

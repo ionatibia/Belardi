@@ -24,6 +24,7 @@ var logger = new (winston.Logger)({
  */
 exports.create = function (req, res) {
 	var type = new Type(req.body)
+	type.fecha_alta = Date.now();
 
 	type.save(function (err) {
 		if (err) {

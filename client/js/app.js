@@ -50,7 +50,7 @@ angular.module('app',["ngRoute","ngFlash","ngDialog"])
 	    	templateUrl: '../views/contabilidad/contabilidad.html',
 	    	controller: 'ContabilidadCtrl'
 	    })
-	    .when('/contabilidad/addIngreso', {
+	   /* .when('/contabilidad/addIngreso', {
 	    	templateUrl: '../views/contabilidad/ingresos/addIngreso.html',
 	    	controller: 'IngresosCtrl'
 	    })
@@ -65,7 +65,7 @@ angular.module('app',["ngRoute","ngFlash","ngDialog"])
 	    .when('/contabilidad/updateGasto', {
 	    	templateUrl: '../views/contabilidad/gastos/updateGasto.html',
 	    	controller: 'GastosCtrl'
-	    })
+	    })*/
 	    .when('/config', {
 	    	templateUrl: '../views/config.html',
 	    	controller: 'ConfigCtrl'
@@ -136,7 +136,10 @@ angular.module('app',["ngRoute","ngFlash","ngDialog"])
 	    apiUrl: 'http://localhost:8000',
 	    tiposUsuarios: ["Normal","Terapeutico"],
 	    //ambitos: [{'nombre':"Barra"},{'nombre':"Dispensa"},{'nombre':'Otros'}],
-	    descuentoTeraupeutico: 20
+	    descuentoTeraupeutico: 20,
+	    tiposIngreso:['cuota','aportacion','otros'],
+	    tiposGasto:['factura','nomina','otros'],
+	    ivaCuotas:21
 	})
 	.service("progress", ["$rootScope", "ngProgress", function($rootScope, ngProgress){
 		$rootScope.$on("event:endProgress", function(){

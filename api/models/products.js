@@ -18,7 +18,7 @@ var productSchema = new Schema({
 	precio:{type:Number, required: 'Falta el precio'},
 	iva:{type:Number,required:'Falta el IVA'},
 	stock:[subSchema],
-	fecha_alta:{type:Date, default:Date.now()},
+	fecha_alta:{type:Date},
 	baja:{type:Boolean,default:false}
 });
 

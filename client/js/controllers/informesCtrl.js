@@ -32,9 +32,16 @@ app.controller('InformesCtrl', ['$scope','$location','Flash','InformesSrv','conf
 	$scope.crearPdf = function (firm) {
 		var start = $('#startDate').val()
 		var end = $('#endDate').val()
+		var startArray = start.split('/');
+		var startDate = new Date(startArray[2],(parseInt(startArray[1])-1),startArray[0]);
+		var endArray = end.split('/');
+		var endDate = new Date(endArray[2],(parseInt(endArray[1])-1),endArray[0]);
 		if (end == '' || end == undefined || end == null || start == '' || start == null || start == undefined) {
 			var message = '<strong>INFO!!!</strong> falta alguna fecha';
 		    Flash.create('info', message);
+		}else if(startDate > endDate){
+			var message = '<strong>ERROR!!!</strong> la fecha de inicio es mayor que la de fin';
+		    Flash.create('danger', message);
 		}else{
 			var obj = {'startDate':start,'endDate':end}
 			InformesSrv.getTicketReport(obj).then(function (response) {

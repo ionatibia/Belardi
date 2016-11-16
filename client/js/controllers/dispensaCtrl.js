@@ -118,7 +118,8 @@ app.controller('DispensaCtrl', ['$scope','$location','ProductosServ','SociosServ
 					precioBruto = precioBruto - ((precioBruto * config.descuentoTeraupeutico) / 100)
 				}
 			}
-			var precioNeto = precioBruto / (($scope.listaProductos[p].iva/100)+1)
+			var iva = (precioBruto * $scope.listaProductos[p].iva) / 100;
+			var precioNeto = precioBruto - iva;
 			//var precioNetoFixed = parseFloat(precioNeto.toFixed(2))//Math.round(precioNeto * 100) / 100//
 			cuenta += precioNeto
 		}
@@ -135,8 +136,7 @@ app.controller('DispensaCtrl', ['$scope','$location','ProductosServ','SociosServ
 					precioBruto = precioBruto - ((precioBruto * config.descuentoTeraupeutico) / 100)
 				}
 			}
-			var precioNeto = precioBruto / (($scope.listaProductos[p].iva/100)+1);
-			var iva = precioBruto - precioNeto
+			var iva = (precioBruto * $scope.listaProductos[p].iva) / 100;
 			cuentaIva += iva
 		}
 		//var cuentaRedondeada = cuentaIva.toFixed(2)//Math.round(cuentaIva * 100) / 100

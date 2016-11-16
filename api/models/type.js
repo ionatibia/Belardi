@@ -7,7 +7,7 @@ var typeSchema = new Schema({
 	nombre:{type:String,required: 'Falta el nombre', unique:'Tipo repetido'},
 	descripcion:{type:String},
 	//ambito:{type:String, required: 'Falta el ámbito'},
-	fecha_alta:{type:Date, default:Date.now()}
+	fecha_alta:{type:Date}
 });
 
 module.exports = mongoose.model('Type', typeSchema);
