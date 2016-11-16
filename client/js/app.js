@@ -143,12 +143,10 @@ angular.module('app',["ngRoute","ngFlash","ngDialog"])
 	})
 	.service("progress", ["$rootScope", "ngProgress", function($rootScope, ngProgress){
 		$rootScope.$on("event:endProgress", function(){
-			console.log("End progress");
 			ngProgress.complete();
 			// ngProgress.reset();
 		});
 		$rootScope.$on("event:startProgress", function(){
-			console.log("Start progress");
 			ngProgress.reset();
 			ngProgress.start();
 		})

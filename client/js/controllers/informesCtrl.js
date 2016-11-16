@@ -58,7 +58,7 @@ app.controller('InformesCtrl', ['$scope','$location','Flash','InformesSrv','conf
 										headerRows: 1,
 										widths: [ 'auto', 'auto', '*', 'auto','auto','auto' ],
 										body: [
-											[ {text:'Fecha',style:'title',fillColor:'green'}, {text:'Socio',style:'title',fillColor:'green'}, {text:'Dispensa',style:'title',fillColor:'green'},{text:'Usuario',style:'title',fillColor:'green'}, {text:'Total',style:'title',fillColor:'green'}, {text:'Firma',style:'title',fillColor:'green'} ],
+											[ {text:'Fecha',style:'titles',fillColor:'green'}, {text:'Socio',style:'titles',fillColor:'green'}, {text:'Dispensa',style:'titles',fillColor:'green'},{text:'Usuario',style:'titles',fillColor:'green'}, {text:'Total',style:'titles',fillColor:'green'}, {text:'Firma',style:'titles',fillColor:'green'} ],
 										]
 									}
 								}
@@ -107,6 +107,12 @@ app.controller('InformesCtrl', ['$scope','$location','Flash','InformesSrv','conf
 
 					var count = 0;
 					for (var i = 0; i < response.data.length; i++) {
+						var dispensa = '';
+						for(var d in response.data[i].dispensa){
+							console.log(response.data[i].dispensa[d].producto.nombre)
+							dispensa += response.data[i].dispensa[d].producto.nombre+"  Cantidad:"+response.data[i].dispensa[d].cantidad+"\n";
+						}
+						console.log(dispensa)
 						
 						var fecha = new Date(response.data[i].fecha).toLocaleString();
 						var array = fecha.split(' ');
@@ -114,12 +120,8 @@ app.controller('InformesCtrl', ['$scope','$location','Flash','InformesSrv','conf
 						var socio = response.data[i].socio.numero;
 						var usuario = response.data[i].usuario.numero;
 						var total = (response.data[i].neto + response.data[i].iva).toFixed(2);
-						var dispensa = '';
+						
 						var imagen = response.data[i].firmaUrl;
-
-						for(var d in response.data[i].dispensa){
-							dispensa += response.data[i].dispensa[d].producto.nombre+"  Cantidad:"+response.data[i].dispensa[d].cantidad+"\n";
-						}
 
 						if (firm) {
 							if (count%2 == 0) {
@@ -143,7 +145,6 @@ app.controller('InformesCtrl', ['$scope','$location','Flash','InformesSrv','conf
 			}, function (err) {
 				var message = '<strong>ERROR!!!</strong> '+JSON.stringify(err.data);
 		    	Flash.create('danger', message);
-				console.log(err.data)
 			})
 		}//else sin data
 	}
@@ -216,7 +217,6 @@ app.controller('InformesCtrl', ['$scope','$location','Flash','InformesSrv','conf
 			}, function (err) {
 				var message = '<strong>ERROR!!!</strong> '+JSON.stringify(err.data);
 		    	Flash.create('danger', message);
-				console.log(err.data)
 			})
 		}
 	}

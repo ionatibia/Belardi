@@ -7,51 +7,53 @@ app.controller('DispensaCtrl', ['$scope','$location','ProductosServ','SociosServ
 		//get all productos
 		ProductosServ.getAll().then(function (response) {
 			$scope.productos = response.data;
+			for (var i = 0; i < $scope.productos.length; i++) {
+				var stock = $scope.stock($scope.productos[i])
+				if (stock == 0) {
+					$scope.productos.splice($scope.productos.indexOf($scope.productos[i]),1)
+				}
+			}
+				
 		}, function (err) {
 			var message = '<strong>ERROR!!!</strong> '+JSON.stringify(err.data.message);
-		    Flash.create('danger', message);
-			console.log(JSON.stringify(err))
+		    Flash.create('danger', message)
 		});
 		//get all socios
 		SociosServ.getAll().then(function (response) {
 			$scope.socios = response.data;
 			for (var i = 0; i < $scope.socios.length; i++) {
 				if($scope.socios[i].numero == 0){
-					$scope.socios.splice($scope.socios[i],1)
+					$scope.socios.splice($scope.socios.indexOf($scope.socios[i]),1)
 				}
 				if ($scope.socios.length != 0) {
 					if(isNaN($scope.socios[i].numero)){
-						$scope.socios.splice($scope.socios[i],1)
+						$scope.socios.splice($scope.socios.indexOf($scope.socios[i]),1)
 					}
 				}
 			}
 		}, function (err) {
 			var message = '<strong>ERROR!!!</strong> '+JSON.stringify(err.data);
-		    Flash.create('danger', message);
-			console.log(JSON.stringify(err))
+		    Flash.create('danger', message)
 		});
 		ConfigServ.getAll('type').then(function (response) {
 			$scope.tipos = response.data;
 		}, function (err) {
 			var message = '<strong>ERROR!!!</strong> '+JSON.stringify(err.data);
-			Flash.create('danger', message);
-			console.log(JSON.stringify(err))
+			Flash.create('danger', message)
 		})
 
 		ConfigServ.getAll('subtype').then(function (response) {
 			$scope.subtipos = response.data;
 		},function (err) {
 			var message = '<strong>ERROR!!!</strong> '+JSON.stringify(err.data);
-			Flash.create('danger', message);
-			console.log(JSON.stringify(err))
+			Flash.create('danger', message)
 		})
 
 		ConfigServ.getAll('variety').then(function (response) {
 			$scope.variedades = response.data;
 		},function (err) {
 			var message = '<strong>ERROR!!!</strong> '+JSON.stringify(err.data);
-			Flash.create('danger', message);
-			console.log(JSON.stringify(err))
+			Flash.create('danger', message)
 		})
 
 		//$scope.ambitos = config.ambitos;
@@ -91,7 +93,6 @@ app.controller('DispensaCtrl', ['$scope','$location','ProductosServ','SociosServ
 			}, function (err) {
 				var message = '<strong>ERROR!!!</strong> '+JSON.stringify(err.data);
 			    Flash.create('danger', message);
-				console.log(JSON.stringify(err))
 			})
 			countProd = 0;
 			$scope.prodDispensados = false;
@@ -204,9 +205,7 @@ app.controller('DispensaCtrl', ['$scope','$location','ProductosServ','SociosServ
 				var e = event.originalEvent;
 				e.preventDefault();
 				pulsado = true;
-				console.log(this.offsetLeft)
 				movimientos.push([e.targetTouches[0].pageX - this.offsetLeft,e.targetTouches[0].pageY - this.offsetTop,false]);
-				console.log(movimientos)
 				repinta();
 			});
 

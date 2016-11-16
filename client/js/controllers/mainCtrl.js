@@ -9,7 +9,6 @@ app.controller('MainCtrl', ['$scope','$location','MainServ','Flash','$window', f
 		}, function (err) {
 			var message = '<strong>ERROR!!!</strong> '+JSON.stringify(err.data);
 		    Flash.create('danger', message);
-			console.log(JSON.stringify(err))
 		})
 	}
 }])

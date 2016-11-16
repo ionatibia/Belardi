@@ -104,10 +104,8 @@ exports.create = function (req, res) {
 		}else{
 			if (!total) {
 				logger.error("No hay totales")
-				return res
-					.status(500)
-					.send("No hay totales. Ingresar total en config ")
 			}else{
+
 				totalObj = total 
 			}
 		}
@@ -116,30 +114,37 @@ exports.create = function (req, res) {
 	
 
 	Q.all(promises).then(function (response) {
-		var ticket = new Ticket({'usuario':userObj,'socio':socioObj,'dispensa':productosTicket,'firmaUrl':img, 'neto':req.body.neto, 'iva':req.body.iva, 'fecha':Date.now()})
-		ticket.save(function (err) {
-			if (err) {
-				logger.error("Error guardando ticket de socio "+socioObj.dni+'. Usuario: '+userObj.dni+'. Fecha: '+ticket.fecha)
-				return res
-					.status(400)
-					.send("Error guardando ticket: "+err);
-			}else{
-				var sumTotal = totalObj.cantidad + req.body.neto;
-				var newTotal = new Total({'cantidad':sumTotal,'fecha':Date.now()})
-				newTotal.save(function (err) {
-					if (err) {
-						logger.error("Error guardando total")
-						return res
-							.status(500)
-							.send("Error guardando total "+err)
-					}
-				})
-				logger.info("Guardado ticket de socio "+socioObj.dni+'. Usuario: '+userObj.dni+'. Fecha: '+ticket.fecha)
-				return res
-					.status(200)
-					.send(ticket);
-			}
-		})
+		if (totalObj.cantidad) {
+			var ticket = new Ticket({'usuario':userObj,'socio':socioObj,'dispensa':productosTicket,'firmaUrl':img, 'neto':req.body.neto, 'iva':req.body.iva, 'fecha':Date.now()})
+			ticket.save(function (err) {
+				if (err) {
+					logger.error("Error guardando ticket de socio "+socioObj.dni+'. Usuario: '+userObj.dni+'. Fecha: '+ticket.fecha)
+					return res
+						.status(400)
+						.send("Error guardando ticket: "+err);
+				}else{
+					var sumTotal = totalObj.cantidad + req.body.neto;
+					var newTotal = new Total({'cantidad':sumTotal,'fecha':Date.now()})
+					newTotal.save(function (err) {
+						if (err) {
+							logger.error("Error guardando total")
+							return res
+								.status(500)
+								.send("Error guardando total "+err)
+						}
+					})
+					logger.info("Guardado ticket de socio "+socioObj.dni+'. Usuario: '+userObj.dni+'. Fecha: '+ticket.fecha)
+					return res
+						.status(200)
+						.send(ticket);
+				}
+			})
+		}else{
+			return res
+				.status(400)
+				.send("No hay totales. Definirlo en config")
+		}
+			
 	}, function (err) {
 		logger.error("Error al ejecutar las promises")
 		return res

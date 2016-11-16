@@ -18,7 +18,6 @@ app.controller('ConfigCtrl', ['$scope','$location','Flash','$window','ConfigServ
 		}, function (err) {
 			var message = '<strong>ERROR!!!</strong> '+JSON.stringify(err.data);
 			Flash.create('danger', message);
-			console.log(JSON.stringify(err))
 		})
 
 		ConfigServ.getAll('type').then(function (response) {
@@ -26,7 +25,6 @@ app.controller('ConfigCtrl', ['$scope','$location','Flash','$window','ConfigServ
 		}, function (err) {
 			var message = '<strong>ERROR!!!</strong> '+JSON.stringify(err.data);
 			Flash.create('danger', message);
-			console.log(JSON.stringify(err))
 		})
 
 		ConfigServ.getAll('subtype').then(function (response) {
@@ -34,7 +32,6 @@ app.controller('ConfigCtrl', ['$scope','$location','Flash','$window','ConfigServ
 		},function (err) {
 			var message = '<strong>ERROR!!!</strong> '+JSON.stringify(err.data);
 			Flash.create('danger', message);
-			console.log(JSON.stringify(err))
 		})
 
 		ConfigServ.getAll('variety').then(function (response) {
@@ -42,7 +39,6 @@ app.controller('ConfigCtrl', ['$scope','$location','Flash','$window','ConfigServ
 		},function (err) {
 			var message = '<strong>ERROR!!!</strong> '+JSON.stringify(err.data);
 			Flash.create('danger', message);
-			console.log(JSON.stringify(err))
 		})
 
 		ContabilidadServ.getTotal().then(function (response) {
@@ -53,7 +49,6 @@ app.controller('ConfigCtrl', ['$scope','$location','Flash','$window','ConfigServ
 		}, function (err) {
 			var message = '<strong>ERROR!!!</strong> '+JSON.stringify(err.data);
 			Flash.create('danger', message);
-			console.log(JSON.stringify(err))
 		})
 
 		//$scope.ambitos = config.ambitos;
@@ -149,9 +144,7 @@ app.controller('ConfigCtrl', ['$scope','$location','Flash','$window','ConfigServ
 				ConfigServ.delete('type',tipo).then(function (response) {
 					var message = '<strong>HECHO!!!</strong> el tipo se ha borrado correctamente';
 					Flash.create('success', message);
-					console.log(tipo)
 					$scope.tipos.splice($scope.tipos.indexOf(tipo),1)
-					console.log($scope.tipos)
 				}, function(err) {
 					var message = '<strong>ERROR!!!</strong> '+JSON.stringify(err.data);
 					Flash.create('danger', message);
@@ -200,7 +193,6 @@ app.controller('ConfigCtrl', ['$scope','$location','Flash','$window','ConfigServ
 	}
 
 	$scope.updateType = function (tipo) {
-		console.log(tipo)
 		ConfigServ.update('type',tipo).then(function (response){
 			var message = '<strong>HECHO!!!</strong> el tipo se ha modificado correctamente';
 			Flash.create('success', message);
@@ -321,14 +313,18 @@ app.controller('ConfigCtrl', ['$scope','$location','Flash','$window','ConfigServ
 		for(var s in $scope.socios){
 			socios.push($scope.socios[s]._id)
 		}
-		ContabilidadServ.anadirCuotaAll(cuota,socios).then(function (response) {
-			var message = '<strong>HECHO!!!</strong> '+response.data;
-			Flash.create('success', message);
-		}, function (err) {
-			var message = '<strong>ERROR!!!</strong> '+JSON.stringify(err.data);
+		if (socios.length == 0) {
+			var message = '<strong>ERROR!!!</strong> No hay socios para añadir cuota';
 			Flash.create('danger', message);
-			console.log(err)
-		})
+		}else{
+			ContabilidadServ.anadirCuotaAll(cuota,socios).then(function (response) {
+				var message = '<strong>HECHO!!!</strong> '+response.data;
+				Flash.create('success', message);
+			}, function (err) {
+				var message = '<strong>ERROR!!!</strong> '+JSON.stringify(err.data);
+				Flash.create('danger', message);
+			})
+		}
 	}
 	
 	/*=====  End of CUOTAS  ======*/
@@ -345,7 +341,6 @@ app.controller('ConfigCtrl', ['$scope','$location','Flash','$window','ConfigServ
 		}, function (err) {
 			var message = '<strong>ERROR!!!</strong> '+JSON.stringify(err.data);
 			Flash.create('danger', message);
-			console.log(err)
 		})
 	}
 	/*=====  End of TOTAL  ======*/

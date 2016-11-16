@@ -1,32 +1,10 @@
 *consumo mensual (ir rellenando desde dispensa y vaciar todos los 1 de mes)
 *crossfilter con filtros para filtrar los datos para los totales
 *añadir totales cuotas en el informe trimestral
-*gastos con iva solo facturas (en cliente meter el total(conIVA) y el % iva, calcular y enviar a la api)
 *falla ivaDevolver desde api
 
-*redondear precios en cliente
 
-*Contabilidad
-	-Ingresos:
-		>schema con fecha e ingreso(cantidad, descripcion, ambito y si es dispensa controlar que se)*******OK
-		>-agregar/list/buscar por fecha api****************************************************************OK
-		>tipos ingreso:
-			.cuotas (subschema para socio)(añadir cuota anual)
-			.aportaciones
-			.otros
-		>Pagina contabilidad
-			.total
-			.tabla gastos
-			.tabla ingresos********************************************************************************OK
-			.IVA consulta por fechas
-	-Total:
-		>schema con fecha, cantidad total******************************************************************OK
-	-Gastos:
-		>igual que ingresos********************************************************************************OK
-		>tipos gastos
-			.factura
-			.nominas
-			.otros
+*Contabilidad iva
 
 *Informes
 	-trimestral

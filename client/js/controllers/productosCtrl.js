@@ -10,28 +10,24 @@ app.controller('ProductosCtrl', ['$scope','$location','ProductosServ','Flash','C
 		}, function (err) {
 			var message = '<strong>ERROR!!!</strong> '+JSON.stringify(err.data);
 		    Flash.create('danger', message);
-			console.log(JSON.stringify(err))
 		})
 		ConfigServ.getAll('type').then(function (response) {
 			$scope.tipos = response.data;
 		}, function (err) {
 			var message = '<strong>ERROR!!!</strong> '+JSON.stringify(err.data);
 			Flash.create('danger', message);
-			console.log(JSON.stringify(err))
 		})
 		ConfigServ.getAll('subtype').then(function (response) {
 			$scope.subtipos = response.data;
 		},function (err) {
 			var message = '<strong>ERROR!!!</strong> '+JSON.stringify(err.data);
 			Flash.create('danger', message);
-			console.log(JSON.stringify(err))
 		})
 		ConfigServ.getAll('variety').then(function (response) {
 			$scope.variedades = response.data;
 		},function (err) {
 			var message = '<strong>ERROR!!!</strong> '+JSON.stringify(err.data);
 			Flash.create('danger', message);
-			console.log(JSON.stringify(err))
 		})
 
 		//$scope.ambitos = config.ambitos;

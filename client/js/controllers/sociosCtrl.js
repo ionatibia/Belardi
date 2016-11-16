@@ -11,12 +11,10 @@ app.controller('SociosCtrl', ['$scope','$location', 'SociosServ','Flash','config
 		}, function (err) {
 			var message = '<strong>ERROR!!!</strong> '+JSON.stringify(err.data);
 		    Flash.create('danger', message);
-			console.log(JSON.stringify(err))
 		});
 	}
 	//update socio
 	$scope.updateSocio = function (socio) {
-		console.log(socio)
 		if (!isNaN(socio.numero) || socio.numero.indexOf('baja') != -1) {
 			socio.correo = socio.correo.toLowerCase().trim()
 			SociosServ.updateSocio(socio).then(function (response) {

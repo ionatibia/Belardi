@@ -8,7 +8,6 @@ app.controller('ContabilidadCtrl', ['$scope','ContabilidadServ','ngDialog','Flas
 		}, function (err) {
 			var message = '<strong>ERROR!!!</strong> '+JSON.stringify(err.data);
 			Flash.create('danger', message);
-			console.log(JSON.stringify(err))
 		})
 
 		ContabilidadServ.getGastos().then(function (response) {
@@ -16,7 +15,6 @@ app.controller('ContabilidadCtrl', ['$scope','ContabilidadServ','ngDialog','Flas
 		}, function (err) {
 			var message = '<strong>ERROR!!!</strong> '+JSON.stringify(err.data);
 			Flash.create('danger', message);
-			console.log(JSON.stringify(err))
 		})
 
 		ContabilidadServ.getTotal().then(function (response) {
@@ -27,7 +25,6 @@ app.controller('ContabilidadCtrl', ['$scope','ContabilidadServ','ngDialog','Flas
 		}, function (err) {
 			var message = '<strong>ERROR!!!</strong> '+JSON.stringify(err.data);
 			Flash.create('danger', message);
-			console.log(JSON.stringify(err))
 		})
 
 		SociosServ.getAll().then(function (response) {
@@ -45,7 +42,6 @@ app.controller('ContabilidadCtrl', ['$scope','ContabilidadServ','ngDialog','Flas
 		}, function (err) {
 			var message = '<strong>ERROR!!!</strong> '+JSON.stringify(err.data);
 			Flash.create('danger', message);
-			console.log(JSON.stringify(err))
 		})
 
 		$scope.tiposIngreso = config.tiposIngreso;
@@ -92,7 +88,6 @@ app.controller('ContabilidadCtrl', ['$scope','ContabilidadServ','ngDialog','Flas
 			}, function (err) {
 				var message = '<strong>ERROR!!!</strong> '+JSON.stringify(err.data);
 				Flash.create('danger', message);
-				console.log(JSON.stringify(err))
 				ngDialog.closeAll()
 			})
 
@@ -126,7 +121,6 @@ app.controller('ContabilidadCtrl', ['$scope','ContabilidadServ','ngDialog','Flas
 		}, function (err) {
 			var message = '<strong>ERROR!!!</strong> '+JSON.stringify(err.data);
 			Flash.create('danger', message);
-			console.log(JSON.stringify(err))
 			ngDialog.closeAll()
 		})
 	}
@@ -165,7 +159,6 @@ app.controller('ContabilidadCtrl', ['$scope','ContabilidadServ','ngDialog','Flas
 			}, function (err) {
 				var message = '<strong>ERROR!!!</strong> '+JSON.stringify(err.data);
 				Flash.create('danger', message);
-				console.log(JSON.stringify(err))
 			})
 		}
 	}

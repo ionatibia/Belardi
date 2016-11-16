@@ -37,7 +37,7 @@
 
 	<div class="form-group" ng-class="{'has-error':formularioAddSocio.telefono.$invalid && formularioAddSocio.telefono.$dirty}" ng-if="socio.correo">
 		<label for="telefono" class="label label-default">Telefono: </label>
-		<input type="tel" name="telefono" id="telefono" class="form-control" value="{{socio.telefono}}" ng-model="socio.telefono" placeholder="Telefono">
+		<input type="number" name="telefono" id="telefono" class="form-control" value="{{socio.telefono}}" ng-model="socio.telefono" placeholder="Telefono">
 	</div>
 
 	<div class="form-group" ng-class="{'has-error':formularioAddSocio.password.$invalid && formularioAddSocio.password.$dirty}" ng-if="socio.correo">
