@@ -3,13 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="b57558da-095b-46fb-94e6-8d3cd034d638" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/api/controllers/product.js" afterPath="$PROJECT_DIR$/api/controllers/product.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/api/controllers/tickets.js" afterPath="$PROJECT_DIR$/api/controllers/tickets.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/client/js/controllers/almacenCtrl.js" afterPath="$PROJECT_DIR$/client/js/controllers/almacenCtrl.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/client/js/controllers/dispensaCtrl.js" afterPath="$PROJECT_DIR$/client/js/controllers/dispensaCtrl.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/client/js/controllers/informesCtrl.js" afterPath="$PROJECT_DIR$/client/js/controllers/informesCtrl.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/client/views/almacen.html" afterPath="$PROJECT_DIR$/client/views/almacen.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/client/views/tickets/dispensa.html" afterPath="$PROJECT_DIR$/client/views/tickets/dispensa.html" />
     </list>
     <ignored path="Belardi.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -248,12 +241,20 @@
       <workItem from="1477742487455" duration="628000" />
       <workItem from="1477825280828" duration="7978000" />
       <workItem from="1479489298228" duration="3318000" />
-      <workItem from="1479500081042" duration="5493000" />
+      <workItem from="1479500081042" duration="5539000" />
     </task>
+    <task id="LOCAL-00001" summary="Informe trimestral ok; fix bugs">
+      <created>1479505889299</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1479505889299</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="17417000" />
+    <option name="totallyTimeSpent" value="17463000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
@@ -287,6 +288,10 @@
   </component>
   <component name="VcsContentAnnotationSettings">
     <option name="myLimit" value="2678400000" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Informe trimestral ok; fix bugs" />
+    <option name="LAST_COMMIT_MESSAGE" value="Informe trimestral ok; fix bugs" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
@@ -496,6 +501,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="764">
           <caret line="103" column="113" selection-start-line="103" selection-start-column="113" selection-end-line="103" selection-end-column="113" />
+          <folding />
         </state>
       </provider>
     </entry>
