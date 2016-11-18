@@ -112,7 +112,6 @@ app.controller('InformesCtrl', ['$scope','$location','Flash','InformesSrv','conf
 							console.log(response.data[i].dispensa[d].producto.nombre)
 							dispensa += response.data[i].dispensa[d].producto.nombre+"  Cantidad:"+response.data[i].dispensa[d].cantidad+"\n";
 						}
-						console.log(dispensa)
 						
 						var fecha = new Date(response.data[i].fecha).toLocaleString();
 						var array = fecha.split(' ');
@@ -170,6 +169,7 @@ app.controller('InformesCtrl', ['$scope','$location','Flash','InformesSrv','conf
 				}else{
 					var tickets = response.data.tickets;
 					var cuotas = response.data.cuotas;
+
 					for (var i = 0; i < tickets.length; i++) {
 						var date = new Date(tickets[i].fecha);
 						var dia = date.getDate();
@@ -177,11 +177,22 @@ app.controller('InformesCtrl', ['$scope','$location','Flash','InformesSrv','conf
 						var ano = date.getFullYear()
 						var neto = tickets[i].neto;
 						var iva = tickets[i].iva
-						crearArray(dia,mes,ano,neto,iva)
+						crearArray(dia,mes,ano,neto,iva,'dis');
+					}
+
+					for (var i = 0; i < cuotas.length; i++) {
+						var date = new Date(cuotas[i].fecha);
+						var dia = date.getDate();
+						var mes = date.getMonth()+1;
+						var ano = date.getFullYear();
+						var neto = cuotas[i].cantidad;
+						var iva = cuotas[i].iva;
+						crearArray(dia,mes,ano,neto,iva,'cuota');
 					}
 				}
+
 				var docDefinition = {
-					header: { text: 'Resumen de Dispensa diaria '+start+' a '+end, style: 'header', margin: [ 40, 10, 10, 20 ] },
+					header: { text: 'Resumen de Dispensa diaria '+start+' a '+end, style: 'header', margin: [ 30, 10, 10, 20 ] },
 					content: [
 						{
 							table: {
@@ -207,13 +218,20 @@ app.controller('InformesCtrl', ['$scope','$location','Flash','InformesSrv','conf
 					}
 				};
 				var count = 0;
-				/*for (var i = 0; i < triObj.length; i++) {
+				for (var i = 0; i < triObj.length; i++) {
+					var totalDis = triObj[i].netoDis + triObj[i].ivaDis;
+					var totalCuo = triObj[i].netoCuo + triObj[i].ivaCuo;
 					if (count%2 == 0) {
-						var texto = [{text:triObj[i].dia+"-"+triObj[i].mes+"-"+triObj[i].ano, style:'body'},{text:triObj[i].}]
+						var texto = [{text:triObj[i].dia+"-"+triObj[i].mes+"-"+triObj[i].ano, style:'body'},{text:triObj[i].netoCuo, style:'body'},{text:triObj[i].ivaCuo,style:'body'},{text:totalCuo,style:'body',bold:true},{text:triObj[i].netoDis,style:'body'},{text:triObj[i].ivaDis,style:'body'},{text:totalDis,style:'body',bold:true}]
 					}else{
-						var texto = 
+						var texto = [{text:triObj[i].dia+"-"+triObj[i].mes+"-"+triObj[i].ano, style:'body',fillColor:'yellow'},{text:triObj[i].netoCuo, style:'body',fillColor:'yellow'},{text:triObj[i].ivaCuo,style:'body',fillColor:'yellow'},{text:totalCuo,style:'body',bold:true,fillColor:'yellow'},{text:triObj[i].netoDis,style:'body',fillColor:'yellow'},{text:triObj[i].ivaDis,style:'body',fillColor:'yellow'},{text:totalDis,style:'body',bold:true,fillColor:'yellow'}]
 					}
-				}*/
+					count++
+					docDefinition.content[0].table.body.push(texto)
+				}
+
+				//pdfMake.createPdf(docDefinition).download('Resumen_Trimestral'+start+'**'+end+'.pdf');
+
 			}, function (err) {
 				var message = '<strong>ERROR!!!</strong> '+JSON.stringify(err.data);
 		    	Flash.create('danger', message);
@@ -222,17 +240,28 @@ app.controller('InformesCtrl', ['$scope','$location','Flash','InformesSrv','conf
 	}
 
 	var triObj = []
-	function crearArray(dia,mes,ano,neto,iva) {
+	function crearArray(dia,mes,ano,neto,iva,tipo) {
 		var existe = false;
 		for (var i = 0; i < triObj.length; i++) {
 			if(triObj[i].dia == dia && triObj[i].mes == mes && triObj[i].ano == ano){
-				triObj[i].neto += neto;
-				triObj[i].iva += iva
-				existe = true;
+				if (tipo == 'dis') {
+					triObj[i].netoDis += neto;
+					triObj[i].ivaDis += iva;
+					existe = true;
+				}else{
+					triObj[i].netoCuo += neto;
+					triObj[i].ivaCuo += iva;
+					existe = true;
+				}
 			}
 		}
 		if (!existe) {
-			triObj.push({'dia':dia,'mes':mes,'ano':ano,'neto':neto,'iva':iva})
+			if (tipo == 'dis') {
+				triObj.push({'dia':dia,'mes':mes,'ano':ano,'netoDis':neto,'ivaDis':iva,'netoCuo':0,'ivaCuo':0})
+			}else{
+				triObj.push({'dia':dia,'mes':mes,'ano':ano,'netoDis':0,'ivaDis':0,'netoCuo':neto,'ivaCuo':iva})
+			}
+			
 		}
 	}
 	

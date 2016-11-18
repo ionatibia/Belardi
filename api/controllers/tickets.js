@@ -82,7 +82,7 @@ exports.create = function (req, res) {
 		productos[i].stock.push({'cantidad':stockBefore-cantidad})
 		var stockCompleto = productos[i].stock
 
-		var promise = Product.update({_id: productos[i]._id},{$set:{stock: stockCompleto}},function (err) {
+		var promise = Product.update({_id: productos[i]._id},productos[i],function (err) {
 			if (err) {
 				logger.error("Error guardando stock nuevo en productos")
 				return res

@@ -5,7 +5,8 @@
  *
  */
 var mongoose = require('mongoose'),
-	Ticket = mongoose.model('Ticket');
+	Ticket = mongoose.model('Ticket'),
+	Ingreso = mongoose.model('Ingreso');
 var Q = require('q');
 
 exports.ticketReport = function (req,res) {
@@ -60,7 +61,17 @@ exports.trimestralReport = function (req,res) {
 		}
 	})
 	promises.push(promiseTickets)
-	//promise cuotas
+	
+	var promiseCuotas = Ingreso.find({fecha:{$gte: startDate, $lte: endDate}, tipo:'cuota'}).exec(function (err,data) {
+		if (err) {
+			return res
+				.status(400)
+				.send("Error buscando tickets para informe "+err)
+		}else{
+			cuotas = data;
+		}
+	});
+	promises.push(promiseCuotas)
 
 	Q.all(promises).then(function (response) {
 		var obj = {'tickets':tickets,'cuotas':cuotas};
