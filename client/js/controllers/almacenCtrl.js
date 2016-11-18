@@ -43,8 +43,8 @@ app.controller('AlmacenCtrl', ['$scope','ProductosServ','ConfigServ','config','F
 			var message = '<strong>HECHO!!!</strong> stock del producto '+response.data.nombre+' actualizado';
 			Flash.create('success', message);
 			for(var p in $scope.productos){
-				if ($scope.productos[p]._id = prod.producto) {
-					$scope.productos[p].cantidad = prod.cantidad;
+				if ($scope.productos[p]._id = response.data._id) {
+					$scope.productos[p].stock = response.data.stock;
 				}
 			}
 		}, function (err) {

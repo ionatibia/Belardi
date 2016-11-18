@@ -8,12 +8,11 @@ app.controller('DispensaCtrl', ['$scope','$location','ProductosServ','SociosServ
 		ProductosServ.getAll().then(function (response) {
 			$scope.productos = response.data;
 			for (var i = 0; i < $scope.productos.length; i++) {
-				var stock = $scope.stock($scope.productos[i])
-				if (stock == 0) {
+				if ($scope.productos[i].stock[$scope.productos[i].stock.length-1].cantidad == 0 || $scope.productos[i].baja) {
 					$scope.productos.splice($scope.productos.indexOf($scope.productos[i]),1)
 				}
 			}
-				
+
 		}, function (err) {
 			var message = '<strong>ERROR!!!</strong> '+JSON.stringify(err.data.message);
 		    Flash.create('danger', message)
@@ -89,6 +88,18 @@ app.controller('DispensaCtrl', ['$scope','$location','ProductosServ','SociosServ
 			TicketServ.addTicket($scope.ticketCompleto).then(function (response) {
 				var message = '<strong>HECHO!!!</strong> creado ticket para socio '+socio;
 			    Flash.create('success', message);
+				for(var s in $scope.productos){
+					for(var p in response.data.productos){
+
+						if($scope.productos[s]._id == response.data.productos[p]._id){
+							$scope.productos[s].stock = response.data.productos[p].stock;
+						}
+
+						if ($scope.productos[s].stock[$scope.productos[s].stock.length-1].cantidad == 0 || $scope.productos[s].baja) {
+							$scope.productos.splice($scope.productos.indexOf($scope.productos[s]),1)
+						}
+					}
+				}
 
 			}, function (err) {
 				var message = '<strong>ERROR!!!</strong> '+JSON.stringify(err.data);

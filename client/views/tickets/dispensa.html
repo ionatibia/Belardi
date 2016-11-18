@@ -16,9 +16,9 @@
 	<h1 class="h1">DISPENSA</h1>
 	<form id="formularioDispensa" name="formularioDispensa" novalidate ng-show="productos">
 		<!--Numero socio-->
-		<div class="form-group" ng-show="!prodDispensados">
-			<label for="numeroSocio" class="label label-default">Nº Socio: </label>
-			<input list="socios" name="socio" ng-model="socio" class="form-control">
+		<div class="form-group" ng-show="!prodDispensados && productos">
+			<label for="socio" class="label label-default">Nº Socio: </label>
+			<input list="socios" name="socio" id="socio" ng-model="socio" class="form-control">
 			<datalist id="socios">
 				<option ng-repeat="socio in socios" value="{{socio.numero}}">{{socio.numero}}</option>
 			</datalist>

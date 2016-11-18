@@ -109,7 +109,6 @@ app.controller('InformesCtrl', ['$scope','$location','Flash','InformesSrv','conf
 					for (var i = 0; i < response.data.length; i++) {
 						var dispensa = '';
 						for(var d in response.data[i].dispensa){
-							console.log(response.data[i].dispensa[d].producto.nombre)
 							dispensa += response.data[i].dispensa[d].producto.nombre+"  Cantidad:"+response.data[i].dispensa[d].cantidad+"\n";
 						}
 						
@@ -218,19 +217,37 @@ app.controller('InformesCtrl', ['$scope','$location','Flash','InformesSrv','conf
 					}
 				};
 				var count = 0;
+				var totalNetoDis = 0;
+				var totalIvaDis = 0;
+				var totalDispensa = 0;
+				var totalNetoCuo = 0;
+				var totalIvaCuo = 0;
+				var totalCuotas = 0;
+				var totalDis = 0;
+				var totalCuo = 0;
 				for (var i = 0; i < triObj.length; i++) {
-					var totalDis = triObj[i].netoDis + triObj[i].ivaDis;
-					var totalCuo = triObj[i].netoCuo + triObj[i].ivaCuo;
+					totalNetoDis += triObj[i].netoDis;
+					totalIvaDis += triObj[i].ivaDis;
+					totalNetoCuo += triObj[i].netoCuo;
+					totalIvaCuo += triObj[i].ivaCuo;
+					totalDis = (triObj[i].netoDis + triObj[i].ivaDis).toFixed(2);
+					totalCuo = (triObj[i].netoCuo + triObj[i].ivaCuo).toFixed(2);
+
+					totalDispensa += parseFloat(totalDis);
+					totalCuotas += parseFloat(totalCuo);
 					if (count%2 == 0) {
-						var texto = [{text:triObj[i].dia+"-"+triObj[i].mes+"-"+triObj[i].ano, style:'body'},{text:triObj[i].netoCuo, style:'body'},{text:triObj[i].ivaCuo,style:'body'},{text:totalCuo,style:'body',bold:true},{text:triObj[i].netoDis,style:'body'},{text:triObj[i].ivaDis,style:'body'},{text:totalDis,style:'body',bold:true}]
+						var texto = [{text:triObj[i].dia+"-"+triObj[i].mes+"-"+triObj[i].ano, style:'body'},{text:triObj[i].netoCuo.toFixed(2).toString(), style:'body'},{text:triObj[i].ivaCuo.toFixed(2).toString(),style:'body'},{text:totalCuo.toString(),style:'body',bold:true},{text:triObj[i].netoDis.toFixed(2).toString(),style:'body'},{text:triObj[i].ivaDis.toFixed(2).toString(),style:'body'},{text:totalDis.toString(),style:'body',bold:true}]
 					}else{
-						var texto = [{text:triObj[i].dia+"-"+triObj[i].mes+"-"+triObj[i].ano, style:'body',fillColor:'yellow'},{text:triObj[i].netoCuo, style:'body',fillColor:'yellow'},{text:triObj[i].ivaCuo,style:'body',fillColor:'yellow'},{text:totalCuo,style:'body',bold:true,fillColor:'yellow'},{text:triObj[i].netoDis,style:'body',fillColor:'yellow'},{text:triObj[i].ivaDis,style:'body',fillColor:'yellow'},{text:totalDis,style:'body',bold:true,fillColor:'yellow'}]
+						var texto = [{text:triObj[i].dia+"-"+triObj[i].mes+"-"+triObj[i].ano, style:'body',fillColor:'yellow'},{text:triObj[i].netoCuo.toFixed(2).toString(), style:'body',fillColor:'yellow'},{text:triObj[i].ivaCuo.toFixed(2).toString(),style:'body',fillColor:'yellow'},{text:totalCuo.toString(),style:'body',bold:true,fillColor:'yellow'},{text:triObj[i].netoDis.toFixed(2).toString(),style:'body',fillColor:'yellow'},{text:triObj[i].ivaDis.toFixed(2).toString(),style:'body',fillColor:'yellow'},{text:totalDis.toString(),style:'body',bold:true,fillColor:'yellow'}]
 					}
 					count++
 					docDefinition.content[0].table.body.push(texto)
 				}
 
-				//pdfMake.createPdf(docDefinition).download('Resumen_Trimestral'+start+'**'+end+'.pdf');
+				var textoTotal = [{text:'TOTALES',style:'body',bold:true},{text:totalNetoCuo.toFixed(2).toString(),style:'body',bold:true},{text:totalIvaCuo.toFixed(2).toString(),style:'body',bold:true},{text:totalCuotas.toString(),style:'body',bold:true},{text:totalNetoDis.toFixed(2).toString(),style:'body',bold:true},{text:totalIvaDis.toFixed(2).toString(),style:'body',bold:true},{text:totalDispensa.toString(),style:'body',bold:true}];
+				docDefinition.content[0].table.body.push(textoTotal);
+				pdfMake.createPdf(docDefinition).download('Resumen_Trimestral'+start+' a '+end+'.pdf');
+				triObj = [];
 
 			}, function (err) {
 				var message = '<strong>ERROR!!!</strong> '+JSON.stringify(err.data);

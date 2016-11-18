@@ -72,19 +72,18 @@ exports.create = function (req, res) {
 
 	//actualizar stock de los productos y crear array dispensa para el ticket
 	for(var i in productos){
-		var cantidad = productos[i].cantidad
+		var cantidad = productos[i].cantidad;
 		var stockBefore = productos[i].stock[productos[i].stock.length-1].cantidad;
 		if (stockBefore < cantidad) {
 			return res
 				.status(500)
-				.send("Hay menos stock que el requerido")
+				.send("Hay menos stock que el requerido");
 		}
-		productos[i].stock.push({'cantidad':stockBefore-cantidad})
-		var stockCompleto = productos[i].stock
+		productos[i].stock.push({'cantidad':stockBefore-cantidad});
 
 		var promise = Product.update({_id: productos[i]._id},productos[i],function (err) {
 			if (err) {
-				logger.error("Error guardando stock nuevo en productos")
+				logger.error("Error guardando stock nuevo en productos");
 				return res
 					.status(400)
 					.send("Error guardando productos: "+err);
@@ -136,7 +135,7 @@ exports.create = function (req, res) {
 					logger.info("Guardado ticket de socio "+socioObj.dni+'. Usuario: '+userObj.dni+'. Fecha: '+ticket.fecha)
 					return res
 						.status(200)
-						.send(ticket);
+						.send({'ticket':ticket,'productos':productos});
 				}
 			})
 		}else{

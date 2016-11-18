@@ -134,7 +134,7 @@ module.exports.list = function (req, res) {
 module.exports.addStock = function (req,res) {
 	var stockBefore = req.product.stock[req.product.stock.length-1].cantidad;
 	var stockAfter = req.body.cantidad + stockBefore;
-	req.product.stock.push({'cantidad':stockAfter})
+	req.product.stock.push({'cantidad':stockAfter,'fecha':Date.now()})
 	req.product.save(function (err) {
 		if (err) {
 			loggerAjuste.error("Error añadiendo stock al producto "+req.product.nombre)
@@ -154,7 +154,7 @@ module.exports.ajusteStock = function (req,res) {
 	if (req.body.observaciones != '' && req.body.observaciones != null && req.body.observaciones != undefined) {
 		req.product.stock.push({'cantidad':req.body.cantidad, 'observaciones':req.body.observaciones});
 	}else{
-		req.product.stock.push({'cantidad':req.body.cantidad})
+		req.product.stock.push({'cantidad':req.body.cantidad,'fecha':Date.now()})
 	}
 	req.product.save(function (err) {
 		if (err) {
