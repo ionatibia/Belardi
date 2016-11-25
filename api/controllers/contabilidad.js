@@ -489,6 +489,7 @@ exports.cuentaIva = function (req,res) {
 	var promises = [];
 	var dispensas = [];
 	var facturas = [];
+	var ingresos = [];
 
 	var prom = Ticket.find({fecha:{$gte: startDate, $lte: endDate}}, function (err,data) {
 		if (err) {
@@ -512,14 +513,33 @@ exports.cuentaIva = function (req,res) {
 	})
 	promises.push(prom2)
 
+	var prom3 = Ingreso.find({fecha:{$gte:startDate, $lte:endDate}}, function (err,data) {
+		if (err) {
+			return res
+				.status(400)
+				.send("Error buscando gastos para cuenta iva "+err)
+		}else{
+			ingresos = data;
+		}
+	})
+	promises.push(prom3)
+
 	Q.all(promises).then(function () {
+		console.log(dispensas.length)
+		console.log(ingresos.length)
+		console.log(facturas.length)
 		for (var i = 0; i < dispensas.length; i++) {
 			cuentaIva += dispensas[i].iva;
 		}
-		for (var i = 0; i < facturas.length; i++) {
-			ivaDevolver += parseFloat(facturas[i].iva)
-			console.log(ivaDevolver)
+		for (var e = 0; e < ingresos.length; e++) {
+			cuentaIva += ingresos[e].iva
 		}
+		for (var i = 0; i < facturas.length; i++) {
+			if (facturas[i].iva) {
+				ivaDevolver += facturas[i].iva
+			}
+		}
+
 		return res
 			.status(200)
 			.send({'iva':cuentaIva, 'ivaD':ivaDevolver})

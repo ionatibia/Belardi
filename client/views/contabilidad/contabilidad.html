@@ -58,7 +58,7 @@
         		<td>{{gasto.descripcion}}</td>
         		<td>{{gasto.numeroFactura}}</td>
         		<td>{{gasto.cantidad}}€</td>
-        		<td>{{gasto.iva}}€</td>
+        		<td>{{gasto.iva ? gasto.iva : '0'}}€</td>
         		<!--<td><button class="btn btn-danger" ng-click="deleteGasto(gasto)"><i class="glyphicon glyphicon-trash"></i></button></td>-->
         	</tr>
         </tbody>
@@ -103,8 +103,16 @@
 		<button class="btn btn-primary" ng-click="cuentaIVA()" style="width:100%;margin-top:10px;margin-bottom:20px;">Cuenta IVA</button>
 	</div>
 	<div id="resultIva">
-		{{cuentaDeIva.iva.toFixed(2)}}
-		{{cuentaDeIva.ivaD.toFixed(2)}}
+	<table class="table table-borderer" style="text-align:center">
+		<tr style="background-color:#333;color:white">
+			<th>Deber</th>
+			<th>Devolver</th>
+		</tr>
+		<tr>
+			<td>{{cuentaDeIva.iva.toFixed(2)}}</td>
+			<td>{{cuentaDeIva.ivaD.toFixed(2)}}</td>
+		</tr>
+	</table>
 	</div>
 	<!--FIN IVA-->
 

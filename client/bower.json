@@ -28,6 +28,7 @@
     "eonasdan-bootstrap-datetimepicker": "^4.17.43",
     "moment": "^2.16.0",
     "bootstrap-datepicker": "^1.6.4",
-    "pdfmake": "^0.1.20"
+    "pdfmake": "^0.1.20",
+    "highcharts": "^5.0.4"
   }
 }

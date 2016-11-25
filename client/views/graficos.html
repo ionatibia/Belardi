@@ -1,5 +1,91 @@
 <section>
 <div>
 	<h1>GRAFICOS</h1>
+	<div class="row">
+		<h3>Gráfico Stock</h3>
+		<input type="radio" name="tipoG" ng-model="tipoG" value="stock">Stock
+		<input type="radio" name="tipoG" ng-model="tipoG" value="cont">Contabilidad<!--<button class="btn btn-primary" ng-click="ensenaF = !ensenaF" style="margin-bottom:-35px;margin-left:10px;"><i class="glyphicon glyphicon-search" ></i></button>-->
+		<!--<div class="row" style="clear:both">-->
+			<form id="graficoStock" name="graficoStock" class="form-group" ng-submit="crearGrafico(datos)" novalidate>
+				<div class="col-xs-4" id="startDiv">
+					<label for="startDate" class="label label-default">Fecha inicio</label>
+					<div class="input-group date" data-provide="datepicker">
+					    <input type="text" class="datepicker form-control" id="startDate" ng-model="datos.startDate" ng-required="true" readonly>
+					    <div class="input-group-addon">
+					        <span class="add-on glyphicon glyphicon-calendar"></span>
+					    </div>
+					</div>
+				</div>
+				<div class="col-xs-4" id="endDiv">
+					<label for="endDate" class="label label-default">Fecha fin</label>
+					<div class="input-group date" data-provide="datepicker">
+					    <input type="text" class="datepicker form-control" id="endDate" ng-model="datos.endDate" ng-required="true" readonly>
+					    <div class="input-group-addon">
+					        <span class="add-on glyphicon glyphicon-calendar"></span>
+					    </div>
+					</div>
+				</div>
+				<div class="col-xs-4" id="intervalDiv">
+					<label for="interval" class="label label-default">Intervalo</label>
+					<select class="form-control" name="interval" id="interval" ng-model="datos.interval" ng-required="true">
+						<option value="" selected disabled>Selecciona</option>
+						<option value="ano">Año</option>
+						<option value="mes">Mes</option>
+						<option value="dia">Día</option>
+					</select>
+				</div>
+		<!--</div>
+		<div class="row" ng-show="ensenaF">-->
+			<div class="col-xs-12">
+				<div class="col-xs-4">
+					<label for="tipo" class="label label-default">Tipo: </label>
+					<div class="form-group">
+						<select class="form-control" ng-model="datos.tipo" name="tipo" id="tipo">
+							<option value="" selected>Todos</option>
+							<!--<option ng-repeat="tipo in tipos | filter: producto.ambito" value="{{tipo._id}}">{{tipo.nombre.toUpperCase()}}</option>-->
+							<option ng-repeat="tipo in tipos" value="{{tipo._id}}">{{tipo.nombre.toUpperCase()}}</option>
+						</select>
+					</div>
+				</div>
+				<div class="col-xs-4">
+					<label for="subtipo" class="label label-default">Subtipo: </label>
+					<div class="form-group">
+						<select class="form-control" ng-model="datos.subtipo" name="subtipo" id="subtipo">
+							<option value="" selected>Todos</option>
+							<option ng-repeat="subtipo in subtipos | filter: datos.tipo" value="{{subtipo._id}}">{{subtipo.nombre.toUpperCase()}}</option>
+						</select>
+					</div>
+				</div>
+				<div class="col-xs-4">
+					<label for="variedad" class="label label-default">Variedad: </label>
+					<div class="form-group">
+						<select class="form-control" ng-model="datos.variedad" name="variedad" id="variedad">
+							<option value="" selected>Todos</option>
+							<option ng-repeat="variedad in variedades | filter: datos.tipo | filter: datos.subtipo" value="{{variedad._id}}">{{variedad.nombre.toUpperCase()}}</option>
+						</select>
+					</div>
+				</div>
+			</div>
+				
+		<!--</div>
+		<div class="row">-->
+				<div class="col-xs-12">
+					<label for="producto" class="label label-default">Producto: </label>
+					<div class="form-group">
+						<select class="form-control" ng-model="datos.producto" name="producto" id="producto">
+							<option value="" selected>Todos</option>
+							<option ng-repeat="producto in productos | filter: datos.tipo | filter: datos.subtipo | filter: datos.variedad" value="{{producto._id}}">{{producto.nombre.toUpperCase()}}</option>
+						</select>
+					</div>
+				</div>
+				<div class="col-xs-12">
+					<input class="btn btn-primary" type="submit" name="gStockSub" value="Crear" ng-disabled="graficoStock.$invalid" style="width:100%">
+					<!--<button class="btn btn-primary" ng-click="crearGraficoStock(startDate,endDate,interval,tipo,subtipo,variedad,producto)">Crear</button>-->
+				</div>	
+		<!--</div>-->
+				
+			</form>
+	</div>
+		<div id="gStockDiv" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
 </div>
 </section>

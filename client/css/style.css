@@ -121,5 +121,9 @@ h1{
 	overflow-y: scroll;
 	margin-bottom: 20px;
 }
-
-
+#resultIva > table > tbody > tr > th{
+	text-align: center !important;
+}
+#resultIva > table > tbody > tr > td{
+	background-color: white;
+}
