@@ -25,3 +25,9 @@
 
 
 *dejado en funcion crear array con totales por dia
+
+*totales consumo(bajadas stock menos ajustes de inventario. marca en descripcion)
+*totales produccion (lo que se añade al almacen)
+*stock total a 1 de enero a las 00:00 y 31 diciembre a las 00:00
+*ajuste de stock negativo (perdidas de produccion)
+*controlar en consultas de stock si ha habido ajustes

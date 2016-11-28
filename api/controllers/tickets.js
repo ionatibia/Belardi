@@ -46,12 +46,15 @@ exports.create = function (req, res) {
 
 	//buscar usuario
 	var promiseUser = User.findOne({_id: user}, function (err,user) {
+		console.log("Sssssssssssssssssssssssssss")
 		if (err) {
 			console.log(err)
+			console.log("Ssssssssssssssssssssssssss222222s")
 			return res
 				.status(400)
 				.send("Error buscando usuarios: "+err);
 		}else{
+			console.log("Sssssssssssssssssssssssssss44444")
 			userObj = user
 		}
 	})
