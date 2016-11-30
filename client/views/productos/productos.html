@@ -1,21 +1,63 @@
 <section>
 <div>
-	<h1>PRODUCTOS</h1>
-	<a href="#/productos/addProducto" class="glyphicon glyphicon-plus"></a>
-	<input type="text" name="buscador" ng-model="buscador" placeholder="Buscar" class="form-control">
-	<div id="listaProductos">
-		<ul class="list-group" ng-show="productos">
+	<h1 class="h1">PRODUCTOS</h1>
+	<a href="#/productos/addProducto" class="glyphicon glyphicon-plus"></a><span style="color:white;margin-left:20px;">Total Productos: {{productos.length}}</span>
 
-			<li class="list-group-item" ng-repeat="producto in productos | filter: buscador" >{{producto.nombre}} <br/>
-			<p ng-if="producto.baja" style="color:red">Baja</p>
-			<small ng-if="!producto.baja">{{producto.descripcion}} <br/>Tipo: {{producto.tipo.nombre.toUpperCase()}}<br/>Subtipo: {{producto.subtipo.nombre.toUpperCase()}}<br/>Variedad: {{producto.variedad.nombre.toUpperCase()}}<br/>Stock: {{stock(producto)}}</small>
+	<form class="form-inline">
+        <div class="input-group" style="margin-bottom:20px;width:100%">
+            <input type="text" ng-model="search" class="form-control" placeholder="Buscar">
+            <div class="input-group-addon">
+		        <span class="glyphicon glyphicon-filter"></span>
+		    </div>
+		    <div class="input-group-addon">
+		        <span class="green">{{((productos | filter:search).length)}}</span>
+		    </div>
+        </div>
+    </form>
 
-			<a id="botonUpdate" class="btn btn-primary" ng-click="seleccionProductoUpdate(producto)"><span class="glyphicon glyphicon-pencil"></span></a>
-			<a id="botonDelete" class="btn btn-danger" ng-click="deleteProducto(producto)"><span class="glyphicon glyphicon-trash"></span></a>
-			<a id="botonBaja" class="btn btn-warning" ng-if="!producto.baja" ng-click="bajaProducto(producto)"><span class="glyphicon glyphicon-minus"></span></a>
-			<a id="botonAlta" class="btn btn-success" ng-if="producto.baja" ng-click="altaProducto(producto)"><span class="glyphicon glyphicon-plus"></span></a>
-			</li>
-		</ul>
-	</div>
+<!--Products table-->
+    <table id="tablaProductos" class="table table-striped table-responsive">
+    	<thead>
+    		<tr style="font-size:15px;background-color:white">
+    			<th ng-click="sort('nombre')">Nombre
+    				<span class="glyphicon sort-icon" ng-show="sortKey=='nombre'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+				</th>
+				<th ng-click="sort('tipo')">Tipo
+				<span class="glyphicon sort-icon" ng-show="sortKey=='tipo'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+				</th>
+				<th ng-click="sort('subtipo')">Subtipo
+				<span class="glyphicon sort-icon" ng-show="sortKey=='subtipo'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+				</th>
+				<th ng-click="sort('variedad')">Variedad
+				<span class="glyphicon sort-icon" ng-show="sortKey=='variedad'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+				</th>
+				<th ng-click="sort('stock')">Stock
+				<span class="glyphicon sort-icon" ng-show="sortKey=='stock'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+				</th>
+				<th>Controles</th>
+    		</tr>
+    	</thead>
+    	<tbody>
+    		<tr dir-paginate="producto in productos | orderBy:sortKey:reverse | filter:search | itemsPerPage:5" style="font-size: 15px;">
+    			<td>{{producto.nombre}}<span ng-if="producto.baja" style="color:red">Baja</span></td>
+    			<td>{{producto.tipo.nombre}}</td>
+    			<td>{{producto.subtipo.nombre}}</td>
+    			<td>{{producto.variedad.nombre}}</td>
+    			<td>{{stock(producto)}}</td>
+    			<td>
+    				<a id="botonUpdate" class="btn btn-primary" ng-click="seleccionProductoUpdate(producto)"><span class="glyphicon glyphicon-pencil"></span></a>
+					<a id="botonDelete" class="btn btn-danger" ng-click="deleteProducto(producto)"><span class="glyphicon glyphicon-trash"></span></a>
+					<a id="botonBaja" class="btn btn-warning" ng-if="!producto.baja" ng-click="bajaProducto(producto)"><span class="glyphicon glyphicon-minus"></span></a>
+					<a id="botonAlta" class="btn btn-success" ng-if="producto.baja" ng-click="altaProducto(producto)"><span class="glyphicon glyphicon-plus"></span></a>
+    			</td>
+    		</tr>
+    	</tbody>
+    </table>
+    <center>
+		<!--pagination tag-->
+		<dir-pagination-controls max-size="5" direction-links="true" boundary-links="true">
+	    </dir-pagination-controls>
+    </center>
+
 </div>
 </section>

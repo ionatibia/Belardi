@@ -244,7 +244,7 @@ app.controller('InformesCtrl', ['$scope','$location','Flash','InformesSrv','conf
 					docDefinition.content[0].table.body.push(texto)
 				}
 
-				var textoTotal = [{text:'TOTALES',style:'body',bold:true},{text:totalNetoCuo.toFixed(2).toString(),style:'body',bold:true},{text:totalIvaCuo.toFixed(2).toString(),style:'body',bold:true},{text:totalCuotas.toString(),style:'body',bold:true},{text:totalNetoDis.toFixed(2).toString(),style:'body',bold:true},{text:totalIvaDis.toFixed(2).toString(),style:'body',bold:true},{text:totalDispensa.toString(),style:'body',bold:true}];
+				var textoTotal = [{text:'TOTALES',style:'body',bold:true},{text:totalNetoCuo.toFixed(2).toString(),style:'body',bold:true},{text:totalIvaCuo.toFixed(2).toString(),style:'body',bold:true},{text:totalCuotas.toFixed(2).toString(),style:'body',bold:true},{text:totalNetoDis.toFixed(2).toString(),style:'body',bold:true},{text:totalIvaDis.toFixed(2).toString(),style:'body',bold:true},{text:totalDispensa.toFixed(2).toString(),style:'body',bold:true}];
 				docDefinition.content[0].table.body.push(textoTotal);
 				pdfMake.createPdf(docDefinition).download('Resumen_Trimestral'+start+' a '+end+'.pdf');
 				triObj = [];

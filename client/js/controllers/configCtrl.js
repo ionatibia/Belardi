@@ -1,8 +1,15 @@
 var app = angular.module("app");
-app.controller('ConfigCtrl', ['$scope','$location','Flash','$window','ConfigServ','ngDialog','config','SociosServ','ContabilidadServ', function ($scope,$location,Flash,$window, ConfigServ,ngDialog,config,SociosServ,ContabilidadServ) {
+app.controller('ConfigCtrl', ['$scope','$location','Flash','$window','ConfigServ','ngDialog','config','SociosServ','ContabilidadServ','ProductosServ', function ($scope,$location,Flash,$window, ConfigServ,ngDialog,config,SociosServ,ContabilidadServ,ProductosServ) {
 	if (!$scope.checkLogin()){
 		$location.path("/");
 	}else{
+		ProductosServ.getAll().then(function (response) {
+			$scope.productos = response.data;
+		}, function (err) {
+			var message = '<strong>ERROR!!!</strong> '+JSON.stringify(err.data.message);
+		    Flash.create('danger', message)
+		});
+
 		SociosServ.getAll().then(function (response) {
 			$scope.socios = response.data;
 			for (var i = 0; i < $scope.socios.length; i++) {
@@ -134,61 +141,96 @@ app.controller('ConfigCtrl', ['$scope','$location','Flash','$window','ConfigServ
 
 	$scope.borrarTipo = function(tipo) {
 		var found = false;
+		var foundP = false;
 		for(var s in $scope.subtipos){
 			if($scope.subtipos[s].tipo._id == tipo){
 				found = true;
 			}
 		}
-		if (!found) {
+		for( var p in $scope.productos){
+			if($scope.productos[p].tipo._id == tipo){
+				foundP = true;
+			}
+		}
+		if (!found && !foundP) {
 			if (confirm("Seguro que quieres borrar el tipo??")) {
 				ConfigServ.delete('type',tipo).then(function (response) {
 					var message = '<strong>HECHO!!!</strong> el tipo se ha borrado correctamente';
 					Flash.create('success', message);
-					$scope.tipos.splice($scope.tipos.indexOf(tipo),1)
+					for (var i = 0; i < $scope.tipos.length; i++) {
+						if($scope.tipos[i]._id == tipo){
+							$scope.tipos.splice(i,1)
+						}
+					}
 				}, function(err) {
 					var message = '<strong>ERROR!!!</strong> '+JSON.stringify(err.data);
 					Flash.create('danger', message);
 				})
 			}
 		}else{
-			var message = '<strong>ERROR!!!</strong> hay subtipos que dependen de éste tipo';
+			var message = '<strong>ERROR!!!</strong> hay subtipos o productos que dependen de éste tipo';
 			Flash.create('danger', message);
 		}
 		
 	}
 	$scope.borrarSubtipo = function(subtipo) {
 		var found = false;
+		var foundP = false;
 		for(var s in $scope.variedades){
 			if ($scope.variedades[s].subtipo._id == subtipo) {
 				found = true;
 			}
 		}
-		if (!found) {
+		for( var p in $scope.productos){
+			if($scope.productos[p].subtipo._id == subtipo){
+				foundP = true
+			}
+		}
+		if (!found && !foundP) {
 			if (confirm("Seguro que quieres borrar el subtipo??")) {
 				ConfigServ.delete('subtype',subtipo).then(function (response) {
 					var message = '<strong>HECHO!!!</strong> el subtipo se ha borrado correctamente';
 					Flash.create('success', message);
-					$scope.subtipos.splice($scope.subtipos.indexOf(subtipo),1)
+					for (var i = 0; i < $scope.subtipos.length; i++) {
+						if($scope.subtipos[i]._id == subtipo){
+							$scope.subtipos.splice(i,1)
+						}
+					}
 				}, function(err) {
 					var message = '<strong>ERROR!!!</strong> '+JSON.stringify(err.data);
 					Flash.create('danger', message);
 				})
 			}
 		}else{
-			var message = '<strong>ERROR!!!</strong> hay variedades que dependen de éste subtipo';
+			var message = '<strong>ERROR!!!</strong> hay variedades o productos que dependen de éste subtipo';
 			Flash.create('danger', message);
 		}
 	}
 	$scope.borrarVariedad = function(variedad) {
-		if (confirm("Seguro que quieres borrar la variedad??")) {
-			ConfigServ.delete('variety',variedad).then(function (response) {
-				var message = '<strong>HECHO!!!</strong> la variedad se ha borrado correctamente';
-				Flash.create('success', message);
-				$scope.variedades.splice($scope.variedades.indexOf(variedad,1))
-			}, function(err) {
-				var message = '<strong>ERROR!!!</strong> '+JSON.stringify(err.data);
-				Flash.create('danger', message);
-			})
+		var foundP = false;
+		for(var p in $scope.productos){
+			if($scope.productos[p].variedad._id == variedad){
+				foundP = true;
+			}
+		}
+		if(!foundP){
+			if (confirm("Seguro que quieres borrar la variedad??")) {
+				ConfigServ.delete('variety',variedad).then(function (response) {
+					var message = '<strong>HECHO!!!</strong> la variedad se ha borrado correctamente';
+					Flash.create('success', message);
+					for (var i = 0; i < $scope.variedades.length; i++) {
+						if($scope.variedades[i]._id == variedad){
+							$scope.variedades.splice(i,1)
+						}
+					}
+				}, function(err) {
+					var message = '<strong>ERROR!!!</strong> '+JSON.stringify(err.data);
+					Flash.create('danger', message);
+				})
+			}
+		}else{
+			var message = '<strong>ERROR!!!</strong> hay productos que dependen de ésta variedad';
+			Flash.create('danger', message);
 		}
 	}
 
@@ -197,6 +239,11 @@ app.controller('ConfigCtrl', ['$scope','$location','Flash','$window','ConfigServ
 			var message = '<strong>HECHO!!!</strong> el tipo se ha modificado correctamente';
 			Flash.create('success', message);
 			ngDialog.closeAll()
+			for (var i = 0; i < $scope.tipos.length; i++) {
+				if($scope.tipos[i]._id == tipo){
+					$scope.tipos[i] = response.data
+				}
+			}
 		}, function (err) {
 			var message = '<strong>ERROR!!!</strong> '+JSON.stringify(err.data);
 			Flash.create('danger', message);

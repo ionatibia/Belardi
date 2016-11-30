@@ -1,40 +1,66 @@
 <section>
-<h1>UpdateSocio</h1>
+<h1 class="h1">UpdateSocio</h1>
 <form id="formularioUpdateSocio" name="formularioUpdateSocio" class="form-group" ng-submit="updateSocio(socioSeleccionado)" novalidate>
 
+<!--user type-->
 	<div class="form-group" ng-class="{'has-error':formularioAddSocio.tipo.$invalid}">
-		<label for="tipo" class="label label-default">Tipo: </label>
+		<label for="tipo" class="label label-info">Tipo: </label>
 		<select class="form-control" name="tipo" id="tipo" ng-model="socioSeleccionado.tipo" ng-required="true">
 			<option value="" selected disabled="">Selecciona</option>
 			<option ng-repeat="tipo in tiposUsuarios" value="{{tipo}}">{{tipo.toUpperCase()}}</option>
 		</select>
 	</div>
+<!---->
 
+<!--user name-->
 	<div class="form-group" ng-class="{'has-error':formularioUpdateSocio.nombre.$invalid && formularioUpdateSocio.nombre.$dirty}">
-		<label for="nombre" class="label label-default">Nombre: </label>
+		<label for="nombre" class="label label-info">Nombre: </label>
 		<input type="text" name="nombre" id="nombre" class="form-control" value="{{socioSeleccionado.nombre}}" ng-model="socioSeleccionado.nombre" ng-required="true" minlength="3">
 	</div>
+<!---->
 
+<!--user lastname-->
 	<div class="form-group" ng-class="{'has-error':formularioUpdateSocio.apellido.$invalid && formularioUpdateSocio.apellido.$dirty}">
-		<label for="apellido" class="label label-default">Apellido: </label>
+		<label for="apellido" class="label label-info">Apellido: </label>
 		<input type="text" name="apellido" id="apellido" class="form-control" value="{{socioSeleccionado.apellido}}" ng-model="socioSeleccionado.apellido" ng-required="true" minlength="3">
 	</div>
+<!---->
 
+<!--user number-->
 	<div class="form-group" ng-class="{'has-error':formularioUpdateSocio.numero.$invalid && formularioUpdateSocio.numero.$dirty}">
-		<label for="numero" class="label label-default">Numero: </label>
+		<label for="numero" class="label label-info">Numero: </label>
 		<input type="text" name="numero" id="numero" class="form-control" value="{{socioSeleccionado.numero}}" ng-model="socioSeleccionado.numero" ng-required="true">
 	</div>
+<!---->
 
+<!--user email-->
 	<div class="form-group" ng-class="{'has-error':formularioUpdateSocio.correo.$invalid && formularioUpdateSocio.correo.$dirty}">
-		<label for="correo" class="label label-default">Correo: </label>
+		<label for="correo" class="label label-info">Correo: </label>
 		<input type="email" name="correo" id="correo" class="form-control" value="{{socioSeleccionado.correo}}" ng-model="socioSeleccionado.correo" ng-required="true">
 	</div>
+<!---->
 
+<!--user telephon-->
 	<div class="form-group">
-		<label for="password" class="label label-default">Password: </label>
+		<label for="telefono" class="label label-info">Telefono</label>
+		<input type="number" name="telefono" id="telefono" class="form-control" value="{{socioSeleccionado.telefono}}" ng-model="socioSeleccionado.telefono">
+	</div>
+<!---->
+
+<!--user password-->
+	<div class="form-group">
+		<label for="password" class="label label-info">Password: </label>
 		<input type="password" name="password" id="password" class="form-control" value="{{socioSeleccionado.password}}" ng-model="socioSeleccionado.password">
 	</div>
+<!---->
 
-	<input type="submit" name="submit" style="width:100%" class="btn btn-primary" value="Actualizar" ng-disabled="formularioUpdateSocio.$invalid">
+<!--submit button-->
+	<input type="submit" name="submit" style="width:100%;margin-bottom:10px;" class="btn btn-primary" value="Actualizar" ng-disabled="formularioUpdateSocio.$invalid">
+<!---->
+
+<!--Cancel button-->
+	<button class="btn btn-warning" ng-click="cancelar()" style="width:100%">Cancelar</button>
+<!---->
+	
 </form>
 </section>

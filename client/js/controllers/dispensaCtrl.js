@@ -1,12 +1,14 @@
 var app = angular.module("app");
-app.controller('DispensaCtrl', ['$scope','$location','ProductosServ','SociosServ','$window','Flash','TicketServ','ConfigServ','config','ngDialog', function ($scope,$location,ProductosServ,SociosServ,$window,Flash,TicketServ,ConfigServ,config,ngDialog) {
+app.controller('DispensaCtrl', ['$scope','$location','ProductosServ','SociosServ','$window','Flash','TicketServ','ConfigServ','config','ngDialog','progress', function ($scope,$location,ProductosServ,SociosServ,$window,Flash,TicketServ,ConfigServ,config,ngDialog,progress) {
+	//check login
 	if (!$scope.checkLogin()){
 		$location.path("/");
 	}else{
-		$scope.socios = [];
+		
 		//get all productos
 		ProductosServ.getAll().then(function (response) {
 			$scope.productos = response.data;
+			//splice products with stock 0 & baja attr
 			for (var i = 0; i < $scope.productos.length; i++) {
 				if ($scope.productos[i].stock[$scope.productos[i].stock.length-1].cantidad == 0 || $scope.productos[i].baja) {
 					$scope.productos.splice($scope.productos.indexOf($scope.productos[i]),1)
@@ -17,9 +19,12 @@ app.controller('DispensaCtrl', ['$scope','$location','ProductosServ','SociosServ
 			var message = '<strong>ERROR!!!</strong> '+JSON.stringify(err.data.message);
 		    Flash.create('danger', message)
 		});
+
+		$scope.socios = [];
 		//get all socios
 		SociosServ.getAll().then(function (response) {
 			$scope.socios = response.data;
+			//splice users with not number & administrator
 			for (var i = 0; i < $scope.socios.length; i++) {
 				if($scope.socios[i].numero == 0){
 					$scope.socios.splice($scope.socios.indexOf($scope.socios[i]),1)
@@ -34,6 +39,8 @@ app.controller('DispensaCtrl', ['$scope','$location','ProductosServ','SociosServ
 			var message = '<strong>ERROR!!!</strong> '+JSON.stringify(err.data);
 		    Flash.create('danger', message)
 		});
+
+		//get types
 		ConfigServ.getAll('type').then(function (response) {
 			$scope.tipos = response.data;
 		}, function (err) {
@@ -41,6 +48,7 @@ app.controller('DispensaCtrl', ['$scope','$location','ProductosServ','SociosServ
 			Flash.create('danger', message)
 		})
 
+		//get subtypes
 		ConfigServ.getAll('subtype').then(function (response) {
 			$scope.subtipos = response.data;
 		},function (err) {
@@ -48,6 +56,7 @@ app.controller('DispensaCtrl', ['$scope','$location','ProductosServ','SociosServ
 			Flash.create('danger', message)
 		})
 
+		//get varietys
 		ConfigServ.getAll('variety').then(function (response) {
 			$scope.variedades = response.data;
 		},function (err) {
@@ -58,10 +67,12 @@ app.controller('DispensaCtrl', ['$scope','$location','ProductosServ','SociosServ
 		//$scope.ambitos = config.ambitos;
 	}
 
-	$scope.ticketCompleto = {};
+
+	//variables anadir 
 	$scope.listaProductos = {};
 	$scope.prodDispensados = false;
 	var countProd = 0;
+	//add products to provisional ticket
 	$scope.anadir = function (ticket) {
 		for(var p in $scope.productos){
 			if($scope.productos[p]._id == ticket.producto){
@@ -78,6 +89,9 @@ app.controller('DispensaCtrl', ['$scope','$location','ProductosServ','SociosServ
 		$scope.ticket = angular.copy($scope.master);
 		$scope.prodDispensados = true;
 	}
+
+	//End and send ticket
+	$scope.ticketCompleto = {};
 	$scope.finalizar = function (socio) {
 		if ($scope.firma) {
 			//canvas creado en funcion de pintar
@@ -120,6 +134,8 @@ app.controller('DispensaCtrl', ['$scope','$location','ProductosServ','SociosServ
 		    Flash.create('danger', message);
 		}
 	}
+
+	//subtotal count
 	$scope.cuenta = 0;
 	$scope.subtotal = function () {
 		var cuenta = 0;
@@ -138,6 +154,8 @@ app.controller('DispensaCtrl', ['$scope','$location','ProductosServ','SociosServ
 		$scope.cuenta = cuenta
 		return cuenta
 	}
+
+	//iva count
 	$scope.cuentaIva = 0;
 	$scope.subtotalIva = function () {
 		var cuentaIva = 0;
@@ -151,11 +169,11 @@ app.controller('DispensaCtrl', ['$scope','$location','ProductosServ','SociosServ
 			var iva = (precioBruto * $scope.listaProductos[p].iva) / 100;
 			cuentaIva += iva
 		}
-		//var cuentaRedondeada = cuentaIva.toFixed(2)//Math.round(cuentaIva * 100) / 100
 		$scope.cuentaIva = cuentaIva;
 		return cuentaIva;
 	}
 
+	//count ticket total
 	$scope.totalTicket = function () {
 		var total = 0;
 		total = parseFloat($scope.cuenta) + parseFloat($scope.cuentaIva)
@@ -165,10 +183,12 @@ app.controller('DispensaCtrl', ['$scope','$location','ProductosServ','SociosServ
 		return total
 	}
 
+	//check product stock
 	$scope.stock = function (producto) {
 		return producto.stock[producto.stock.length-1].cantidad
 	}
 
+	//check client device
 	$scope.esMovil = {
 		Android: function(){
 			return navigator.userAgent.match(/Android/i);
@@ -178,13 +198,17 @@ app.controller('DispensaCtrl', ['$scope','$location','ProductosServ','SociosServ
 		}
 	}
 
+	//control variables
 	$scope.firma = false;
 	$scope.acuerdo = false;
 	$scope.paraEnviar = false;
+
+	//set ticket to send
 	$scope.preFinal = function () {
 		$scope.paraEnviar = true;
 	}
 
+	//acuerdo modal
 	$scope.modalAcuerdo = function () {
 		ngDialog.open({template: 'acuerdoTemplate.html', className: 'ngdialog-theme-default', scope:$scope, overlay:false});
 	}
@@ -192,19 +216,22 @@ app.controller('DispensaCtrl', ['$scope','$location','ProductosServ','SociosServ
 		ngDialog.closeAll()
 	}
 
+	//canvas variables
 	var pulsado;
 	var movimientos = new Array();
 	var countPinta = 0;
 	var canvasDiv = document.getElementById('lienzo');
 
+	//start canvas
 	initCanvas()
 
+	//start canvas and set draw functions
 	function initCanvas() {
 		countPinta = 0;
 		
 		canvas = document.createElement('canvas');
-		canvas.setAttribute('width', 300);
-		canvas.setAttribute('height', 300);
+		canvas.setAttribute('width', 400);
+		canvas.setAttribute('height', 400);
 		canvas.setAttribute('id', 'canvas');
 		canvasDiv.appendChild(canvas);
 		if(typeof G_vmlCanvasManager != 'undefined') {
@@ -259,11 +286,12 @@ app.controller('DispensaCtrl', ['$scope','$location','ProductosServ','SociosServ
 	    repinta();
 	}
 
+	//reset canvas
 	function resetCanvas() {
-		//context.clearRect(0, 0, canvas.width, canvas.height);
 		canvas.width=canvas.width
 	}
 
+	//draw in canvas
     function repinta(){
     	countPinta++
     	if (countPinta > 1) {

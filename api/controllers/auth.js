@@ -132,7 +132,6 @@ exports.emailUpdate = function (req,res) {
                 .send("Error actualizando el socio: "+err.errmsg)
         } else {
             logger.info("Modificado el socio: "+user.dni+' por el usuario: '+req.user.dni)
-            console.log(userUpdated)
             //devolvemos el usuario modificado
             delete userUpdated.password
             res.json(userUpdated)

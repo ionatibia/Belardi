@@ -24,8 +24,8 @@ var app = angular.module('app');
         }
 
 
-
         factory.getAll = function () {
+            configGet.url = config.apiUrl + '/productos'
             return $http(configGet);
         }
         factory.updateProducto = function (producto) {

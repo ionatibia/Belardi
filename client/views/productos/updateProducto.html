@@ -2,26 +2,40 @@
 <h1>updateproducto</h1>
 <form id="formularioUpdateProducto" name="formularioUpdateProducto" class="form-group" ng-submit="updateProducto(productoSeleccionado)" novalidate>
 
+<!--product name-->
 	<div class="form-group" ng-class="{'has-error':formularioUpdateProducto.nombre.$invalid && formularioUpdateProducto.nombre.$dirty}">
-		<label for="nombre" class="label label-default">Nombre: </label>
+		<label for="nombre" class="label label-info">Nombre: </label>
 		<input type="text" name="nombre" id="nombre" class="form-control" value="{{productoSeleccionado.nombre}}" ng-model="productoSeleccionado.nombre" ng-required="true" minlength="3">
 	</div>
+<!---->
 
+<!--product description-->
 	<div class="form-group" ng-class="{'has-error':formularioUpdateProducto.descripcion.$invalid && formularioUpdateProducto.descripcion.$dirty}">
-		<label for="descripcion" class="label label-default">Descripcion: </label>
+		<label for="descripcion" class="label label-info">Descripcion: </label>
 		<input type="text" name="descripcion" id="descripcion" class="form-control" value="{{productoSeleccionado.descripcion}}" ng-model="productoSeleccionado.descripcion">
 	</div>
+<!---->
 
+<!--product price-->
 	<div class="form-group" ng-class="{'has-error':formularioUpdateProducto.precio.$invalid && formularioUpdateProducto.precio.$dirty}">
-		<label for="precio" class="label label-default">Precio: </label>
+		<label for="precio" class="label label-info">Precio: </label>
 		<input type="number" name="precio" id="precio" class="form-control" value="{{productoSeleccionado.precio}}" ng-model="productoSeleccionado.precio" ng-required="true">
 	</div>
+<!---->
 
+<!--product iva-->
 	<div class="form-group" ng-class="{'has-error':formularioUpdateProducto.iva.$invalid && formularioUpdateProducto.iva.$dirty}">
-		<label for="iva" class="label label-default">Iva: </label>
+		<label for="iva" class="label label-info">Iva: </label>
 		<input type="number" name="iva" id="iva" class="form-control" value="{{productoSeleccionado.iva}}" ng-model="productoSeleccionado.iva" ng-required="true">
 	</div>
+<!---->
 
-	<input type="submit" name="submit" style="width:100%" class="btn btn-primary" value="Actualizar" ng-disabled="formularioUpdateProducto.$invalid">
+<!--submit button-->
+	<input type="submit" name="submit" style="width:100%;margin-bottom:10px" class="btn btn-primary" value="Actualizar" ng-disabled="formularioUpdateProducto.$invalid">
+<!---->
+
+<!--cancel button-->
+	<button class="btn btn-warning" ng-click="cancelar()" style="width:100%">Cancelar</button>
+<!---->
 </form>
 </section>

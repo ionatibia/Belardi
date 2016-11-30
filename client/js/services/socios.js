@@ -24,7 +24,6 @@ var app = angular.module('app');
         }
 
 
-
         factory.getAll = function () {
             return $http(configGet);
         }

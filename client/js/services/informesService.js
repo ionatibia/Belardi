@@ -23,7 +23,6 @@ app.factory('InformesSrv', ['$http','config', function ($http,config) {
     }
 
 
-
     factory.getTicketReport = function (obj) {
     	configAdd.url = endpoint+"/tickets";
     	configAdd.data = obj;

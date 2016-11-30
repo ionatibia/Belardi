@@ -4,7 +4,6 @@ var app = angular.module('app');
         var factory = {};
         var endpoint = config.apiUrl+'/auth/login';
 
-
         factory.login = function (user) {
             var config = {
                 url:endpoint,

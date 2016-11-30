@@ -1,14 +1,22 @@
 <div id="containerFormulario" class="container-fluid form-group">
+
 	<h1 class="h1">LOGIN</h1>
+
 	<form id="formularioLogin" name="formularioLogin" novalidate>
+		<!--login email-->
 		<div class="form-group" ng-class="{'has-error':formularioLogin.correo.$invalid && formularioLogin.correo.$dirty}">
-			<label for="correo" class="label label-default">Correo: </label>
+			<label for="correo" class="label label-info">Correo: </label>
 			<input type="email" name="correo" id="correo" class="form-control" ng-model="user.correo" ng-required="true">
 		</div>
+
+		<!--login password-->
 		<div class="form-group">
-			<label for="password" class="label label-default">Password: </label>
+			<label for="password" class="label label-info">Password: </label>
 			<input type="password" name="password" id="password" class="form-control" ng-model="user.password" ng-required="true" minlength="6">
 		</div>
+
+		<!--submit button-->
 		<button id="submitButton" class="btn btn-primary" ng-click="submit(user)" ng-disabled="formularioLogin.$invalid">Login</button>
 	</form>
+
 </div>

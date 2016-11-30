@@ -1,4 +1,5 @@
-angular.module('app',["ngRoute","ngFlash","ngDialog"])
+angular.module('app',["ngRoute","ngFlash","ngDialog","ngAnimate","ngProgress","angularUtils.directives.dirPagination"])
+	
 	//Routes
 	.config(function($routeProvider,$httpProvider) {
 	    $routeProvider
@@ -7,7 +8,7 @@ angular.module('app',["ngRoute","ngFlash","ngDialog"])
 	        controller: 'MainCtrl'
 	    })
 	    .when("/dispensa", {
-	        templateUrl: "../views/tickets/dispensa.html",
+	        templateUrl: "../views/dispensa.html",
 	        controller: 'DispensaCtrl' 
 	    })
 	    .when('/socios', {
@@ -47,25 +48,9 @@ angular.module('app',["ngRoute","ngFlash","ngDialog"])
 	    	controller: 'AlmacenCtrl'
 	    })
 	    .when('/contabilidad', {
-	    	templateUrl: '../views/contabilidad/contabilidad.html',
+	    	templateUrl: '../views/contabilidad.html',
 	    	controller: 'ContabilidadCtrl'
 	    })
-	   /* .when('/contabilidad/addIngreso', {
-	    	templateUrl: '../views/contabilidad/ingresos/addIngreso.html',
-	    	controller: 'IngresosCtrl'
-	    })
-	    .when('/contabilidad/updateIngreso', {
-	    	templateUrl: '../views/contabilidad/ingresos/updateIngreso.html',
-	    	controller: 'IngresosCtrl'
-	    })
-	    .when('/contabilidad/addGasto', {
-	    	templateUrl: '../views/contabilidad/gastos/addGasto.html',
-	    	controller: 'GastosCtrl'
-	    })
-	    .when('/contabilidad/updateGasto', {
-	    	templateUrl: '../views/contabilidad/gastos/updateGasto.html',
-	    	controller: 'GastosCtrl'
-	    })*/
 	    .when('/config', {
 	    	templateUrl: '../views/config.html',
 	    	controller: 'ConfigCtrl'
@@ -73,11 +58,14 @@ angular.module('app',["ngRoute","ngFlash","ngDialog"])
 
 	    .otherwise({ redirectTo: '/' });
 
+	    //inject interceptors
 	    $httpProvider.interceptors.push('HeadersInterceptor');
 	    $httpProvider.interceptors.push('LoadingInterceptor');
 	})
+
 	//Controller
 	.controller('AppCtrl', ['$scope','$location','$window','Flash', function ($scope,$location,$window,Flash) {
+		
 		//Active links
 		$scope.isActive = function (viewLocation) {
 			if ($location.path().indexOf(viewLocation) > -1) {
@@ -85,7 +73,6 @@ angular.module('app',["ngRoute","ngFlash","ngDialog"])
 			}else{
 				return false
 			}
-        	//return viewLocation === $location.path();
     	};
 
     	//Login comprobation
@@ -97,13 +84,17 @@ angular.module('app',["ngRoute","ngFlash","ngDialog"])
 			}
 		}//check login
 
+		//logout function
 		$scope.logout = function () {
+			//clear local storage include token
 			$window.localStorage.clear();
 			var message = '<strong>Agur... </strong><i class="glyphicon glyphicon-grain"></i><i class="glyphicon glyphicon-grain"></i><i class="glyphicon glyphicon-grain"></i>&nbsp;<i class="glyphicon glyphicon-thumbs-up"></i>';
 		    Flash.create('success', message);
 			$location.path('/')
 		}
 	}])//AppCtrl controller
+
+	//token interceptor
 	.factory("HeadersInterceptor", function($window){
 	      var request = function request(config){
 	          config.headers["X-ACCESS-TOKEN"] = $window.localStorage.getItem('token');
@@ -114,6 +105,8 @@ angular.module('app',["ngRoute","ngFlash","ngDialog"])
 	          request: request
 	      };
 	})
+
+	//loading bar interceptor
 	.factory("LoadingInterceptor",function($q, $rootScope){
       
       return function(promise){
@@ -132,6 +125,8 @@ angular.module('app',["ngRoute","ngFlash","ngDialog"])
           
       }
     })
+
+    //app constants
 	.constant('config', {
 	    apiUrl: 'http://localhost:8000',
 	    tiposUsuarios: ["Normal","Terapeutico"],
@@ -141,6 +136,8 @@ angular.module('app',["ngRoute","ngFlash","ngDialog"])
 	    tiposGasto:['factura','nomina','otros'],
 	    ivaCuotas:21
 	})
+
+	//loading bar function
 	.service("progress", ["$rootScope", "ngProgress", function($rootScope, ngProgress){
 		$rootScope.$on("event:endProgress", function(){
 			ngProgress.complete();

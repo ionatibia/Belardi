@@ -8,6 +8,7 @@ var path = require('path'),
 	mongoose = require('mongoose'),
 	Product = mongoose.model('Product'),
 	lodash = require('lodash');
+//mongoose.set('debug', true);
 //log
 var winston = require('winston');
 var logger = new (winston.Logger)({
@@ -56,7 +57,7 @@ exports.create = function (req, res) {
  * SHOW product byID
  *
  */
-module.exports.find = function (req, res) {
+/*module.exports.find = function (req, res) {
 	res.json(req.product);
 };//exports read
 
@@ -116,14 +117,14 @@ module.exports.delete = function (req, res) {
  */
 module.exports.list = function (req, res) {
 	//buscamos todos los articulos ordenados por fecha
-	Product.find().sort('nombre').populate('tipo').populate('subtipo').populate('variedad').exec(function (err, products) {
+	Product.find().sort('numero').populate('tipo').populate('subtipo').populate('variedad').exec(function (err, products) {
 		if (err) {
 			logger.error("Error buscando productos")
 			return res
 				.status(400)
 				.send("Error buscando productos: "+err.errmsg);
 		} else {
-			//devolvemos todos los articulos
+			//devolvemos todos los productos
 			return res
 				.status(200)
 				.json(products);

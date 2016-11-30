@@ -1,18 +1,35 @@
 var app = angular.module('app');
 
-app.controller('SociosCtrl', ['$scope','$location', 'SociosServ','Flash','config',function ($scope,$location,SociosServ,Flash,config) {
+app.controller('SociosCtrl', ['$scope','$location', 'SociosServ','Flash','config','ngDialog',function ($scope,$location,SociosServ,Flash,config,ngDialog) {
+	
+	//check login
 	if (!$scope.checkLogin()){
 		$location.path("/");
 	} else{
+		//get users types
 		$scope.tiposUsuarios = config.tiposUsuarios;
+
 		//get all socios
 		SociosServ.getAll().then(function (response) {
 			$scope.socios = response.data;
+			//splice admin user
+			for (var i = 0; i < $scope.socios.length; i++) {
+				if($scope.socios[i].numero == 0){
+					$scope.socios.splice($scope.socios.indexOf($scope.socios[i]),1)
+				}
+			}
 		}, function (err) {
 			var message = '<strong>ERROR!!!</strong> '+JSON.stringify(err.data);
 		    Flash.create('danger', message);
 		});
 	}
+
+	//table sort function
+	$scope.sort = function(keyname){
+        $scope.sortKey = keyname;   //set the sortKey to the param passed
+        $scope.reverse = !$scope.reverse; //if true make it false and vice versa
+    }
+    
 	//update socio
 	$scope.updateSocio = function (socio) {
 		if (!isNaN(socio.numero) || socio.numero.indexOf('baja') != -1) {
@@ -30,7 +47,8 @@ app.controller('SociosCtrl', ['$scope','$location', 'SociosServ','Flash','config
 	        Flash.create('danger', message);
 		}
 	}
-	//ad socio
+
+	//add socio
 	$scope.addSocio = function (socio) {
 		if (!isNaN(socio.numero)) {
 			socio.correo = socio.correo.toLowerCase().trim()
@@ -47,6 +65,7 @@ app.controller('SociosCtrl', ['$scope','$location', 'SociosServ','Flash','config
 	        Flash.create('danger', message);
 		}
 	}
+
 	//deleteSocio
 	$scope.deleteSocio = function (socio) {
 		if (confirm("Seguro que quieres borrar el socio??")) {
@@ -61,6 +80,7 @@ app.controller('SociosCtrl', ['$scope','$location', 'SociosServ','Flash','config
 		}
 	}
 
+	//baja socio
 	$scope.bajaSocio = function (socio) {
 		if (socio.numero == '0') {
 			var message = '<strong>ERROR!!!</strong> no puedes dar de baja al socio administrador';
@@ -79,6 +99,7 @@ app.controller('SociosCtrl', ['$scope','$location', 'SociosServ','Flash','config
 		}
 	}
 
+	//alta socio
 	$scope.altaSocio = function (socio) {
 		var num = prompt("Introduce el número de socio: ");
 		if (!isNaN(num)) {
@@ -98,6 +119,7 @@ app.controller('SociosCtrl', ['$scope','$location', 'SociosServ','Flash','config
 		}
 	}
 
+	//check baja
 	$scope.esBaja = function (socio) {
 		if (isNaN(parseInt(socio))) {
 			return true
@@ -116,5 +138,30 @@ app.controller('SociosCtrl', ['$scope','$location', 'SociosServ','Flash','config
 		$location.path('/socios/updateSocio')
 	}
 	
+	//cancell update user
+	$scope.cancelar = function () {
+		$location.path('/socios')
+	}
 
-}]);
+	//user data
+	$scope.socioDatos = {};
+	$scope.datosSocio = function (user) {
+		$scope.socioDatos = user;
+		ngDialog.open({template: 'datosSocioTemplate.html', className: 'ngdialog-theme-default', scope:$scope, overlay:true,showClose:true});
+	}
+
+	$scope.cancelarModal = function () {
+		ngDialog.closeAll()
+	}
+
+}])
+//filtro locale date
+.filter('toLocale', function () {
+    return function (item) {
+    	if (item != null) {
+    		return new Date(item).toLocaleString()
+    	}else{
+    		return item
+    	}
+    };
+});

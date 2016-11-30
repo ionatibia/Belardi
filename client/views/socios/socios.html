@@ -1,25 +1,101 @@
 <section>
 <div>
-	<h1>SOCIOS</h1>
-	<a href="#/socios/addSocio" class="glyphicon glyphicon-plus"></a>&nbsp;({{socios.length - 1}})
-	<input type="text" name="buscador" ng-model="buscador" placeholder="Buscar" class="form-control">
-	<div id="listaSocios">
-		<ul class="list-group">
-			<li class="list-group-item" ng-repeat="socio in socios | filter: buscador" ng-if="(socio.numero != '0')">{{socio.nombre}} {{socio.apellido}} <br/>
-			<p ng-if="esBaja(socio.numero)" style="color:red">Baja</p>
-			<small ng-if="!esBaja(socio.numero)">
-			<span ng-if="socio.cuota == 0" class="noDebe">Cuota: {{socio.cuota}}</span><span ng-if="socio.cuota != 0" class="debe">Cuota: {{socio.cuota}}</span>
-			Número: {{socio.numero}}<br/>
-			Tipo: {{socio.tipo}}<br/>
-			Correo: {{socio.correo}}
-			</small> 
-			<a id="botonUpdate" class="btn btn-primary" ng-click="seleccionSocioUpdate(socio)"><span class="glyphicon glyphicon-pencil"></span></a>
-			<a id="botonDelete" class="btn btn-danger" ng-click="deleteSocio(socio)"><span class="glyphicon glyphicon-trash"></span></a>
-			<a id="botonBaja" class="btn btn-warning" ng-if="!esBaja(socio.numero)" ng-click="bajaSocio(socio)"><span class="glyphicon glyphicon-minus"></span></a>
-			<a id="botonAlta" class="btn btn-success" ng-if="esBaja(socio.numero)" ng-click="altaSocio(socio)"><span class="glyphicon glyphicon-plus"></span></a>
-			</li>
-		</ul>
-	</div>
-	<!--<pagination ng-model="currentPage" total-items="todos.length" max-size="maxSize" boundary-links="true"></pagination>-->
+	<h1 class="h1">SOCIOS</h1>
+
+	<!--add user button + users length tag-->
+	<a href="#/socios/addSocio" class="glyphicon glyphicon-plus" title="Añadir Socio"></a><span style="color:white;margin-left:20px;">Total Socios: {{socios.length}}</span>
+
+	<!-- search input-->
+	<form class="form-inline">
+        <div class="input-group" style="margin-bottom:20px;width:100%">
+            <input type="text" ng-model="search" class="form-control" placeholder="Buscar">
+            <div class="input-group-addon">
+		        <span class="glyphicon glyphicon-filter"></span>
+		    </div>
+		    <div class="input-group-addon">
+		        <span class="green">{{((socios | filter:search).length)}}</span>
+		    </div>
+        </div>
+    </form>
+
+    <!--users table-->
+	<table id="tablaSocios" class="table table-striped table-responsive">
+		<thead>
+			<tr style="font-size:15px;background-color:white">
+			<!--sort(type) to sort table with function in controller-->
+				<th ng-click="sort('numero')">Numero
+					<span class="glyphicon sort-icon" ng-show="sortKey=='numero'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+				</th>
+				<th ng-click="sort('nombre')">Nombre
+					<span class="glyphicon sort-icon" ng-show="sortKey=='nombre'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+				</th>
+				<th ng-click="sort('apellido')">Apellido
+				<span class="glyphicon sort-icon" ng-show="sortKey=='apellido'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+				</th>
+				<th ng-click="sort('correo')">Correo
+				<span class="glyphicon sort-icon" ng-show="sortKey=='correo'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+				</th>
+				<th ng-click="sort('cuota')">Cuota
+				<span class="glyphicon sort-icon" ng-show="sortKey=='cuota'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+				</th>
+				<th ng-click="sort('tipo')">Tipo
+				<span class="glyphicon sort-icon" ng-show="sortKey=='tipo'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+				</th>
+				<th>Controles</th>
+			</tr>
+		</thead>
+		<tbody>
+		<!--ng-repeat >> dir-paginate; orderBy sort; filter by search; items per page-->
+			<tr dir-paginate="socio in socios | orderBy:sortKey:reverse | filter:search | itemsPerPage:5" ng-if="(socio.numero != '0')" style="font-size:15px;">
+				<td ng-click="datosSocio(socio)"><span ng-if="socio.numero.indexOf('baja') == -1">{{socio.numero}}</span></td>
+				<td ng-click="datosSocio(socio)">{{socio.nombre}}</td>
+				<td ng-click="datosSocio(socio)">{{socio.apellido}}</td>
+				<td ng-click="datosSocio(socio)" style="overflow-wrap: break-word;">{{socio.correo}}</td>
+				<td ng-click="datosSocio(socio)" ng-if="socio.cuota == 0" class="noDebe">{{socio.cuota}}</td>
+				<td ng-click="datosSocio(socio)" ng-if="socio.cuota != 0" class="debe">{{socio.cuota}}</td>
+				<td ng-click="datosSocio(socio)">{{socio.tipo}}</td>
+				<td>
+					<a id="botonUpdate" class="btn btn-primary" ng-click="seleccionSocioUpdate(socio)"><span class="glyphicon glyphicon-pencil"></span></a>
+					<a id="botonDelete" class="btn btn-danger" ng-click="deleteSocio(socio)"><span class="glyphicon glyphicon-trash"></span></a>
+					<a id="botonBaja" class="btn btn-warning" ng-if="!esBaja(socio.numero)" ng-click="bajaSocio(socio)"><span class="glyphicon glyphicon-minus"></span></a>
+					<a id="botonAlta" class="btn btn-success" ng-if="esBaja(socio.numero)" ng-click="altaSocio(socio)"><span class="glyphicon glyphicon-plus"></span></a>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+	<center>
+		<!--pagination tag-->
+		<dir-pagination-controls max-size="5" direction-links="true" boundary-links="true">
+	    </dir-pagination-controls>
+    </center>
+
+    <!--MODAL DATOS-->
+    <script type="text/ng-template" id="datosSocioTemplate.html">
+    <div class="panel-heading">
+        <h1>Datos usuario</h1>
+    </div>
+
+    <div class="panel-body">
+    	<small>
+    	<ul>
+    		<li><span class="green">Numero:</span> {{socioDatos.numero}}</li>
+    		<li><span class="green">Tipo:</span> {{socioDatos.tipo}}</li>
+    		<li><span class="green">Nombre:</span> {{socioDatos.nombre}}</li>
+    		<li><span class="green">Apellido:</span> {{socioDatos.apellido}}</li>
+    		<li><span class="green">DNI:</span> {{socioDatos.dni}}</li>
+    		<li><span class="green">Correo:</span> {{socioDatos.correo}}</li>
+    		<li><span class="green">Telefono:</span> {{socioDatos.telefono}}</li>
+    		<li><span class="green">Fecha Alta:</span> {{socioDatos.fecha_alta | toLocale}}</li>
+    		<li><span class="green">Fecha Baja:</span> {{socioDatos.fecha_baja | toLocale}}</li>
+    		<li><span class="green">Cuota:</span> {{socioDatos.cuota}}</li>
+    	</ul>
+    	</small>
+    </div>
+    
+    <div class="panel-footer">
+        <button class="btn btn-primary" ng-click="cancelarModal()">Cancelar</button>
+    </div>
+</script>
+    <!---->
 </div>
 </section>

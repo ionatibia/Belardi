@@ -9,19 +9,19 @@
     <form id="formAddType" name="formAddType" class="form-group" ng-submit="addType(type)" novalidate>
         <div class="panel-body">
             <!--<div class="form-group" ng-class="{'has:error':formAddType.ambito.$invalid && formAddType.ambito.$dirty}">
-                <label for="ambito" class="label label-default">Ambito: </label>
+                <label for="ambito" class="label label-info">Ambito: </label>
                 <select id="ambito" name="ambito" class="form-control" ng-model="type.ambito" ng-required="true">
                     <option value="" selected disabled>Selecciona</option>
                     <option ng-repeat="ambito in ambitos" value="{{ambito.nombre}}">{{ambito.nombre.toUpperCase()}}</option>
                 </select>
             </div>-->
             <div class="form-group" ng-class="{'has-error':formAddType.nombre.$invalid && formAddType.nombre.$dirty}">
-                <label for="nombreTipo" class="label label-default">Nombre: </label>
+                <label for="nombreTipo" class="label label-info">Nombre: </label>
                 <!--<input type="text" name="nombreTipo" id="nombreTipo" ng-model="type.nombre" ng-disabled="!type.ambito" ng-required="true" maxlength="20">-->
                 <input type="text" name="nombreTipo" id="nombreTipo" ng-model="type.nombre" ng-required="true" maxlength="20">
             </div>
             <div class="form-group">
-                <label for="descripcionTipo" class="label label-default">Descripcion: </label>
+                <label for="descripcionTipo" class="label label-info">Descripcion: </label>
                 <!--<input type="text" name="descripcionTipo" id="descripcionTipo" ng-model="type.descripcion" ng-disabled="!type.ambito">-->
                 <input type="text" name="descripcionTipo" id="descripcionTipo" ng-model="type.descripcion">
             </div>
@@ -43,18 +43,18 @@
     <form id="formUpdateType" name="formUpdateType" class="form-group" ng-submit="updateType(tipoSeleccionado)" novalidate>
         <div class="panel-body">
             <!--<div class="form-group" ng-class="{'has:error':formUpdateType.ambito.$invalid && formUpdateType.ambito.$dirty}">
-                <label for="ambito" class="label label-default">Ambito: </label>
+                <label for="ambito" class="label label-info">Ambito: </label>
                 <select id="ambito" name="ambito" class="form-control" ng-model="tipoSeleccionado.ambito" ng-required="true">
                     <option value="" selected disabled>Selecciona</option>
                     <option ng-repeat="ambito in ambitos" value="{{ambito.nombre}}">{{ambito.nombre.toUpperCase()}}</option>
                 </select>
             </div>-->
             <div class="form-group" ng-class="{'has-error':formUpdateType.nombre.$invalid && formUpdateType.nombre.$dirty}">
-                <label for="nombreTipo" class="label label-default">Nombre: </label>
+                <label for="nombreTipo" class="label label-info">Nombre: </label>
                 <input type="text" name="nombreTipo" id="nombreTipo" ng-model="tipoSeleccionado.nombre" ng-required="true" maxlength="20">
             </div>
             <div class="form-group">
-                <label for="descripcionTipo" class="label label-default">Descripcion: </label>
+                <label for="descripcionTipo" class="label label-info">Descripcion: </label>
                 <input type="text" name="descripcionTipo" id="descripcionTipo" ng-model="tipoSeleccionado.descripcion">
             </div>
         </div>
@@ -80,18 +80,18 @@
     <form id="formAddSubtype" name="formAddSubtype" class="form-group" ng-submit="addSubType(subtype)" novalidate>
         <div class="panel-body">
             <div class="form-group" ng-class="{'has:error':formAddSubtype.tipo.$invalid && formAddSubtype.tipo.$dirty}">
-                <label for="tipo" class="label label-default">Tipo: </label>
+                <label for="tipo" class="label label-info">Tipo: </label>
                 <select id="tipo" name="tipo" class="form-control" ng-model="subtype.tipo" ng-required="true">
                     <option value="" selected disabled>Selecciona</option>
                     <option ng-repeat="tipo in tipos" value="{{tipo._id}}">{{tipo.nombre.toUpperCase()}}</option>
                 </select>
             </div>
             <div class="form-group" ng-class="{'has-error':formAddSubtype.nombre.$invalid && formAddSubtype.nombre.$dirty}">
-                <label for="nombreSubtipo" class="label label-default">Nombre: </label>
+                <label for="nombreSubtipo" class="label label-info">Nombre: </label>
                 <input type="text" name="nombreSubtipo" id="nombreSubtipo" ng-model="subtype.nombre" ng-disabled="!subtype.tipo" ng-required="true" maxlength="20">
             </div>
             <div class="form-group">
-                <label for="descripcionSubtipo" class="label label-default">Descripcion: </label>
+                <label for="descripcionSubtipo" class="label label-info">Descripcion: </label>
                 <input type="text" name="descripcionSubtipo" id="descripcionSubtipo" ng-model="subtype.descripcion" ng-disabled="!subtype.tipo">
             </div>
         </div>
@@ -112,18 +112,18 @@
     <form id="formUpdateSubtype" name="formUpdateSubtype" class="form-group" ng-submit="updateSubtype(subtypeSeleccionado)" novalidate>
         <div class="panel-body">
             <div class="form-group" ng-class="{'has:error':formUpdateSubtype.tipo.$invalid && formUpdateSubtype.tipo.$dirty}">
-                <label for="tipo" class="label label-default">Tipo: </label>
+                <label for="tipo" class="label label-info">Tipo: </label>
                 <select id="tipo" name="tipo" class="form-control" ng-model="subtypeSeleccionado.tipo._id" ng-required="true">
                     <option value="" selected disabled>Selecciona</option>
                     <option ng-repeat="tipo in tipos" value="{{tipo._id}}">{{tipo.nombre.toUpperCase()}}</option>
                 </select>
             </div>
             <div class="form-group" ng-class="{'has-error':formUpdateSubtype.nombre.$invalid && formUpdateSubtype.nombre.$dirty}">
-                <label for="nombreSubtipo" class="label label-default">Nombre: </label>
+                <label for="nombreSubtipo" class="label label-info">Nombre: </label>
                 <input type="text" name="nombreSubtipo" id="nombreSubtipo" ng-model="subtypeSeleccionado.nombre" ng-required="true" maxlength="20">
             </div>
             <div class="form-group">
-                <label for="descripcionSubtipo" class="label label-default">Descripcion: </label>
+                <label for="descripcionSubtipo" class="label label-info">Descripcion: </label>
                 <input type="text" name="descripcionSubtipo" id="descripcionSubtipo" ng-model="subtypeSeleccionado.descripcion">
             </div>
         </div>
@@ -147,25 +147,25 @@
     <form id="formAddVariety" name="formAddVariety" class="form-group" ng-submit="addVariety(variety)" novalidate>
         <div class="panel-body">
             <div class="form-group" ng-class="{'has:error':formAddVariety.tipo.$invalid && formAddVariety.tipo.$dirty}">
-                <label for="tipo" class="label label-default">Tipo: </label>
+                <label for="tipo" class="label label-info">Tipo: </label>
                 <select id="tipo" name="tipo" class="form-control" ng-model="variety.tipo" ng-required="true">
                     <option value="" selected disabled>Selecciona</option>
                     <option ng-repeat="tipo in tipos" value="{{tipo._id}}">{{tipo.nombre.toUpperCase()}}</option>
                 </select>
             </div>
             <div class="form-group" ng-class="{'has:error':formAddVariety.subtipo.$invalid && formAddVariety.subtipo.$dirty}">
-                <label for="subtipo" class="label label-default">Subtipo: </label>
+                <label for="subtipo" class="label label-info">Subtipo: </label>
                 <select id="subtipo" name="subtipo" class="form-control" ng-model="variety.subtipo" ng-required="true">
                     <option value="" selected disabled>Selecciona</option>
                     <option ng-repeat="subtipo in subtipos | filter: variety.tipo" value="{{subtipo._id}}">{{subtipo.nombre.toUpperCase()}}</option>
                 </select>
             </div>
             <div class="form-group" ng-class="{'has-error':formAddVariety.nombre.$invalid && formAddVariety.nombre.$dirty}">
-                <label for="nombreVariedad" class="label label-default">Nombre: </label>
+                <label for="nombreVariedad" class="label label-info">Nombre: </label>
                 <input type="text" name="nombreVariedad" id="nombreVariedad" ng-model="variety.nombre" ng-required="true" maxlength="20">
             </div>
             <div class="form-group">
-                <label for="descripcionVariedad" class="label label-default">Descripcion: </label>
+                <label for="descripcionVariedad" class="label label-info">Descripcion: </label>
                 <input type="text" name="descripcionVariedad" id="descripcionVariedad" ng-model="variety.descripcion">
             </div>
         </div>
@@ -186,25 +186,25 @@
     <form id="formUpdateVariety" name="formUpdateVariety" class="form-group" ng-submit="updateVariety(varietySeleccionado)" novalidate>
         <div class="panel-body">
             <div class="form-group" ng-class="{'has:error':formUpdateVariety.tipo.$invalid && formUpdateVariety.tipo.$dirty}">
-                <label for="tipo" class="label label-default">Tipo: </label>
+                <label for="tipo" class="label label-info">Tipo: </label>
                 <select id="tipo" name="tipo" class="form-control" ng-model="varietySeleccionado.tipo._id" ng-required="true">
                     <option value="" selected disabled>Selecciona</option>
                     <option ng-repeat="tipo in tipos" value="{{tipo._id}}">{{tipo.nombre.toUpperCase()}}</option>
                 </select>
             </div>
             <div class="form-group" ng-class="{'has:error':formUpdateVariety.subtipo.$invalid && formUpdateVariety.subtipo.$dirty}">
-                <label for="subtipo" class="label label-default">Subtipo: </label>
+                <label for="subtipo" class="label label-info">Subtipo: </label>
                 <select id="subtipo" name="subtipo" class="form-control" ng-model="varietySeleccionado.subtipo._id" ng-required="true">
                     <option value="" selected disabled>Selecciona</option>
                     <option ng-repeat="subtipo in subtipos | filter: varietySeleccionado.tipo._id" value="{{subtipo._id}}">{{subtipo.nombre.toUpperCase()}}</option>
                 </select>
             </div>
             <div class="form-group" ng-class="{'has-error':formUpdateVariety.nombre.$invalid && formUpdateVariety.nombre.$dirty}">
-                <label for="nombreVariedad" class="label label-default">Nombre: </label>
+                <label for="nombreVariedad" class="label label-info">Nombre: </label>
                 <input type="text" name="nombreVariedad" id="nombreVariedad" ng-model="varietySeleccionado.nombre" ng-required="true" maxlength="20">
             </div>
             <div class="form-group">
-                <label for="descripcionVariedad" class="label label-default">Descripcion: </label>
+                <label for="descripcionVariedad" class="label label-info">Descripcion: </label>
                 <input type="text" name="descripcionVariedad" id="descripcionVariedad" ng-model="varietySeleccionado.descripcion">
             </div>
         </div>
@@ -219,18 +219,18 @@
     <!---------------->
 
 <div><small>
-	<h1>Configuracion</h1>
+	<h1 class="h1">Configuracion</h1>
 
     <!--CUOTAS-->
     <div id="anadirCuota" class="col-xs-6">
         <h3>Añadir cuota por Usuario</h3>
         <div class="form-group">
-            <label for="numeroSocio" class="label label-default">Nº Socio: </label>
-            <input list="socios" name="socio" ng-model="socio" class="form-control" style="overflow:scroll">
+            <label for="numeroSocio" class="label label-info">Nº Socio: </label>
+            <input list="socios" name="numeroSocio" id="numeroSocio" ng-model="socio" class="form-control" style="overflow:scroll">
             <datalist id="socios">
                 <option ng-repeat="socio in socios" value="{{socio.numero}}">{{socio.numero}}</option>
             </datalist>
-            <label for="cantidadU" class="label label-default">Cantidad: </label>
+            <label for="cantidadU" class="label label-info">Cantidad: </label>
             <input type="number" name="cantidadU" id="cantidadU" ng-model="cantidadU" class="form-control">
             <button class="btn btn-primary" ng-click="anadirCuotaU(socio,cantidadU)">Añadir</button>
         </div>
@@ -239,7 +239,7 @@
     <div id="anadirCuota" class="col-xs-6">
         <h3>Añadir cuota a todos</h3>
         <div class="form-group">
-            <label for="cantidad" class="label label-default">Cantidad</label>
+            <label for="cantidad" class="label label-info">Cantidad</label>
             <input type="number" name="cantidad" id="cantidad" ng-model="cantidad" class="form-control">
             <button class="btn btn-primary" ng-click="anadirCuotaAll(cantidad)">Añadir</button> 
         </div>
@@ -248,15 +248,15 @@
 
     <!--TOTAL-->
     <div id="totalDiv" style="margin-bottom:50px;">
-        <h3>TOTAL</h3>
+        <h3 style="color:white">TOTAL</h3>
         <input type="number" name="total" ng-model="total" ng-show="totales.length == 0" class="form-control" style="width:60%;float:left;margin-right:10px;">
         <button class="btn btn-primary" ng-click="anadirTotal(total)" ng-show="totales.length == 0">Añadir</button>
         <h3 id="totalEtiq" ng-show="totales.length != 0" style="width:60%;margin-right:10px;margin-bottom:50px;">{{total.toFixed(2)}}</h3>
     </div>
 
     <!--FIN TOTAL-->
-	<div class="col-lg-5 table-responsive">
-        <h4 class="configTitle">Tipos</h4><button class="btn btn-primary" ng-click="crearTipo()"><i class="glyphicon glyphicon-plus"></i></button>
+	<div class="col-lg-5 table-responsive" id="divTipos">
+        <h3 class="configTitle">Tipos</h3><button class="btn btn-primary" ng-click="crearTipo()" style="margin-top:15px"><i class="glyphicon glyphicon-plus"></i></button>
         <table class="table table-striped table-bordered">
             <thead>
             <tr style="background-color: #333333; color: white">
@@ -277,8 +277,8 @@
             </tbody>
         </table>
     </div>
-    <div class="col-lg-7 table-responsive">
-        <h4 class="configTitle">Subtipos</h4><button class="btn btn-primary" ng-click="crearSubtipo()"><i class="glyphicon glyphicon-plus"></i></button>
+    <div class="col-lg-7 table-responsive" id="divSubtipos">
+        <h3 class="configTitle">Subtipos</h3><button class="btn btn-primary" ng-click="crearSubtipo()" style="margin-top:15px"><i class="glyphicon glyphicon-plus"></i></button>
         <table class="table table-striped table-bordered">
             <thead>
             <tr style="background-color: #333333; color: white">
@@ -301,8 +301,8 @@
             </tbody>
         </table>
     </div>
-    <div class="col-lg-12 table-responsive">
-        <h4 class="configTitle">Variedades</h4><button class="btn btn-primary" ng-click="crearVariedad()"><i class="glyphicon glyphicon-plus"></i></button>
+    <div class="col-lg-12 table-responsive" id="divVariedades">
+        <h3 class="configTitle">Variedades</h3><button class="btn btn-primary" ng-click="crearVariedad()" style="margin-top:15px"><i class="glyphicon glyphicon-plus"></i></button>
         <table class="table table-striped table-bordered">
             <thead>
             <tr style="background-color: #333333;color: white">

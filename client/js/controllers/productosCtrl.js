@@ -1,6 +1,7 @@
 var app = angular.module('app');
 
 app.controller('ProductosCtrl', ['$scope','$location','ProductosServ','Flash','ConfigServ','config', function ($scope,$location,ProductosServ,Flash,ConfigServ,config) {
+	//check login
 	if (!$scope.checkLogin()){
 		$location.path("/");
 	} else{
@@ -11,18 +12,21 @@ app.controller('ProductosCtrl', ['$scope','$location','ProductosServ','Flash','C
 			var message = '<strong>ERROR!!!</strong> '+JSON.stringify(err.data);
 		    Flash.create('danger', message);
 		})
+		//get all types
 		ConfigServ.getAll('type').then(function (response) {
 			$scope.tipos = response.data;
 		}, function (err) {
 			var message = '<strong>ERROR!!!</strong> '+JSON.stringify(err.data);
 			Flash.create('danger', message);
 		})
+		//get all subtypes
 		ConfigServ.getAll('subtype').then(function (response) {
 			$scope.subtipos = response.data;
 		},function (err) {
 			var message = '<strong>ERROR!!!</strong> '+JSON.stringify(err.data);
 			Flash.create('danger', message);
 		})
+		//get all varietys
 		ConfigServ.getAll('variety').then(function (response) {
 			$scope.variedades = response.data;
 		},function (err) {
@@ -33,11 +37,19 @@ app.controller('ProductosCtrl', ['$scope','$location','ProductosServ','Flash','C
 		//$scope.ambitos = config.ambitos;
 	}
 	
+	//table sort function
+	$scope.sort = function(keyname){
+        $scope.sortKey = keyname;   //set the sortKey to the param passed
+        $scope.reverse = !$scope.reverse; //if true make it false and vice versa
+    }
+
 	$scope.seleccionTipo = function (tipo) {
 		$scope.tipo = tipo;
 	}
+
 	//add producto
 	$scope.addProducto = function (producto) {
+		//get type, subtype & variety objects
 		for(var t in $scope.tipos){
 			if (producto.tipo == $scope.tipos[t]._id) {
 				producto.tipo = $scope.tipos[t]
@@ -55,18 +67,28 @@ app.controller('ProductosCtrl', ['$scope','$location','ProductosServ','Flash','C
 				}
 			}
 		}
+		//send data to save product
 		ProductosServ.addProducto(producto).then(function (response) {
 			var message = '<strong>HECHO!!!</strong> El producto ha sido guardado correctamente';
 	        Flash.create('success', message);
+	        $scope.productos.push(producto)
 	        $location.path('/productos')
 		}, function (err) {
 			var message = '<strong>ERROR!!!</strong> '+JSON.stringify(err.data);
 	        Flash.create('danger', message);
 		})
 	}
+
 	//update producto
 	$scope.updateProducto = function (producto) {
+		//send data to update
 		ProductosServ.updateProducto(producto).then(function (response) {
+			//change object with new object
+			for (var i = 0; i < $scope.productos.length; i++) {
+				if($scope.productos[i]._id == response.data._id){
+					$scope.productos[i] = response.data;
+				}
+			}
 	        var message = '<strong>HECHO!!!</strong> El producto ha sido modificado correctamente';
 	        Flash.create('success', message);
 	        $location.path('/productos')
@@ -75,13 +97,18 @@ app.controller('ProductosCtrl', ['$scope','$location','ProductosServ','Flash','C
 	        Flash.create('danger', message);
 		})
 	}
+
 	//delete producto
 	$scope.deleteProducto = function (producto) {
 		if (confirm("Seguro que quieres borrar el usuario??")) {
 			ProductosServ.deleteProducto(producto).then(function (response) {
 				var message = '<strong>HECHO!!!</strong> El producto ha sido borrado correctamente';
 	        	Flash.create('success', message);
-	        	$scope.productos.splice($scope.productos.indexOf(producto), 1);
+	        	for (var i = 0; i < $scope.productos.length; i++) {
+					if($scope.productos[i]._id == response.data._id){
+						$scope.productos.splice(i,1)
+					}
+				}
 			}, function (err) {
 				var message = '<strong>ERROR!!!</strong> '+JSON.stringify(err.data);
 	        	Flash.create('danger', message);
@@ -99,17 +126,20 @@ app.controller('ProductosCtrl', ['$scope','$location','ProductosServ','Flash','C
 		$location.path('/productos/updateProducto')
 	}
 
+	//check product stock
 	$scope.stock = function (producto) {
 		return producto.stock[producto.stock.length-1].cantidad
 	}
 
+	//baja producto
 	$scope.bajaProducto = function (producto) {
 		ProductosServ.bajaProducto(producto).then(function (response) {
 			var message = '<strong>HECHO!!!</strong> El producto ha sido dado de baja correctamente';
         	Flash.create('success', message);
+        	//update baja.producto in scope
         	for(var i in $scope.productos){
         		if ($scope.productos[i]._id == producto._id) {
-        			$scope.productos[i].baja = true;
+        			$scope.productos[i] = response.data;
         		}
         	}
 		}, function (err) {
@@ -118,13 +148,15 @@ app.controller('ProductosCtrl', ['$scope','$location','ProductosServ','Flash','C
 		})
 	}
 
+	//alta producto
 	$scope.altaProducto = function (producto) {
 		ProductosServ.altaProducto(producto).then(function (response) {
 			var message = '<strong>HECHO!!!</strong> El producto ha sido dado de alta correctamente';
         	Flash.create('success', message);
+        	//update alta.producto in scope
         	for(var i in $scope.productos){
         		if ($scope.productos[i]._id == producto._id) {
-        			$scope.productos[i].baja = false;
+        			$scope.productos[i] = response.data;
         		}
         	}
 		}, function (err) {
@@ -132,4 +164,9 @@ app.controller('ProductosCtrl', ['$scope','$location','ProductosServ','Flash','C
         	Flash.create('danger', message);
 		})
 	}
+
+	$scope.cancelar = function () {
+		$location.path('/productos')
+	}
+
 }])

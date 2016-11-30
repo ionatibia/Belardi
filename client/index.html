@@ -10,7 +10,10 @@
 	<link rel="mask-icon" href="./img/favicon/safari-pinned-tab.svg" color="#5bbad5">
 	<meta name="theme-color" content="#ffffff">
 	<title>Belardi</title>
+
+	<!--Stylesheets-->
 	<link rel="stylesheet" type="text/css" href="./bower_components/bootstrap/dist/css/bootstrap.min.css">
+	<!--<link rel="stylesheet" type="text/css" href="./bower_components/bootstrap/dist/css/bootstrap-theme.min.css">-->
 	<link rel="stylesheet" type="text/css" href="./bower_components/angular-flash-alert/dist/angular-flash.min.css">
 	<link rel="stylesheet" type="text/css" href="./css/style.css">
 	<link rel="stylesheet" type="text/css" href="./bower_components/ngprogress/ngProgress.css">
@@ -18,11 +21,20 @@
 	<link rel="stylesheet" type="text/css" href="./bower_components/ng-dialog/css/ngDialog-theme-default.min.css">
 	<link rel="stylesheet" type="text/css" href="./bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css">
 	<link rel="stylesheet" type="text/css" href="./bower_components/highcharts/css/highcharts.css">
+	<!---->
+
 </head>
 <body ng-app="app" ng-controller="AppCtrl">
+
+<!--Include header.html (navBar)-->
 <ng-include src="'views/header.html'"></ng-include>
-<flash-message duration="4000" show-close="true"></flash-message> 
+
+<!--Flash message-->
+<flash-message duration="5000" show-close="true"></flash-message> 
+
+<!--view-->
 <ng-view></ng-view>
+
 	<!--SCRIPTS-->
 	<script src="./bower_components/jquery/dist/jquery.min.js"></script>
 	<script src="./bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
@@ -38,8 +50,11 @@
 	<script src="./bower_components/pdfmake/build/pdfmake.min.js"></script>
 	<script src="./bower_components/pdfmake/build/vfs_fonts.js"></script>
 	<script src="./bower_components/highcharts/js/highcharts.js"></script>
+	<script src="./bower_components/angular-animate/angular-animate.js"></script>
+	<script src="./bower_components/angularUtils-pagination/dirPagination.js"></script>
 	<!--<script src="./bower_components/highcharts/js/highstock.js"></script>-->
 	<!--<script src="./bower_components/highcharts/js/highcharts-more.js"></script>-->
+
 	<!--CONTROLLERS-->
 	<script src="./js/app.js"></script>
 	<script src="./js/controllers/mainCtrl.js"></script>
@@ -50,11 +65,9 @@
 	<script src="./js/controllers/graficosCtrl.js"></script>
 	<script src="./js/controllers/almacenCtrl.js"></script>
 	<script src="./js/controllers/configCtrl.js"></script>
-	<script src="./js/controllers/contabilidad/contabilidadCtrl.js"></script>
-	<script src="./js/controllers/contabilidad/ingresosCtrl.js"></script>
-	<script src="./js/controllers/contabilidad/gastosCtrl.js"></script>
+	<script src="./js/controllers/contabilidadCtrl.js"></script>
+
 	<!--SERVICES-->
-	<script src="./js/services/menuService.js"></script>
 	<script src="./js/services/productos.js"></script>
 	<script src="./js/services/socios.js"></script>
 	<script src="./js/services/main.js"></script>
@@ -62,5 +75,6 @@
 	<script src="./js/services/configService.js"></script>
 	<script src="./js/services/informesService.js"></script>
 	<script src="./js/services/contabilidad.js"></script>
+	
 </body>
 </html>
