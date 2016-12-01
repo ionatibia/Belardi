@@ -194,11 +194,11 @@ h1{
 
 /*INFORMES*/
 #ticketDiv{
-	background-color: white;
+	/*background-color: white;*/
 	padding: 20px;
 	margin-top: 20px;
 	border-radius: 15px;
-	background-image: url("../img/papel.jpg");
+	background-image: url("../img/papelP.jpg");
 }
 #startDiv, #endDiv{
 	margin-bottom: 10px;
@@ -250,7 +250,7 @@ h1{
 	overflow-y: scroll;
 	margin-bottom: 20px;
 	background-color: #D8D8D8;
-	box-shadow: 0px 0px 15px white;
+	/*box-shadow: 0px 0px 15px white;*/
 }
 #resultIva > table > tbody > tr > th{
 	text-align: center !important;
@@ -259,7 +259,25 @@ h1{
 	background-color: white;
 }
 #ivaDiv{
-
+	background-color: #D8D8D8;
+    padding: 20px 20px 0px 20px;
+    border-radius: 10px;
+    /*box-shadow: 0px 0px 15px white;*/
+    margin-bottom: 50px;
+}
+#resultIva td{
+	height: 100px;
+	vertical-align: middle;
+}
+#resultIva table { border-collapse: separate; }
+#resultIva td { border: solid 1px #000; }
+#resultIva th{border-top-left-radius: 10px;border-top-right-radius: 10px;}
+/*tr:first-child td:first-child { border-top-left-radius: 10px; }*/
+/*tr:first-child td:last-child { border-top-right-radius: 10px; }*/
+#resultIva tr:last-child td:first-child { border-bottom-left-radius: 10px; }
+#resultIva tr:last-child td:last-child { border-bottom-right-radius: 10px; }
+#resultIva{
+	/*box-shadow: 0px 0px 15px white;*/
 }
 
 /*PRODUCTOS*/
@@ -287,4 +305,29 @@ h1{
 	background-color: #D8D8D8;
 	box-shadow: 0px 0px 15px white;
 	margin-bottom: 20px;
+}
+
+/*GRAFICOS*/
+#graficoDiv{
+	width: 80%;
+	margin: auto;
+	border: 1px solid black;
+	padding: 15px 15px 35px 15px;
+	border-radius: 10px;
+	background-color: #D8D8D8;
+	box-shadow: 0px 0px 15px white;
+	margin-bottom: 20px;
+}
+
+.axis--x path {
+  display: none;
+}
+
+.line {
+  fill: none;
+  stroke: steelblue;
+  stroke-width: 1.5px;
+}
+svg{
+	background-color: white
 }

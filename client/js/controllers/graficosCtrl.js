@@ -9,8 +9,14 @@ app.controller('GraficosCtrl', ['$scope','ProductosServ','SociosServ','Contabili
 		ProductosServ.getAll().then(function (response) {
 			$scope.productos = response.data;
 			for (var i = 0; i < $scope.productos.length; i++) {
-				if ($scope.productos[i].stock[$scope.productos[i].stock.length-1].cantidad == 0 || $scope.productos[i].baja) {
+				if ($scope.productos[i].baja) {
 					$scope.productos.splice($scope.productos.indexOf($scope.productos[i]),1)
+				}
+			}
+			$scope.stocks = [];
+			for(var p in $scope.productos){
+				for (var i = 0; i < $scope.productos[p].stock.length; i++) {
+					$scope.stocks.push({'name':$scope.productos[p].nombre,'fecha':$scope.productos[p].stock[i].fecha,'cantidad':$scope.productos[p].stock[i].cantidad})
 				}
 			}
 
@@ -79,7 +85,63 @@ app.controller('GraficosCtrl', ['$scope','ProductosServ','SociosServ','Contabili
 		})
 	}//else
 
-	$scope.ensenaF = false;
+$scope.crear = function () {
+	var data = $scope.stocks;
+	var svg = d3.select("svg"),
+    margin = {top: 20, right: 20, bottom: 30, left: 50},
+    width = +svg.attr("width") - margin.left - margin.right,
+    height = +svg.attr("height") - margin.top - margin.bottom,
+    g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+	var parseTime = d3.timeParse("%d-%b-%y");
+
+	var x = d3.scaleTime()
+	    .rangeRound([0, width]);
+
+	var y = d3.scaleLinear()
+	    .rangeRound([height, 0]);
+
+	var line = d3.line()
+	    .x(function(d) { return x(new Date(d.fecha)); })
+	    .y(function(d) { return y(+d.cantidad); });
+
+	/*d3.json(algo, function(d) {
+		console.log(d)
+	  d.fecha = parseTime(d.fecha);
+	  d.cantidad = +d.cantidad;
+	  return d;
+	}, function(error, data) {
+	  if (error) throw error;*/
+
+	  x.domain(d3.extent(data, function(d) { console.log(new Date(d.fecha));return new Date(d.fecha); }));
+	  y.domain(d3.extent(data, function(d) { return +d.cantidad; }));
+
+	  g.append("g")
+	      .attr("class", "axis axis--x")
+	      .attr("transform", "translate(0," + height + ")")
+	      .call(d3.axisBottom(x));
+
+	  g.append("g")
+	      .attr("class", "axis axis--y")
+	      .call(d3.axisLeft(y))
+	    .append("text")
+	      .attr("fill", "#000")
+	      .attr("transform", "rotate(-90)")
+	      .attr("y", 6)
+	      .attr("dy", "0.71em")
+	      .style("text-anchor", "end")
+	      .text("Price ($)");
+
+	  g.append("path")
+	      .datum(data)
+	      .attr("class", "line")
+	      .attr("d", line);
+	//});
+}
+
+   
+
+	/*$scope.ensenaF = false;
 	$scope.tipoG = 'stock'
 
 	//config datepickers
@@ -247,11 +309,11 @@ app.controller('GraficosCtrl', ['$scope','ProductosServ','SociosServ','Contabili
 	            title: {
 	                text: 'Stock (gr)'
 	            },
-	            /*plotLines: [{
+	            plotLines: [{
 	                value: 0,
 	                width: 1,
 	                color: '#808080'
-	            }]*/
+	            }]
 	        },
 	        tooltip: {
 	            valueSuffix: 'gr',
@@ -283,6 +345,6 @@ app.controller('GraficosCtrl', ['$scope','ProductosServ','SociosServ','Contabili
 	        },
 	        series: series
 	    });
-	}
+	}*/
 		
 }])

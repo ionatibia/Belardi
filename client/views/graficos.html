@@ -1,12 +1,12 @@
 <section>
 <div>
-	<h1>GRAFICOS</h1>
-	<div class="row">
+	<h1 class="h1">GRAFICOS</h1>
+	<!--<div class="row" id="graficoDiv">
 		<h3>Gráfico Stock</h3>
 		<input type="radio" name="tipoG" ng-model="tipoG" value="stock">Stock
 		<input type="radio" name="tipoG" ng-model="tipoG" value="cont">Contabilidad<!--<button class="btn btn-primary" ng-click="ensenaF = !ensenaF" style="margin-bottom:-35px;margin-left:10px;"><i class="glyphicon glyphicon-search" ></i></button>-->
 		<!--<div class="row" style="clear:both">-->
-			<form id="graficoStock" name="graficoStock" class="form-group" ng-submit="crearGrafico(datos)" novalidate>
+			<!--<form id="graficoStock" name="graficoStock" class="form-group" ng-submit="crearGrafico(datos)" novalidate>
 				<div class="col-xs-4" id="startDiv">
 					<label for="startDate" class="label label-info">Fecha inicio</label>
 					<div class="input-group date" data-provide="datepicker">
@@ -36,14 +36,14 @@
 				</div>
 		<!--</div>
 		<div class="row" ng-show="ensenaF">-->
-			<div class="col-xs-12">
+			<!--<div class="col-xs-12">
 				<div class="col-xs-4">
 					<label for="tipo" class="label label-info">Tipo: </label>
 					<div class="form-group">
 						<select class="form-control" ng-model="datos.tipo" name="tipo" id="tipo">
 							<option value="" selected>Todos</option>
 							<!--<option ng-repeat="tipo in tipos | filter: producto.ambito" value="{{tipo._id}}">{{tipo.nombre.toUpperCase()}}</option>-->
-							<option ng-repeat="tipo in tipos" value="{{tipo._id}}">{{tipo.nombre.toUpperCase()}}</option>
+							<!--<option ng-repeat="tipo in tipos" value="{{tipo._id}}">{{tipo.nombre.toUpperCase()}}</option>
 						</select>
 					</div>
 				</div>
@@ -69,7 +69,7 @@
 				
 		<!--</div>
 		<div class="row">-->
-				<div class="col-xs-12">
+				<!--<div class="col-xs-12">
 					<label for="producto" class="label label-info">Producto: </label>
 					<div class="form-group">
 						<select class="form-control" ng-model="datos.producto" name="producto" id="producto">
@@ -81,11 +81,13 @@
 				<div class="col-xs-12">
 					<input class="btn btn-primary" type="submit" name="gStockSub" value="Crear" ng-disabled="graficoStock.$invalid" style="width:100%">
 					<!--<button class="btn btn-primary" ng-click="crearGraficoStock(startDate,endDate,interval,tipo,subtipo,variedad,producto)">Crear</button>-->
-				</div>	
+				<!--</div>	
 		<!--</div>-->
 				
-			</form>
+			<!--</form>
 	</div>
-		<div id="gStockDiv" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+		<div id="gStockDiv" style="min-width: 310px; height: 400px; margin: 0 auto"></div>-->
+		<button class="btn btn-default" ng-click="crear()">Crear</button>
+		<svg id="graph" width="700" height="400"></svg>
 </div>
 </section>
