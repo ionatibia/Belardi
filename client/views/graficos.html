@@ -1,13 +1,13 @@
 <section>
 <div>
 	<h1 class="h1">GRAFICOS</h1>
-	<!--<div class="row" id="graficoDiv">
+	<div class="row" id="graficoDiv">
 		<h3>Gráfico Stock</h3>
 		<input type="radio" name="tipoG" ng-model="tipoG" value="stock">Stock
 		<input type="radio" name="tipoG" ng-model="tipoG" value="cont">Contabilidad<!--<button class="btn btn-primary" ng-click="ensenaF = !ensenaF" style="margin-bottom:-35px;margin-left:10px;"><i class="glyphicon glyphicon-search" ></i></button>-->
 		<!--<div class="row" style="clear:both">-->
-			<!--<form id="graficoStock" name="graficoStock" class="form-group" ng-submit="crearGrafico(datos)" novalidate>
-				<div class="col-xs-4" id="startDiv">
+			<form id="graficoStock" name="graficoStock" class="form-group" ng-submit="crearGrafico(datos)" novalidate>
+				<div class="col-xs-6" id="startDiv">
 					<label for="startDate" class="label label-info">Fecha inicio</label>
 					<div class="input-group date" data-provide="datepicker">
 					    <input type="text" class="datepicker form-control" id="startDate" ng-model="datos.startDate" ng-required="true" readonly>
@@ -16,7 +16,7 @@
 					    </div>
 					</div>
 				</div>
-				<div class="col-xs-4" id="endDiv">
+				<div class="col-xs-6" id="endDiv">
 					<label for="endDate" class="label label-info">Fecha fin</label>
 					<div class="input-group date" data-provide="datepicker">
 					    <input type="text" class="datepicker form-control" id="endDate" ng-model="datos.endDate" ng-required="true" readonly>
@@ -25,25 +25,26 @@
 					    </div>
 					</div>
 				</div>
-				<div class="col-xs-4" id="intervalDiv">
+				<!--<div class="col-xs-4" id="intervalDiv">
 					<label for="interval" class="label label-info">Intervalo</label>
 					<select class="form-control" name="interval" id="interval" ng-model="datos.interval" ng-required="true">
 						<option value="" selected disabled>Selecciona</option>
 						<option value="ano">Año</option>
 						<option value="mes">Mes</option>
+						<option value="semana">Semana</option>
 						<option value="dia">Día</option>
 					</select>
-				</div>
+				</div>-->
 		<!--</div>
 		<div class="row" ng-show="ensenaF">-->
-			<!--<div class="col-xs-12">
+			<div class="col-xs-12">
 				<div class="col-xs-4">
 					<label for="tipo" class="label label-info">Tipo: </label>
 					<div class="form-group">
 						<select class="form-control" ng-model="datos.tipo" name="tipo" id="tipo">
 							<option value="" selected>Todos</option>
 							<!--<option ng-repeat="tipo in tipos | filter: producto.ambito" value="{{tipo._id}}">{{tipo.nombre.toUpperCase()}}</option>-->
-							<!--<option ng-repeat="tipo in tipos" value="{{tipo._id}}">{{tipo.nombre.toUpperCase()}}</option>
+							<option ng-repeat="tipo in tipos" value="{{tipo._id}}">{{tipo.nombre.toUpperCase()}}</option>
 						</select>
 					</div>
 				</div>
@@ -69,7 +70,7 @@
 				
 		<!--</div>
 		<div class="row">-->
-				<!--<div class="col-xs-12">
+				<div class="col-xs-12">
 					<label for="producto" class="label label-info">Producto: </label>
 					<div class="form-group">
 						<select class="form-control" ng-model="datos.producto" name="producto" id="producto">
@@ -79,15 +80,17 @@
 					</div>
 				</div>
 				<div class="col-xs-12">
-					<input class="btn btn-primary" type="submit" name="gStockSub" value="Crear" ng-disabled="graficoStock.$invalid" style="width:100%">
-					<!--<button class="btn btn-primary" ng-click="crearGraficoStock(startDate,endDate,interval,tipo,subtipo,variedad,producto)">Crear</button>-->
-				<!--</div>	
+					<!--<input class="btn btn-primary" type="submit" name="gStockSub" value="Crear" ng-disabled="graficoStock.$invalid" style="width:100%">-->
+					<button class="btn btn-primary" ng-click="crearGraficoStock(datos)" style="width:100%" ng-disabled="!datos.startDate || !datos.endDate">Crear</button>
+				</div>	
 		<!--</div>-->
 				
-			<!--</form>
+			</form>
 	</div>
-		<div id="gStockDiv" style="min-width: 310px; height: 400px; margin: 0 auto"></div>-->
-		<button class="btn btn-default" ng-click="crear()">Crear</button>
-		<svg id="graph" width="700" height="400"></svg>
+		<!--<div id="gStockDiv" style="min-width: 310px; height: 400px; margin: 0 auto"></div>-->
+		<!--<button class="btn btn-default" ng-click="crear()">Crear</button>-->
+		<div id="container" style="height:400px;width:100%;" class="ui-widget-content ui-resizable" on-size-changed="funcion()">
+			<div id="chartdiv" style="height:400px;width:100%;"></div>
+		</div>
 </div>
 </section>

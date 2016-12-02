@@ -13,13 +13,6 @@ app.controller('GraficosCtrl', ['$scope','ProductosServ','SociosServ','Contabili
 					$scope.productos.splice($scope.productos.indexOf($scope.productos[i]),1)
 				}
 			}
-			$scope.stocks = [];
-			for(var p in $scope.productos){
-				for (var i = 0; i < $scope.productos[p].stock.length; i++) {
-					$scope.stocks.push({'name':$scope.productos[p].nombre,'fecha':$scope.productos[p].stock[i].fecha,'cantidad':$scope.productos[p].stock[i].cantidad})
-				}
-			}
-
 		}, function (err) {
 			var message = '<strong>ERROR!!!</strong> '+JSON.stringify(err.data.message);
 		    Flash.create('danger', message)
@@ -85,59 +78,271 @@ app.controller('GraficosCtrl', ['$scope','ProductosServ','SociosServ','Contabili
 		})
 	}//else
 
-$scope.crear = function () {
-	var data = $scope.stocks;
-	var svg = d3.select("svg"),
-    margin = {top: 20, right: 20, bottom: 30, left: 50},
-    width = +svg.attr("width") - margin.left - margin.right,
-    height = +svg.attr("height") - margin.top - margin.bottom,
-    g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+	//config datepickers
+	$.fn.datepicker.defaults.format = "dd/mm/yyyy";
+	$.fn.datepicker.defaults.language = "es";
+	$.fn.datepicker.defaults.todayHighlight = true;
+	$.fn.datepicker.defaults.clearBtn = true;
+	$.fn.datepicker.defaults.todayBtn = 'linked';
+	$.fn.datepicker.defaults.templates = {
+		leftArrow: '<i class="glyphicon glyphicon-backward"></i>',
+		rightArrow: '<i class="glyphicon glyphicon-forward"></i>',
+	}
 
-	var parseTime = d3.timeParse("%d-%b-%y");
+	//global variables
+	var plot1,start,end;
+	$scope.crearGraficoStock = function (datos) {
+		//clean plot
+		$('#chartdiv').html('');
 
-	var x = d3.scaleTime()
-	    .rangeRound([0, width]);
+		//fecha inicio y final
+		var startArray = datos.startDate.split('/');
+		start = startArray[2]+"-"+startArray[1]+"-"+startArray[0];
+		var endArray = datos.endDate.split('/');
+		end = endArray[2]+"-"+endArray[1]+"-"+endArray[0];
 
-	var y = d3.scaleLinear()
-	    .rangeRound([height, 0]);
+		filtrarProductos(datos.tipo,datos.subtipo,datos.variedad,datos.producto,function (productos) {
 
-	var line = d3.line()
-	    .x(function(d) { return x(new Date(d.fecha)); })
-	    .y(function(d) { return y(+d.cantidad); });
+			//crear series
+			$scope.stocks = [];
+			$scope.seriesNames = [];
+			for(var p in productos){
+				var tmpG = [];
+				$scope.seriesNames.push(productos[p].nombre)
+				for (var i = 0; i < productos[p].stock.length; i++) {
+					var tmp = [];
+					//filtrar por fechas
+					if (new Date(productos[p].stock[i].fecha) > new Date(start) && new Date(productos[p].stock[i].fecha) < new Date(end) ){
+						tmp.push(new Date(productos[p].stock[i].fecha),parseInt(productos[p].stock[i].cantidad))
+						tmpG.push(tmp)
+					}
+				}
+				if (tmpG.length != 0) {
+					$scope.stocks.push(tmpG)
+				}
+			}
 
-	/*d3.json(algo, function(d) {
-		console.log(d)
-	  d.fecha = parseTime(d.fecha);
-	  d.cantidad = +d.cantidad;
-	  return d;
-	}, function(error, data) {
-	  if (error) throw error;*/
+			//opciones grafico
+			$.jqplot._noToImageButton = true;
 
-	  x.domain(d3.extent(data, function(d) { console.log(new Date(d.fecha));return new Date(d.fecha); }));
-	  y.domain(d3.extent(data, function(d) { return +d.cantidad; }));
+		    var options = {
+		        title: 'Stock',
+		        highlighter: {
+		            show: true,
+		            sizeAdjust: 1,
+		            tooltipOffset: 9,
+		            fadeTooltip: true,
+		            bringSeriesToFront: false,
+		            tooltipContentEditor: function (str, seriesIndex, pointIndex, plot) {
+		                     return '<b><span style="color:'+plot.seriesColors[seriesIndex]+';">' + plot.options.series[seriesIndex].label + ': </span></b>' + str;
+		                 }
+		        },
+		        grid: {
+		            background: 'rgba(57,57,57,0.0)',
+		            drawBorder: false,
+		            shadow: false,
+		            gridLineColor: '#666666',
+		            gridLineWidth: 1
+		        },
+		        legend: {
+		            show: false,
+		            placement: 'outside',
+		            location: 's',
+		            showSwatches: true
+		        },
+		        seriesDefaults: {
+		            rendererOptions: {
+		                smooth: true,
+		                animation: {
+		                    show: true
+		                }
+		            },
+		            showMarker: true
+		        },
+		        axesDefaults: {
+		            rendererOptions: {
+		                baselineWidth: 1.5,
+		                baselineColor: '#444444',
+		                drawBaseline: false
+		            }
+		        },
+		        axes: {
+		            xaxis: {
+		                renderer: $.jqplot.DateAxisRenderer,
+		                tickRenderer: $.jqplot.CanvasAxisTickRenderer,
+		                tickOptions: {
+		                    formatString: "%e %b",
+		                    angle: -30,
+		                    textColor: '#333'
+		                },
+		                //min: start,
+		                //max: end,
+		                //tickInterval: "1 "+intervalo,
+		                drawMajorGridlines: false
+		            },
+		            yaxis: {
+		                renderer: $.jqplot.LogAxisRenderer,
+		                pad: 0,
+		                rendererOptions: {
+		                    minorTicks: 1
+		                },
+		                tickOptions: {
+		                    formatString: "%'d gr",
+		                    showMark: false
+		                }
+		            },
+		        },
+		        cursor:{
+		            show: true, 
+		            zoom: true,
+		            tooltipLocation:'sw'
+		        } 
+		    }
 
-	  g.append("g")
-	      .attr("class", "axis axis--x")
-	      .attr("transform", "translate(0," + height + ")")
-	      .call(d3.axisBottom(x));
+		    options.series = [];
+		    //options.seriesColors = []
+		    for (var i = 0; i < $scope.seriesNames.length; i++) {
+		    	options.series.push({'label':$scope.seriesNames[i]})
+		    	//options.seriesColors.push(getRandomColor())
+		    }
+		 	if ($scope.stocks.length == 0) {
+		 		var message = '<strong>INFO</strong> no hay datos para mostrar';
+				Flash.create('info', message);
+		 	}else{
+		 		//mostrar div
+				$('#chartdiv').css("display", "block");
+				$('#container').css("display", "block");
+		 		plot1 = $.jqplot("chartdiv",$scope.stocks, options);
+		 	}
+		    
 
-	  g.append("g")
-	      .attr("class", "axis axis--y")
-	      .call(d3.axisLeft(y))
-	    .append("text")
-	      .attr("fill", "#000")
-	      .attr("transform", "rotate(-90)")
-	      .attr("y", 6)
-	      .attr("dy", "0.71em")
-	      .style("text-anchor", "end")
-	      .text("Price ($)");
+			$('.jqplot-highlighter-tooltip').addClass('ui-corner-all')
+		
+		})
+			
+	}
 
-	  g.append("path")
-	      .datum(data)
-	      .attr("class", "line")
-	      .attr("d", line);
-	//});
-}
+	var el1, el2;
+	$( function() {
+		/*$('#container').bind('resize', function(event, ui) {
+			plot1.replot( { resetAxes: true } );
+			
+		});*/
+
+		$("#container").resizable({
+		    //handles: 'e',
+		    minWidth: '50',
+		    resize: function (event) {
+		        var remainingSpace = $(this).parent().width() - $(this).outerWidth(),
+		            divTwo = $(this).next(),
+		            divTwoWidth = remainingSpace - (divTwo.outerWidth() - divTwo.width());
+		        divTwo.width(divTwoWidth);
+		        el1 = $(this);
+		        el2 = divTwo;
+		        event.stopPropagation();
+		        if (plot1 != undefined) {
+		        	plot1.replot( { resetAxes: true } );
+		        }
+		        //event.preventDefault();
+		        return false;
+		    }
+		});
+
+		$(window).on('resize', function (e) {
+		    //console.log($(e.target).hasClass('ui-resizable'));
+		    if (!$(e.target).hasClass('ui-resizable')) {//Check whether the target has class "ui-resizable".
+		        //console.log('window');
+		        if (el1 && el2) {
+		            el1.width('100%');
+		            el2.width('50%');
+		        }
+		        if(plot1 != undefined){
+		        	plot1.replot( { resetAxes: true } );
+		        }
+		    }
+		 });
+	});
+
+	
+	function filtrarProductos(tipo,subtipo,variedad,producto,callback) {
+		//Productos
+		var productos = [];
+		if(tipo != '' && tipo != undefined){
+			for(var t in $scope.productos){
+				if ($scope.productos[t].tipo._id == tipo) {
+					productos.push($scope.productos[t])
+				}
+			}
+		}
+		if(subtipo != '' && subtipo != undefined){
+			for(var s in $scope.productos){
+				if ($scope.productos[s].subtipo._id == subtipo) {
+					if (productos.indexOf($scope.productos[s]) == -1) {
+						productos.push($scope.productos[s])
+					}
+				}else{
+					for (var i = 0; i < productos.length; i++) {
+						if($scope.productos[s]._id == productos[i]._id){
+							productos.splice(i,1)
+						}
+					}
+				}
+			}
+		}
+		if (variedad != '' && variedad != undefined) {
+			for(var v in $scope.productos){
+				if ($scope.productos[v].variedad._id == variedad) {
+					if (productos.indexOf($scope.productos[v]) == -1) {
+						productos.push($scope.productos[v])
+					}
+				}else{
+					for (var i = 0; i < productos.length; i++) {
+						if($scope.productos[v]._id == productos[i]._id){
+							productos.splice(i,1)
+						}
+					}
+				}
+			}
+		}
+		if (producto != '' && producto != undefined) {
+			for(var p in $scope.productos){
+				if ($scope.productos[p]._id == producto) {
+					if (productos.indexOf($scope.productos[p]) == -1) {
+						productos.push($scope.productos[p])
+					}
+				}else{
+					for (var i = 0; i < productos.length; i++) {
+						if($scope.productos[p]._id == productos[i]._id){
+							productos.splice(i,1)
+						}
+					}
+				}
+			}
+		}
+
+		if (productos.length < 1) {
+			if (tipo != undefined || subtipo != undefined || variedad != undefined) {
+				if(tipo != '' || subtipo != '' || variedad != ''){
+					var message = '<strong>UPS!!!</strong> no hay productos a mostrar';
+					Flash.create('info', message);
+				}else{
+					productos = $scope.productos
+				}
+			}else{
+				productos = $scope.productos
+			}
+		}
+		callback(productos);
+	}
+
+	function getRandomColor() {
+	    var letters = '0123456789ABCDEF';
+	    var color = '#';
+	    for (var i = 0; i < 6; i++ ) {
+	        color += letters[Math.floor(Math.random() * 18)];
+	    }
+	    return color;
+	}
 
    
 

@@ -319,15 +319,16 @@ h1{
 	margin-bottom: 20px;
 }
 
-.axis--x path {
-  display: none;
+#chartdiv{
+	background-color: white;
+	display: none;
+	margin: auto;
 }
-
-.line {
-  fill: none;
-  stroke: steelblue;
-  stroke-width: 1.5px;
+#container{
+	margin-bottom: 50px;
+	display: none;
 }
-svg{
-	background-color: white
+.jqplot-highlighter-tooltip{
+	opacity: 1;
+	background-color: white;
 }
