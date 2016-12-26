@@ -139,7 +139,7 @@ app.controller('ProductosCtrl', ['$scope','$location','ProductosServ','Flash','C
         	//update baja.producto in scope
         	for(var i in $scope.productos){
         		if ($scope.productos[i]._id == producto._id) {
-        			$scope.productos[i] = response.data;
+        			$scope.productos[i].baja = response.data.baja;
         		}
         	}
 		}, function (err) {
@@ -156,7 +156,7 @@ app.controller('ProductosCtrl', ['$scope','$location','ProductosServ','Flash','C
         	//update alta.producto in scope
         	for(var i in $scope.productos){
         		if ($scope.productos[i]._id == producto._id) {
-        			$scope.productos[i] = response.data;
+        			$scope.productos[i].baja = response.data.baja;
         		}
         	}
 		}, function (err) {

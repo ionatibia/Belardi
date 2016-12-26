@@ -145,10 +145,15 @@ app.controller('GraficosCtrl', ['$scope','ProductosServ','SociosServ','Contabili
 		            gridLineWidth: 1
 		        },
 		        legend: {
-		            show: false,
+		        	renderer: $.jqplot.EnhancedLegendRenderer,
+		            show: true,
 		            placement: 'outside',
 		            location: 's',
-		            showSwatches: true
+		            showSwatches: true,
+		            rendererOptions:{
+		            	numberRows: 1,
+		            	seriesToggle:'normal'
+		            },
 		        },
 		        seriesDefaults: {
 		            rendererOptions: {

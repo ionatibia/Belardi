@@ -61,7 +61,7 @@ app.controller('AlmacenCtrl', ['$scope','ProductosServ','ConfigServ','config','F
 				//change old data for new
 				for(var p in $scope.productos){
 					if ($scope.productos[p]._id = response.data._id) {
-						$scope.productos[p] = response.data;
+						$scope.productos[p].stock = response.data.stock;
 					}
 				}
 				//clean form
@@ -92,7 +92,7 @@ app.controller('AlmacenCtrl', ['$scope','ProductosServ','ConfigServ','config','F
 				Flash.create('success', message);
 				for(var p in $scope.productos){
 					if ($scope.productos[p]._id = response.data._id) {
-						$scope.productos[p] = response.data;
+						$scope.productos[p].stock = response.data.stock;
 					}
 				}
 				//clean form

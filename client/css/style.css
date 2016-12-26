@@ -332,3 +332,7 @@ h1{
 	opacity: 1;
 	background-color: white;
 }
+
+#chartdiv > table{
+	margin-top: 50px;
+}

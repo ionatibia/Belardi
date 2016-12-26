@@ -1,8 +1,6 @@
 *consumo mensual (ir rellenando desde dispensa y vaciar todos los 1 de mes)
 *crossfilter con filtros para filtrar los datos para los totales
 
-*Contabilidad iva
-
 *Informes
 	-eusfac
 		.ver que piden y sacar los datos con form por fechas
@@ -14,9 +12,6 @@
 	-pagination: http://plnkr.co/edit/81fPZxpnOQnIHQgp957q?p=preview
 
 *Comprobar funcionamiento en Dispositivo
-
-
-*dejado en funcion crear array con totales por dia
 
 *totales consumo(bajadas stock menos ajustes de inventario. marca en descripcion)
 *totales produccion (lo que se añade al almacen)

@@ -153,9 +153,9 @@ module.exports.addStock = function (req,res) {
 
 module.exports.ajusteStock = function (req,res) {
 	if (req.body.observaciones != '' && req.body.observaciones != null && req.body.observaciones != undefined) {
-		req.product.stock.push({'cantidad':req.body.cantidad, 'observaciones':req.body.observaciones});
+		req.product.stock.push({'cantidad':req.body.cantidad,'fecha':Date.now(), 'observaciones':req.body.observaciones});
 	}else{
-		req.product.stock.push({'cantidad':req.body.cantidad,'fecha':Date.now()})
+		req.product.stock.push({'cantidad':req.body.cantidad,'fecha':Date.now(),'observaciones':'Ajuste stock'})
 	}
 	req.product.save(function (err) {
 		if (err) {
