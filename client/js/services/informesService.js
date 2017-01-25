@@ -33,6 +33,11 @@ app.factory('InformesSrv', ['$http','config', function ($http,config) {
     	configAdd.data = obj;
     	return $http(configAdd)
     }
+    factory.getEusfacReport = function (year) {
+        configAdd.url = endpoint+"/eusfac";
+        configAdd.data = {'ano':year}
+        return $http(configAdd)
+    }
 
     return factory;
  }]);

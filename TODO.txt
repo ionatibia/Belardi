@@ -1,5 +1,4 @@
 *consumo mensual (ir rellenando desde dispensa y vaciar todos los 1 de mes)
-*crossfilter con filtros para filtrar los datos para los totales
 
 *Informes
 	-eusfac
@@ -8,9 +7,6 @@
 
 *toLowerCase() para los correos (comprobar en BD)
 
-*Filter in  pagination http://www.dispatchertimer.com/angularjs/pagination-with-filtering-using-angularjs/
-	-pagination: http://plnkr.co/edit/81fPZxpnOQnIHQgp957q?p=preview
-
 *Comprobar funcionamiento en Dispositivo
 
 *totales consumo(bajadas stock menos ajustes de inventario. marca en descripcion)
@@ -18,3 +14,12 @@
 *stock total a 1 de enero a las 00:00 y 31 diciembre a las 00:00
 *ajuste de stock negativo (perdidas de produccion)
 *controlar en consultas de stock si ha habido ajustes
+
+****Pasar:
+		-informes.html
+		-informesService.js
+		-report.js (server controller)
+		-reports.js (server routes)
+		-InformesCtrl.js
+
+DEJADO EN REPORT.JS INFORME EUSFAC

@@ -13,20 +13,39 @@ app.controller('InformesCtrl', ['$scope','$location','Flash','InformesSrv','conf
 		$('#'+$scope.tipoInforme).removeClass('btn-primary')
 		$('#'+tipo).addClass('btn-primary')
 		$scope.tipoInforme = tipo
+		if($scope.tipoInforme == 'eus'){
+
+		}
 	}
 
-	/*===============================
-	=            TICKETS            =
-	===============================*/
-
+	/*==============================
+	=            CONFIG            =
+	==============================*/
 	//config datepickers
 	$.fn.datepicker.defaults.format = "dd/mm/yyyy";
 	$.fn.datepicker.defaults.language = "es";
 	$.fn.datepicker.defaults.todayHighlight = true;
+	$.fn.datepicker.defaults.clearBtn = true;
+	$.fn.datepicker.defaults.todayBtn = 'linked';
 	$.fn.datepicker.defaults.templates = {
-		leftArrow: '<i class="glyphicon glyphicon-backward"></i>',
-		rightArrow: '<i class="glyphicon glyphicon-forward"></i>'
+		leftArrow: '<i class="glyphicon glyphicon-backward" style="color:#5cb85c"></i>',
+		rightArrow: '<i class="glyphicon glyphicon-forward" style="color:#5cb85c"></i>',
 	}
+
+	var date = new Date;
+	var year = date.getFullYear() - 9;
+	$scope.years = []
+	for (var i = 0; i < 10; i++) {
+		$scope.years.push(year+i)
+	}
+	
+	
+	/*=====  End of CONFIG  ======*/
+	
+
+	/*===============================
+	=            TICKETS            =
+	===============================*/
 
 	//datepickers
 	$scope.crearPdf = function (firm) {
@@ -283,5 +302,23 @@ app.controller('InformesCtrl', ['$scope','$location','Flash','InformesSrv','conf
 	}
 	
 	/*=====  End of TRIMESTRAL  ======*/
+
+	/*==============================
+	=            EUSFAC            =
+	==============================*/
+	$scope.crearPdfEus = function (ano) {
+		
+		InformesSrv.getEusfacReport(ano).then(function (response) {
+			console.log(response.data)
+		}, function (error) {
+			var message = '<strong>ERROR!!!</strong> '+JSON.stringify(err.data);
+	    	Flash.create('danger', message);
+		})
+		
+	}
+	
+	
+	/*=====  End of EUSFAC  ======*/
+	
 	
 }])

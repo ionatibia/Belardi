@@ -64,8 +64,12 @@ angular.module('app',["ngRoute","ngFlash","ngDialog","ngAnimate","ngProgress","a
 	})
 
 	//Controller
-	.controller('AppCtrl', ['$scope','$location','$window','Flash', function ($scope,$location,$window,Flash) {
-		
+	.controller('AppCtrl', ['$scope','$location','$window','Flash', 'ngProgressFactory','$rootScope',function ($scope,$location,$window,Flash,ngProgressFactory,$rootScope) {
+		//create ngProgress instance
+		$rootScope.progressbar = ngProgressFactory.createInstance();
+		$rootScope.progressbar.setHeight('5px');
+		$rootScope.progressbar.setColor('DarkMagenta');
+
 		//Active links
 		$scope.isActive = function (viewLocation) {
 			if ($location.path().indexOf(viewLocation) > -1) {
@@ -107,28 +111,45 @@ angular.module('app',["ngRoute","ngFlash","ngDialog","ngAnimate","ngProgress","a
 	})
 
 	//loading bar interceptor
-	.factory("LoadingInterceptor",function($q, $rootScope){
-      
-      return function(promise){
-        $rootScope.$broadcast("event:startProgress");
-        return promise
-          .then(
-            function(response){
-              $rootScope.$broadcast("event:endProgress");
-              return response;
-            },
-            function(response){ //on error
-              $rootScope.$broadcast("event:endProgress");
-              return $q.reject(response);
-            }
-          )
-          
-      }
-    })
+    .factory('LoadingInterceptor', function($q, $rootScope) {
+		return {
+			// optional method
+			'request': function(config) {
+				$rootScope.$broadcast("event:startProgress");
+				return config;
+			},
+
+			// optional method
+			'requestError': function(rejection) {
+				$rootScope.$broadcast("event:endProgress");
+				if (canRecover(rejection)) {
+					return responseOrNewPromise
+				}
+				return $q.reject(rejection);
+			},
+
+			// optional method
+			'response': function(response) {
+				$rootScope.$broadcast("event:endProgress");
+				return response;
+			},
+
+			// optional method
+			'responseError': function(rejection) {
+				$rootScope.$broadcast("event:endProgress");
+				if (canRecover(rejection)) {
+					return responseOrNewPromise
+				}
+				return $q.reject(rejection);
+			}
+  		};
+	})//loading bar factory
 
     //app constants
 	.constant('config', {
 	    apiUrl: 'http://localhost:8000',
+	    //apiUrl: 'http://192.168.0.5:8000',
+	    //apiUrl: 'http://belardi.zapto.org:8000',
 	    tiposUsuarios: ["Normal","Terapeutico"],
 	    //ambitos: [{'nombre':"Barra"},{'nombre':"Dispensa"},{'nombre':'Otros'}],
 	    descuentoTeraupeutico: 20,
@@ -140,11 +161,10 @@ angular.module('app',["ngRoute","ngFlash","ngDialog","ngAnimate","ngProgress","a
 	//loading bar function
 	.service("progress", ["$rootScope", "ngProgress", function($rootScope, ngProgress){
 		$rootScope.$on("event:endProgress", function(){
-			ngProgress.complete();
-			// ngProgress.reset();
+			$rootScope.progressbar.complete();
 		});
 		$rootScope.$on("event:startProgress", function(){
-			ngProgress.reset();
-			ngProgress.start();
+			$rootScope.progressbar.reset();
+			$rootScope.progressbar.start();
 		})
 	}])

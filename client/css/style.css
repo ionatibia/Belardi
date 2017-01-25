@@ -123,7 +123,7 @@ h1{
 	margin-top: 25px;
 	margin-bottom: 30px;
 }
-#numero, #password, #nombre, #apellido, #correo, #telefono,#tipo,#dni,#tipo,#subtipo,#variedad,#precio,#iva,#descripcion,#cantidad,#producto,#productoAjuste,#numeroSocio,#cantidadU{
+#numero, #password, #nombre, #apellido, #correo, #telefono,#tipo,#dni,#tipo,#subtipo,#variedad,#precio,#iva,#descripcion,#cantidad,#producto,#productoAjuste,#numeroSocio,#cantidadU,#socio{
 	margin-top: 5px;
 	margin-bottom: 20px;
 }

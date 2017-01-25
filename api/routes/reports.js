@@ -7,6 +7,7 @@ module.exports = function (app) {
 	//products
 	app.post('/informes/tickets', middleware.ensureAuthenticated, reportController.ticketReport);
 	app.post('/informes/trimestral', middleware.ensureAuthenticated, reportController.trimestralReport)
+	app.post('/informes/eusfac', middleware.ensureAuthenticated, reportController.eusfacReport)
 	
 
 }

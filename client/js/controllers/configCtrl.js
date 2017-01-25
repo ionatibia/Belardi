@@ -182,7 +182,7 @@ app.controller('ConfigCtrl', ['$scope','$location','Flash','$window','ConfigServ
 			}
 		}
 		for( var p in $scope.productos){
-			if($scope.productos[p].subtipo._id == subtipo){
+			if($scope.productos[p].subtipo != null && $scope.productos[p].subtipo._id == subtipo){
 				foundP = true
 			}
 		}
@@ -209,7 +209,7 @@ app.controller('ConfigCtrl', ['$scope','$location','Flash','$window','ConfigServ
 	$scope.borrarVariedad = function(variedad) {
 		var foundP = false;
 		for(var p in $scope.productos){
-			if($scope.productos[p].variedad._id == variedad){
+			if ($scope.productos[p].variedad != null && $scope.productos[p].variedad._id == variedad) {
 				foundP = true;
 			}
 		}

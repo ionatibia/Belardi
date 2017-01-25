@@ -18,7 +18,7 @@
 		<h3>Informe Tiquets</h3>
 		<div class="col-xs-6" id="startDiv">
 			<label for="startDate" class="label label-success">Fecha inicio</label>
-			<div class="input-group date" data-provide="datepicker">
+			<div class="input-group date" data-provide="datepicker" style="margin-top: 5px">
 			    <input type="text" class="datepicker form-control" id="startDate" ng-model="startDate">
 			    <div class="input-group-addon">
 			        <span class="glyphicon glyphicon-th"></span>
@@ -28,7 +28,7 @@
 		
 		<div class="col-xs-6" id="endDiv">
 			<label for="endDate" class="label label-success">Fecha fin</label>
-			<div class="input-group date" data-provide="datepicker">
+			<div class="input-group date" data-provide="datepicker" style="margin-top: 5px">
 			    <input type="text" class="datepicker form-control" id="endDate" ng-model="endDate">
 			    <div class="input-group-addon">
 			        <span class="glyphicon glyphicon-th"></span>
@@ -37,7 +37,7 @@
 		</div>
 		<label for="firmas" class="label label-success">Incluir firmas</label>
 		<input type="checkbox" name="firmas" id="firmas" ng-model="firmas" class="form-control col-xs-2" style="width:10%">
-		<button class="btn btn-primary" ng-click="crearPdf(firmas)" style="width:100%;margin-top:10px;">Crear Informe</button>
+		<button class="btn btn-primary" ng-click="crearPdf(firmas)" ng-disabled="!startDate || !endDate" style="width:100%;margin-top:10px;">Crear Informe</button>
 	</div>
 	<!--
 	FIN TIKETS
@@ -48,7 +48,12 @@
 	-->
 	<div ng-if="tipoInforme == 'eus'" id="ticketDiv">
 		<h3>Informe EUSFAC</h3>
-
+		<label for="anoEus" class="label label-success">Año: </label>
+		<select class="form-control" ng-model="anoEus" name="anoEus" id="anoEus" style="margin-top:5px">
+			<option value="" selected disabled>Selecciona</option>
+			<option ng-repeat="year in years" value="{{year}}">{{year}}</option>
+		</select>
+		<button class="btn btn-primary" ng-disabled="!anoEus" style="width: 100%;margin-top: 15px;" ng-click="crearPdfEus(anoEus)">Crear</button>
 	</div>
 	<!--
 	FIN EUSFAC
@@ -61,7 +66,7 @@
 		<h3>Informe Trimestral</h3>
 		<div class="col-xs-6" id="startDiv">
 			<label for="startDateTri" class="label label-success">Fecha inicio</label>
-			<div class="input-group date" data-provide="datepicker">
+			<div class="input-group date" data-provide="datepicker" style="margin-top: 5px">
 			    <input type="text" class="datepicker form-control" id="startDateTri" ng-model="startDateTri">
 			    <div class="input-group-addon">
 			        <span class="glyphicon glyphicon-th"></span>
@@ -71,14 +76,14 @@
 		
 		<div class="col-xs-6" id="endDiv">
 			<label for="endDateTri" class="label label-success">Fecha fin</label>
-			<div class="input-group date" data-provide="datepicker">
+			<div class="input-group date" data-provide="datepicker" style="margin-top: 5px">
 			    <input type="text" class="datepicker form-control" id="endDateTri" ng-model="endDateTri">
 			    <div class="input-group-addon">
 			        <span class="glyphicon glyphicon-th"></span>
 			    </div>
 			</div>
 		</div>
-		<button class="btn btn-primary" ng-click="crearPdfTri()" style="width:100%;margin-top:10px;">Crear Informe</button>
+		<button class="btn btn-primary" ng-click="crearPdfTri()" ng-disabled="!startDateTri || !endDateTri" style="width:100%;margin-top:10px;">Crear Informe</button>
 	</div>
 	<!--
 	FIN TRIMESTRAL

@@ -6,7 +6,8 @@
  */
 var mongoose = require('mongoose'),
 	Ticket = mongoose.model('Ticket'),
-	Ingreso = mongoose.model('Ingreso');
+	Ingreso = mongoose.model('Ingreso'),
+	Product = mongoose.model('Product');
 var Q = require('q');
 
 exports.ticketReport = function (req,res) {
@@ -83,6 +84,55 @@ exports.trimestralReport = function (req,res) {
 			.status(400)
 			.send("Error buscando tickets/cuotas: "+err);
 	})
+}
 
+exports.eusfacReport = function (req,res) {
+	var promises = [];
+	var productos = [];
+	var tickets = [];
+	var ano = req.body.ano;
+	var start = new Date(ano,0,1);
+	var end = new Date(ano,11,31,23,59);
+	console.log(ano+"    "+start+"    "+end)
 
+	var productPromise = Product.find().populate('tipo').populate('subtipo').populate('variedad').exec(function (err, products) {
+		if (err) {
+			logger.error("Error buscando productos")
+			return res
+				.status(400)
+				.send("Error buscando productos: "+err.errmsg);
+		} else {
+			productos = products
+			
+		}
+	});
+
+	promises.push(productPromise);
+
+	var ticketPromise = Ticket.find({"fecha":{$gte:start,$lte:end}}).exec(function (err,ticketsArray) {
+		if (err) {
+			logger.error("Error buscando tickets")
+			return res
+				.status(400)
+				.send("Error buscando tickets: "+err.errmsg);
+		}else{
+			tickets = ticketsArray
+		}
+	})
+
+	Q.all(promises).then(function () {
+		//console.log(productos)
+		for(var p in productos){
+			var ano = productos[p].stock[0].fecha.getFullYear()
+		}
+		console.log(tickets)
+	}, function (err) {
+		return res
+			.status(400)
+			.send("Error buscando productos: "+err);
+	})
+
+	return res
+		.status(200)
+		.send("ok")
 }

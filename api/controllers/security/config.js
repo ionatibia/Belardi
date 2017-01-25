@@ -7,6 +7,8 @@ module.exports = {
   server: {
   	server_port: process.env.OPENSHIFT_NODEJS_PORT || process.env.PORT || 8000,
   	server_ip: process.env.OPENSHIFT_NODEJS_IP || process.env.IP || 'localhost',
+  	//server_ip: process.env.OPENSHIFT_NODEJS_IP || process.env.IP || '192.168.0.5',
+  	//server_ip: process.env.OPENSHIFT_NODEJS_IP || process.env.IP || 'belardi.zapto.org',
   	db:{
   		uri: process.env.MONGO_URI || 'localhost' + '/belardi',
   		user: '',

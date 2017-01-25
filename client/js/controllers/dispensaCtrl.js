@@ -74,12 +74,26 @@ app.controller('DispensaCtrl', ['$scope','$location','ProductosServ','SociosServ
 	var countProd = 0;
 	//add products to provisional ticket
 	$scope.anadir = function (ticket) {
+		//recorrer array productos para buscar el producto completo
 		for(var p in $scope.productos){
 			if($scope.productos[p]._id == ticket.producto){
+				//comprobar que hay stock
 				if (ticket.cantidad <= $scope.stock($scope.productos[p])) {
-					$scope.listaProductos[countProd] = $scope.productos[p]
-					$scope.listaProductos[countProd].cantidad = ticket.cantidad
-					countProd++
+					var existe = false;
+					//recorrer lista de productos dispensados
+					for(var i in $scope.listaProductos){
+						//si existe, añadir cantidad
+						if ($scope.listaProductos[i]._id == ticket.producto) {
+							$scope.listaProductos[i].cantidad += ticket.cantidad;
+							existe = true;
+						}
+					}
+					//si no existe el producto en la lista, añadirlo
+					if (!existe) {
+						$scope.listaProductos[countProd] = $scope.productos[p]
+						$scope.listaProductos[countProd].cantidad = ticket.cantidad
+						countProd++
+					}
 				}else{
 					var message = '<strong>ERROR!!!</strong> hay menos stock que la cantidad solicitada';
 					Flash.create('danger', message);
@@ -177,10 +191,18 @@ app.controller('DispensaCtrl', ['$scope','$location','ProductosServ','SociosServ
 	$scope.totalTicket = function () {
 		var total = 0;
 		total = parseFloat($scope.cuenta) + parseFloat($scope.cuentaIva)
-		//var totalRedondeado = total.toFixed(2)
-		//var totalAjustado = Math.round(totalRedondeado)
 		$scope.total = total;
 		return total
+	}
+
+	$scope.aDevolver = function (total) {
+		if ($scope.entregado == undefined) {
+			return 0
+		}else if ($scope.entregado - total < 0) {
+			return 0
+		}else{
+			return $scope.entregado - total
+		}
 	}
 
 	//check product stock
@@ -214,6 +236,19 @@ app.controller('DispensaCtrl', ['$scope','$location','ProductosServ','SociosServ
 	}
 	$scope.cancelarModal = function () {
 		ngDialog.closeAll()
+	}
+
+	$scope.descuento = config.descuentoTeraupeutico;
+	$scope.terapeutico = function (numSocio) {
+		for(var u in $scope.socios){
+			if ($scope.socios[u].numero == numSocio) {
+				if ($scope.socios[u].tipo == 'Terapeutico') {
+					return true
+				}else{
+					return false
+				}
+			}
+		}
 	}
 
 	//canvas variables
