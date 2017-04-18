@@ -4,55 +4,55 @@ angular.module('app',["ngRoute","ngFlash","ngDialog","ngAnimate","ngProgress","a
 	.config(function($routeProvider,$httpProvider) {
 	    $routeProvider
 	    .when("/", {
-	        templateUrl: "../views/main.html",
+	        templateUrl: "views/main.html",
 	        controller: 'MainCtrl'
 	    })
 	    .when("/dispensa", {
-	        templateUrl: "../views/dispensa.html",
+	        templateUrl: "views/dispensa.html",
 	        controller: 'DispensaCtrl' 
 	    })
 	    .when('/socios', {
-	    	templateUrl: '../views/socios/socios.html',
+	    	templateUrl: 'views/socios/socios.html',
 	    	controller: 'SociosCtrl'
 	    })
 	    .when('/socios/addSocio', {
-	    	templateUrl: '../views/socios/addSocio.html',
+	    	templateUrl: 'views/socios/addSocio.html',
 	    	controller: 'SociosCtrl'
 	    })
 	    .when('/socios/updateSocio', {
-	    	templateUrl: '../views/socios/updateSocio.html',
+	    	templateUrl: 'views/socios/updateSocio.html',
 	    	controller: 'SociosCtrl'
 	    })
 	    .when('/productos', {
-	    	templateUrl: '../views/productos/productos.html',
+	    	templateUrl: 'views/productos/productos.html',
 	    	controller: 'ProductosCtrl'
 	    })
 	    .when('/productos/addProducto', {
-	    	templateUrl: '../views/productos/addProducto.html',
+	    	templateUrl: 'views/productos/addProducto.html',
 	    	controller: 'ProductosCtrl'
 	    })
 	    .when('/productos/updateProducto', {
-	    	templateUrl: '../views/productos/updateProducto.html',
+	    	templateUrl: 'views/productos/updateProducto.html',
 	    	controller: 'ProductosCtrl'
 	    })
 	    .when('/informes', {
-	    	templateUrl: '../views/informes.html',
+	    	templateUrl: 'views/informes.html',
 	    	controller: 'InformesCtrl'
 	    })
 	    .when('/graficos', {
-	    	templateUrl: '../views/graficos.html',
+	    	templateUrl: 'views/graficos.html',
 	    	controller: 'GraficosCtrl'
 	    })
 	    .when('/almacen', {
-	    	templateUrl: '../views/almacen.html',
+	    	templateUrl: 'views/almacen.html',
 	    	controller: 'AlmacenCtrl'
 	    })
 	    .when('/contabilidad', {
-	    	templateUrl: '../views/contabilidad.html',
+	    	templateUrl: 'views/contabilidad.html',
 	    	controller: 'ContabilidadCtrl'
 	    })
 	    .when('/config', {
-	    	templateUrl: '../views/config.html',
+	    	templateUrl: 'views/config.html',
 	    	controller: 'ConfigCtrl'
 	    })
 

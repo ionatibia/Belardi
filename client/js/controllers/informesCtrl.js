@@ -310,7 +310,7 @@ app.controller('InformesCtrl', ['$scope','$location','Flash','InformesSrv','conf
 		
 		InformesSrv.getEusfacReport(ano).then(function (response) {
 			console.log(response.data)
-		}, function (error) {
+		}, function (err) {
 			var message = '<strong>ERROR!!!</strong> '+JSON.stringify(err.data);
 	    	Flash.create('danger', message);
 		})
